@@ -1,5 +1,3 @@
-[![run-textlint](https://github.com/MIZOGUCHIKoki/InformationExperiment_4c-4i/actions/workflows/textlint.yml/badge.svg)](https://github.com/MIZOGUCHIKoki/InformationExperiment_4c-4i/actions/workflows/textlint.yml)
-
 # 2023年度 情報学群実験第 4C / 4i
 - Contributor : [MIZOGUCHI Koki](https://github.com/MIZOGUCHIKoki)
   - School of Information 3rd grade (2023)
