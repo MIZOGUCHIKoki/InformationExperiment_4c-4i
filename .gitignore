@@ -1,0 +1,11 @@
+*.asv
+.DS_Store
+.tmp*
+*.bbl
+*.lol
+*.gz
+*.log
+1250373_*.pdf
+*.app
+*.gnuplot
+node_modules
