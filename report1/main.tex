@@ -1,0 +1,29 @@
+\documentclass[twoside]{ltjsreport}
+\input{../preamble.tex}
+\input{../lst_yaml.tex}
+\title{{\normalsize 情報学群実験第4C/4i 実験レポート 第1回}\\TITLE}
+\date{May 7th, 2023}
+\begin{document}
+\maketitle
+\pagenumbering{roman}\thispagestyle{plain}
+\tableofcontents
+\newpage
+\pagestyle{report}
+\setcounter{page}{1}
+\bibliography{bib}
+\begin{lstlisting}[language=yaml]
+key: value
+map:
+    key1: value1
+    key2: value2
+list:
+  - element1
+  - element2
+# This is a comment
+listOfMaps:
+  - key1: value1a
+    key2: value1b
+  - key1: value2a
+    key2: value2b
+\end{lstlisting}
+\end{document}

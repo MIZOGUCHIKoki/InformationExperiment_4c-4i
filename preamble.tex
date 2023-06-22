@@ -1,0 +1,65 @@
+\usepackage{silence}
+\WarningFilter{caption}{Unknown document}
+\usepackage[top=20truemm,bottom=20truemm,left=15truemm,right=15truemm,headheight=20pt]{geometry}
+\usepackage{fancyhdr,lastpage,abstract,listings,float,wrapfig,tabularx,multirow,multicol}
+\usepackage{hyperref,graphics,graphicx,framed}
+\usepackage[symbol]{footmisc}
+\usepackage{amsmath,amssymb}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,fit,positioning}
+\newcolumntype{A}{>{\centering\bfseries}X}
+\newcolumntype{B}{>{\centering\bfseries\arraybackslash}X}
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+\newcolumntype{R}{>{\raggedright\arraybackslash}X}
+\newcolumntype{L}{>{\raggedleft\arraybackslash}X}
+\bibliographystyle{junsrt}
+\hypersetup{
+    colorlinks=true,
+    citecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+\renewcommand{\chaptermark}[1]{\markboth{第\ \thechapter\ 章\,\, #1}{}}
+\fancypagestyle{report}{
+    \fancyhf{}
+    \fancyhead[RO,LE]{\leftmark}
+    \fancyfoot[RO,LE]{\thepage\ /\ \pageref{LastPage}}
+    \pagenumbering{arabic}
+}
+\fancypagestyle{appendixstyle}{
+    \fancyhf{}
+    \fancyhead[RO,LE]{付録}
+    \fancyfoot[RO,LE]{\thepage\ /\ \pageref{LastPage}}
+    \renewcommand{\headrulewidth}{0mm}
+}
+
+\renewcommand{\figurename}{図}
+\renewcommand{\tablename}{表}
+\renewcommand{\lstlistingname}{src.}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\renewcommand{\contentsname}{目次}
+\renewcommand{\listfigurename}{図目次}
+\renewcommand{\listtablename}{表目次}
+\renewcommand{\lstlistlistingname}{ソースコード}
+\renewcommand{\thefigure}{\thechapter-\arabic{figure}}
+\renewcommand{\thetable}{\thechapter-\arabic{table}}
+\renewcommand{\theequation}{\thechapter.\arabic{equation}}
+\renewcommand{\labelenumi}{\textbf{\theenumi}.\ }
+\renewcommand{\eqref}[1]{式(\ref{#1})}
+\newcommand{\figref}[1]{図\ref{#1}}
+\newcommand{\tblref}[1]{表\ref{#1}}
+\newcommand{\srcref}[1]{src.\ref{#1}}
+\makeatletter
+\@addtoreset{figure}{chapter}
+\@addtoreset{table}{chapter}
+\@addtoreset{lstlisting}{chapter}
+\@addtoreset{footnote}{page}
+\renewcommand{\chapter}{%
+    \if@openright\cleardoublepage\else\clearpage\fi
+    \global\@topnum\z@
+    \secdef\@chapter\@schapter}
+\makeatother
+\AtBeginDocument{
+    \renewcommand{\thelstlisting}{\thechapter-\arabic{lstlisting}}
+}
+\author{1250373\hspace{1\zw}溝口 洸熙\thanks{高知工科大学 情報学群 情報セキュリティシステム研究室}\\Group 10}

@@ -1,0 +1,53 @@
+\newcommand\YAMLcolonstyle{\color{red}\mdseries}
+\newcommand\YAMLkeystyle{\color{black}\bfseries}
+\newcommand\YAMLvaluestyle{\color{blue}\mdseries}
+
+\makeatletter
+
+% here is a macro expanding to the name of the language
+% (handy if you decide to change it further down the road)
+\newcommand\language@yaml{yaml}
+
+\expandafter\expandafter\expandafter\lstdefinelanguage
+\expandafter{\language@yaml}
+{
+keywords={true,false,null,y,n},
+sensitive=false,
+comment=[l]{\#},
+morecomment=[s]{/*}{*/},
+moredelim=[l][\color{orange}]{\&},
+moredelim=[l][\color{magenta}]{*},
+moredelim=**[il][\YAMLcolonstyle{:}\YAMLvaluestyle]{:},   % switch to value style at :
+morestring=[b]',
+morestring=[b]",
+literate =    {---}{{\ProcessThreeDashes}}3
+{>}{{\textcolor{red}\textgreater}}1
+{|}{{\textcolor{red}\textbar}}1
+{\ -\ }{{\mdseries\ -\ }}3,
+}
+
+% switch to key style at EOL
+\lst@AddToHook{EveryLine}{\ifx\lst@language\language@yaml\YAMLkeystyle\fi}
+\makeatother
+
+\newcommand\ProcessThreeDashes{\llap{\color{cyan}\mdseries-{-}-}}
+
+\lstset{
+    %backgroundcolor={\color[gray]{.90}},
+    breaklines = true,
+    breakindent = 10pt,
+    basicstyle = \ttfamily\small,
+    commentstyle = {\ttfamily \color[rgb]{0,0.45,0}},
+    classoffset = 0,
+    keywordstyle = {\bfseries \color{red}},
+    stringstyle = {\ttfamily \color{blue}},
+    frame = single,
+    %他オプション：leftline，topline，bottomline，lines，single，shadowbox
+    framesep = 5pt,
+    numbers = left,
+    stepnumber = 1,
+    numberstyle = \small,
+    tabsize = 4,
+    captionpos = t,
+    otherkeywords = {}
+}
