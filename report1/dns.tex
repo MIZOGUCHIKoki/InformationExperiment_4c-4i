@@ -1,5 +1,26 @@
 \chapter{DNS}
-\section{DNS発祥の背景と目的}
-DNS（Domain Name System）とは，ドメイン名とIPアドレスの対応システムである．
+\section{DNS誕生の背景と実験の目的}
+この実験では，DNSを用いてLAN内のコンピュータを，ホスト名で識別できるようにする．DNSを用いることで，IPアドレスではなくアルファベットや記号を用いたホスト名でのアクセスが可能になる．\par
+DNSが誕生する以前，ARPAnet\footnote{米国の重要な機関を結ぶ広域コンピュータネットワーク\cite[p.1]{DNSBIND}．}は数百台のホストだけで構成される小さなネットワークであり，
+ARPAnet上すべてのホスト情報は，\texttt{HOSTS.TXT}というファイルで管理されていた．
+\texttt{HOSTS.TXT}の更新は，SRI-NICにFTP接続して行われており，
+ARPAnetの管理者は，ホスト情報に変更があるとSRI-NICへ電子メールを用いて通知していた．
+しかし，ARPAnetの規模が大きくなると，当然\texttt{HOSTS.TXT}のサイズが大きくなり，SRI-NICから更新情報を得ようとするホスト数も増加する\cite[p.3]{DNSBIND}．
+ARPAnetがTCP/IPプロトコルに移行すると，ネットワーク上のホスト数が爆発的に増え，\texttt{HOSTS.TXT}での管理が困難になった．その主な原因は3つある．
+\begin{enumerate}
+    \item \textbf{トラフィックと負荷的問題}\\
+          \texttt{HOSTS.TXT}配布に伴うプロセッサの負荷と，ネットワークトラフィックの増大にSRI-NICが耐えきれなかった．
+    \item \textbf{名前の衝突問題}\\
+          \texttt{HOSTS.TXT}は，同一ホスト名を登録できないが，ホスト名割り当てに権限がないNICはそれを防げなかった．
+    \item \textbf{一貫性担保の問題}\\
+          \texttt{HOSTS.TXT}の一貫性担保は困難であった．ARPAnetの管理者が新しい\texttt{HOSTS.TXT}に更新するころには，ホストのアドレスが変わっていたり，新しいホストが追加されたりした．
+\end{enumerate}
+\hfill\cite[p.4]{DNSBIND}\par
+ここで登場するのが，DNSである．DNSは分散データベースであり，\texttt{HOSTS.TXT}での管理とは異なり，データベースの各部分はローカルに管理されながら，それぞれの部分データはネットワーク全体で利用できる\cite[p.5]{DNSBIND}．
+今回の実験では，DNSを提供するDNSサーバを構築し，ホスト名を用いた通信を実現する．
+\section{内容}
+DNSを\texttt{BIND}と呼ばれるソフトウェアを用いて構築し，同LAN内で名前解決する．
+さらに，構築したDNSを用いて，インターネット上のドメインに対して名前解決する．
+\paragraph{DNSとは}DNS（Domain Name System）とは，ドメイン名とIPアドレスの対応システムである．
 インターネット上のデバイスは「IPアドレス」という識別子で識別される．
 しかし，一般ではインターネット上ではURIを用いてアクセス箇所を指定する．
