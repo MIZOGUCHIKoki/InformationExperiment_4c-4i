@@ -1,0 +1,7 @@
+\newcommand{\tkin}[3]{\tikz[remember picture,baseline=(#1.base)]{\node[inner xsep=2mm,rounded corners,text height=3mm,text depth=1.5mm,draw](#1){#2}}}
+{\Large\ttfamily \tkin{u1}{www}{red}.\tkin{u2}{info}{green}.\tkin{u3}{kochi-tech}{blue}.\tkin{u4}{ac}{yellow}.\tkin{u5}{jp}{gray}}
+\begin{tikzpicture}[remember picture,overlay]
+      \foreach \u \v in {u1/{ホスト名}, u2/{情報学群ラベル}, u3/{高知工科大学ラベル}, u4/{\texttt{ac}ラベル}, u5/{\texttt{jp}ラベル}}{
+      \node[below=0.2cm of \u]{\scriptsize \v};
+      }
+\end{tikzpicture}
