@@ -4,5 +4,7 @@
 - Contributor : [MIZOGUCHI Koki](https://github.com/MIZOGUCHIKoki)
   - School of Information 3rd grade (2023)
   - E-mail: [250373b@ugs.kochi-tech.ac.jp](mailto:250373b@ugs.kochi-tech.ac.jp)
+- Network構成図作成用アイコン
+  -   [YAMAHA](https://network.yamaha.com/support/download/tool/)
   
 ⚠️  コード・レポートの剽窃はバレるので，行わないこと！！！（私も単位を落とします😭）
