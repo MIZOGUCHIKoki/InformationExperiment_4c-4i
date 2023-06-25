@@ -1,7 +1,7 @@
 \chapter{メールサーバに関する内容}
 \begin{wrapfigure}{r}[0mm]{.43\textwidth}
-    \input{02_mail.tikz}
-    \caption{メール送受信フロー}
+    \input{99_mail.tikz}
+    \caption{メール送受信フロー\footnotemark[2]}
     \label{fig:メール送受信フロー}
     \vspace{-1cm}
 \end{wrapfigure}
@@ -13,10 +13,31 @@
 送り手は，MUA（Mail User Agent）と呼ばれるソフトウェア（ThunderbirdやMicrosoft Outlookなど）から\smtp を利用してMTAにメールを転送する．
 この際，MUAはMTAのドメイン名を保持しており，DNSを用いてMTAのIPアドレスを取得後，\smtp を利用してMTAへメールを転送する．
 転送されたメッセージは，\smtp を利用して宛先MTAへ転送され，Mail Spool\footnote{宛先のMUAが，メールを受け取るまで一時的に保存する場所．}（以下，Spool）へ保存される．
-Spool内のメールは，\pop や\imap を利用して宛先のMUAへ転送されると，Spoolから削除される．
+Spool内のメールは，\pop を利用して宛先のMUAへ転送されると，Spoolから削除される．
+\footnotetext[2]{本レポートで用いる図の一部は\cite{networkfig}の公開済図形を利用している．}
 \section{名前解決フロー}
-DNSを利用して，ドメイン名に対してIPアドレスを割り出すことを「名前解決」と呼ぶ．
-DNSとドメインに関しては（）で詳解する．
-\section{aliasファイル}
+DNSを利用して，ドメイン名とIPアドレスの対応づけ，その対応を呼び出して利用することを「名前解決」と呼ぶ．
+ドメインに関しては\chapref{chap:DNS}で詳解する．
+DNSにおけるデータは，リソースレコードと呼ばれる各種レコードで構成される．
+IPアドレスやネームサーバ，ホスト名エイリアス，メールルーティングなどを記述することで，DNSを構成する\cite[p.88]{Postfix実用ガイド}．
+以下には代表的なレコードと役割は以下の通りである．
+\begin{oframed}
+    \begin{description}
+        \item[A] ホスト名とIPアドレスを対応づける．
+        \item[CNAME] エイリアスホスト名が指し示す「正規名」を提供する．
+            たとえば，ホスト名が\texttt{serevr}であるサーバをWebサーバとして利用したいとき，\texttt{www}をCNAMEを用いて\texttt{server}と対応づけると，\texttt{server}へのアクセスがホスト名を\texttt{www}に指定しても可能になる．
+        \item[MX] メールルーティングを示す．MXレコードには，ドメインのメールエクスチェンジャを指定する．つまり，ドメイン宛のメールを処理するメールハブの名前を指定する．
+            メールをどの場所に送れば良いかMTAに教える役割を果たしている．
+    \end{description}
+    \hfill\cite[p.88\ -\ p.89]{Postfix実用ガイド}
+\end{oframed}
+レコードの設定は，\chapref{chap:ゾーンの設定}で詳解する．
+\clearpage
+\newcommand{\alias}{\texttt{alias}}
+\section{\texttt{\bfseries alias} ファイル}
 通常，メールサーバを設定をしない限り，メールアドレスは「\texttt{username@domain}」になる．
-ここで，ドメインはDNSサーバのMXレコードで指定されるドメイン名やAレコードで指定されるメールサーバのFQDNである．
+ここで，\texttt{username@domain}のユーザ名\texttt{username}宛に送りたいが，ユーザ名\texttt{username}を公開したくない場合，
+\alias ファイルに\texttt{dummy}と\texttt{username}を対応づける設定をすることで，
+\texttt{dummy@domain}でのメール受信が可能になる．
+この機能はユーザ名を秘匿にしたい場合だけでなく，たとえば\texttt{usernameA}，\texttt{usernameB}，\texttt{usernameC}の3ユーザを1つのエイリアス\texttt{group}と対応づけて，
+\texttt{group@domain}宛に送信したメールを3ユーザで受信できる．
