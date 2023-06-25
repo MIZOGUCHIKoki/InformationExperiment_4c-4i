@@ -34,10 +34,11 @@ IPアドレスやネームサーバ，ホスト名エイリアス，メールル
 レコードの設定は，\chapref{chap:ゾーンの設定}で詳解する．
 \clearpage
 \newcommand{\alias}{\texttt{alias}}
+\newcommand{\user}{ユーザ}
 \section{\texttt{\bfseries alias} ファイル}
 通常，メールサーバを設定をしない限り，メールアドレスは「\texttt{username@domain}」になる．
-ここで，\texttt{username@domain}のユーザ名\texttt{username}宛に送りたいが，ユーザ名\texttt{username}を公開したくない場合，
+ここで，\texttt{username@domain}の名\texttt{username}宛に送りたいが，\user 名\texttt{username}を公開したくない場合，
 \alias ファイルに\texttt{dummy}と\texttt{username}を対応づける設定をすることで，
 \texttt{dummy@domain}でのメール受信が可能になる．
-この機能はユーザ名を秘匿にしたい場合だけでなく，たとえば\texttt{usernameA}，\texttt{usernameB}，\texttt{usernameC}の3ユーザを1つのエイリアス\texttt{group}と対応づけて，
-\texttt{group@domain}宛に送信したメールを3ユーザで受信できる．
+この機能は\user 名を秘匿にしたい場合だけでなく，たとえば\texttt{usernameA}，\texttt{usernameB}，\texttt{usernameC}の3\user を1つのエイリアス\texttt{group}と対応づけて，
+\texttt{group@domain}宛に送信したメールを3\user で受信できる．
