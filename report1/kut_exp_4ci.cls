@@ -2,13 +2,13 @@
 \ProvidesClass{kut_exp_4ci}[2023.06.23 K.MIZOGUCHI]
 \usepackage{silence}
 \WarningFilter{caption}{Unknown document}
-\usepackage[top=20truemm,bottom=20truemm,left=15truemm,right=15truemm,headheight=20pt]{geometry}
+\usepackage[top=20truemm,bottom=20truemm,left=15truemm,right=15truemm,headheight=10truemm,footskip=10truemm]{geometry}
 \usepackage{fancyhdr,lastpage,abstract,listings,float,wrapfig,tabularx,multirow,multicol}
 \usepackage{hyperref,graphics,graphicx,framed}
 \usepackage[symbol]{footmisc}
 \usepackage{amsmath,amssymb}
 \usepackage{tikz}
-\usetikzlibrary{calc,arrows.meta,fit,positioning}
+\usetikzlibrary{calc,arrows.meta,fit,positioning,shapes}
 \newcolumntype{A}{>{\centering\bfseries}X}
 \newcolumntype{B}{>{\centering\bfseries\arraybackslash}X}
 \newcolumntype{C}{>{\centering\arraybackslash}X}
@@ -24,8 +24,9 @@
 \renewcommand{\chaptermark}[1]{\markboth{第\ \thechapter\ 章\,\, #1}{}}
 \fancypagestyle{report}{
     \fancyhf{}
-    \fancyhead[RO,LE]{\leftmark}
-    \fancyfoot[RO,LE]{\thepage\ /\ \pageref{LastPage}}
+    \fancyhead[RO]{\leftmark\hspace{1em}\raisebox{-1mm}{\color{gray}\rule{.5mm}{6mm}}\hspace{1em}\thepage\hspace{1em}}
+    \fancyhead[LE]{\hspace{1em}\thepage\hspace{1em}\raisebox{-1mm}{\color{gray}\rule{.5mm}{6mm}}\hspace{1em}\leftmark}
+    % \fancyfoot[RO,LE]{\thepage\ /\ \pageref{LastPage}}
     \pagenumbering{arabic}
 }
 \fancypagestyle{appendixstyle}{
@@ -33,6 +34,13 @@
     \fancyhead[RO,LE]{付録}
     \fancyfoot[RO,LE]{\thepage\ /\ \pageref{LastPage}}
     \renewcommand{\headrulewidth}{0mm}
+}
+\fancypagestyle{toc}{
+    \fancyhf{}
+    \fancyhead[RE]{目次\hspace{1em}\raisebox{-1mm}{\color{gray}\rule{.5mm}{6mm}}\hspace{1em}\thepage\hspace{1em}}
+    \fancyhead[LO]{\hspace{1em}\thepage\hspace{1em}\raisebox{-1mm}{\color{gray}\rule{.5mm}{6mm}}\hspace{1em}目次}
+    % \fancyfoot[RO,LE]{\thepage\ /\ \pageref{LastPage}}
+    \pagenumbering{roman}
 }
 
 \renewcommand{\figurename}{図}
@@ -152,7 +160,7 @@ literate =    {---}{{\ProcessThreeDashes}}3
         \thispagestyle{empty}
         \maketitle
     \end{titlepage}
-    \pagenumbering{roman}\thispagestyle{plain}
+    \pagenumbering{roman}\thispagestyle{toc}
     \tableofcontents
     \newpage
     \pagestyle{report}
