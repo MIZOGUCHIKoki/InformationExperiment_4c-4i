@@ -1,10 +1,10 @@
-\chapter{要素技術}
+\section{要素技術}
 \newcommand{\popt}{\texttt{POP3}}
 \begin{wrapfigure}{r}[0mm]{.55\textwidth}
     \centering
     \input{99_url.tikz}
 \end{wrapfigure}
-\section{ドメインとDNS}\label{chap:DNS}
+\subsection{ドメインとDNS}\label{chap:DNS}
 \paragraph{ドメイン}
 ここで高知工科大学情報学群ホームページのURIを例にあげる．URI冒頭の\texttt{www}はホスト名である．
 DNSはUNIXファイルシステムと同様に木構造を持っている．ファイルシステムの根（root）は\texttt{\ /\ }であるのに対して，DNSの根（ルートDNS）は空ラベル（``''）で表現される．
@@ -21,5 +21,5 @@ DNSでは，各ドメインをいくつかのサブドメインに分割し，�
 たとえば，ドメイン\texttt{info.kochi-tech.ac.jp}において，\texttt{jp}のサブドメインである\texttt{ac}は，\texttt{ac.jp}で終わるドメインについて責任を持つ．
 また，\texttt{ac}は，\texttt{kochi-tech}というサブドメインをもち，\texttt{kochi-tech.ac.jp}が末尾につくドメイン名の責任を高知工科大学に委任している．
 \paragraph{ゾーン}ここで，ゾーンという概念が登場する．ゾーンとは，名前空間において独立し，自治管理される部分である．
-\section{\smtp と \popt}\label{chap:smtppop}
-\section{第3者リレー}
+\subsection{\smtp と \popt}\label{chap:smtppop}
+\subsection{第3者リレー}

@@ -1,4 +1,4 @@
-\chapter{内容}
+\section{内容}
 \begin{wrapfigure}{r}[0mm]{.43\textwidth}
     \input{99_mail.tikz}
     \caption{メール送受信フロー\footnotemark[2]}
@@ -8,14 +8,14 @@
 \newcommand{\smtp}{\texttt{SMTP}}
 \newcommand{\pop}{\texttt{POP}}
 \newcommand{\imap}{\texttt{IMAP}}
-\section{メール送受信フロー}
+\subsection{メール送受信フロー}
 ここで，メールを送信してから宛先に届くまでの大まかな手続きを確認する（\figref{fig:メール送受信フロー}）．
 送り手は，MUA（Mail User Agent）と呼ばれるソフトウェア（ThunderbirdやMicrosoft Outlookなど）から\smtp を利用してMTAにメールを転送する．
 この際，MUAはMTAのドメイン名を保持しており，DNSを用いてMTAのIPアドレスを取得後，\smtp を利用してMTAへメールを転送する．
 転送されたメッセージは，\smtp を利用して宛先MTAへ転送され，Mail Spool\footnote{宛先のMUAが，メールを受け取るまで一時的に保存する場所．}（以下，Spool）へ保存される．
 Spool内のメールは，\pop を利用して宛先のMUAへ転送されると，Spoolから削除される．
 \footnotetext[2]{本レポートで用いる図の一部はヤマハ株式会社の公開済図形（\url{https://network.yamaha.com/support/download/tool/}）を利用している．}
-\section{名前解決フロー}
+\subsection{名前解決フロー}
 DNSを利用して，ドメイン名とIPアドレスの対応づけ，その対応を呼び出して利用することを「名前解決」と呼ぶ．
 ドメインに関しては\chapref{chap:DNS}で詳解する．
 DNSにおけるデータは，リソースレコードと呼ばれる各種レコードで構成される．
@@ -35,7 +35,7 @@ IPアドレスやネームサーバ，ホスト名エイリアス，メールル
 \clearpage
 \newcommand{\alias}{\texttt{alias}}
 \newcommand{\user}{ユーザ}
-\section{\texttt{\bfseries alias} ファイル}
+\subsection{\texttt{\bfseries alias} ファイル}
 通常，メールサーバを設定をしない限り，メールアドレスは「\texttt{username@domain}」になる．
 ここで，\texttt{username@domain}の名\texttt{username}宛に送りたいが，\user 名\texttt{username}を公開したくない場合，
 \alias ファイルに\texttt{dummy}と\texttt{username}を対応づける設定をすることで，
