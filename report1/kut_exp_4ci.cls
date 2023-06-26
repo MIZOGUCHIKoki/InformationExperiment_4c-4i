@@ -24,23 +24,10 @@
 \renewcommand{\chaptermark}[1]{\markboth{第\ \thechapter\ 章\,\, #1}{}}
 \fancypagestyle{report}{
     \fancyhf{}
-    \fancyhead[RO]{\leftmark\hspace{1em}\raisebox{-1mm}{\color{gray}\rule{.5mm}{6mm}}\hspace{1em}\thepage\hspace{1em}}
-    \fancyhead[LE]{\hspace{1em}\thepage\hspace{1em}\raisebox{-1mm}{\color{gray}\rule{.5mm}{6mm}}\hspace{1em}\leftmark}
+    \fancyhead[RE]{\leftmark\hspace{1em}\raisebox{-1mm}{\color{gray}\rule{.5mm}{6mm}}\hspace{1em}\thepage\hspace{1em}}
+    \fancyhead[LO]{\hspace{1em}\thepage\hspace{1em}\raisebox{-1mm}{\color{gray}\rule{.5mm}{6mm}}\hspace{1em}\leftmark}
     % \fancyfoot[RO,LE]{\thepage\ /\ \pageref{LastPage}}
     \pagenumbering{arabic}
-}
-\fancypagestyle{appendixstyle}{
-    \fancyhf{}
-    \fancyhead[RO,LE]{付録}
-    \fancyfoot[RO,LE]{\thepage\ /\ \pageref{LastPage}}
-    \renewcommand{\headrulewidth}{0mm}
-}
-\fancypagestyle{toc}{
-    \fancyhf{}
-    \fancyhead[RE]{目次\hspace{1em}\raisebox{-1mm}{\color{gray}\rule{.5mm}{6mm}}\hspace{1em}\thepage\hspace{1em}}
-    \fancyhead[LO]{\hspace{1em}\thepage\hspace{1em}\raisebox{-1mm}{\color{gray}\rule{.5mm}{6mm}}\hspace{1em}目次}
-    % \fancyfoot[RO,LE]{\thepage\ /\ \pageref{LastPage}}
-    \pagenumbering{roman}
 }
 
 \renewcommand{\figurename}{図}
@@ -160,9 +147,6 @@ literate =    {---}{{\ProcessThreeDashes}}3
         \thispagestyle{empty}
         \maketitle
     \end{titlepage}
-    \pagenumbering{roman}\thispagestyle{toc}
-    \tableofcontents
-    \newpage
     \pagestyle{report}
     \setcounter{page}{1}
 }
