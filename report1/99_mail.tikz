@@ -1,6 +1,6 @@
 \begin{tikzpicture}
     \node (mua1){\includegraphics[keepaspectratio,width=0.1\textwidth]{../network_iconset/laptop.pdf}};
-    \node at (mua1.north){\texttt{MUA}};
+    \node at (mua1.north){\texttt{MUA}（送信）};
     \node[right=0.5cm of mua1,draw,text width=1cm,minimum height=1cm](mta1){};
     \node[fill=white] at (mta1.north){\texttt{MTA}};
     \node[right=0.5cm of mta1,draw,dotted,thick,text width=1cm, minimum height=1cm](spool1){};
@@ -14,7 +14,7 @@
     \node[left=0.5cm of spool,draw,dashed,thick,text width=1cm, minimum height=1cm](popper){};
     \node[fill=white] at (popper.south){\texttt{\footnotesize popper}};
     \node at (mua1 |- popper)(mua2){\includegraphics[keepaspectratio,width=0.1\textwidth]{../network_iconset/laptop.pdf}};
-    \node at (mua2.south){\texttt{MUA}};
+    \node at (mua2.south){\texttt{MUA}（受信）};
     \node[inner ysep=0.4cm,fit={(mta1)(spool1)(popper1)},draw,thick,rounded corners](wrap){};
     \node[fill=white] at (wrap.north){\texttt{\small Mail Server}};
     \node[inner ysep=0.3cm,fit={(mta2)(spool)(popper)},draw,thick,rounded corners](wrap2){};
