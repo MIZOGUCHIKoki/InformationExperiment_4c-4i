@@ -1,0 +1,34 @@
+\tikzset{point/.style={circle,minimum size=3pt,draw,fill=white}}
+\begin{tikzpicture}
+    \newcommand{\dist}{1.5cm}
+    \node[point] (root){};\node[right=.2cm of root]{\texttt{root}};;
+    \node[point,below left=\dist of root](jp){};\node[right=.2cm of jp]{\texttt{jp}};
+    \node[point,below right=\dist of root](uk){};\node[right=.2cm of uk]{\texttt{uk}};
+    \node[point,below left=\dist of jp](ac){};\node[right=.2cm of ac]{\texttt{ac}};
+    \node[point,below right=\dist of jp](co){};\node[right=.2cm of co]{\texttt{co}};
+    \node[point,below left=\dist of ac](kut){};\node[left=.2cm of kut](lkut){\texttt{kochi-tech}};
+    \node[point,below right=\dist of ac](uec){};\node[right=.2cm of uec]{\texttt{uec}};
+    \node[point,below left=\dist of kut](info){};\node[left=.2cm of info](linfo){\texttt{info}};
+    \node[point,below right=\dist of kut](sceng){};\node[below=.2cm of sceng](lsceng){\texttt{sceng}};
+    \node[point,fill=black,below left=\dist of info](www){};\node[below=.2cm of www](lwww){\texttt{www}};
+    \node[point,fill=black,below right=\dist of info](host2){};\node[below=.2cm of host2](lhost2){\texttt{host2}};
+    \node[point,fill=black]at($(www)!0.5!(host2)$)(host1){};\node[below=.2cm of host1](lhost1){\texttt{host1}};
+    \draw[thick]{
+        (root)--(jp)--(ac)--(kut)--(info)--(www)
+        (kut)--(sceng)
+        (info)--(host1)
+        (info)--(host2)
+        (root)--(uk)
+        (jp)--(co)
+        (ac)--(uec)
+    };
+    \node[ellipse,minimum width=3.5cm,minimum height=1.5cm,fill=gray,opacity=0.1]at (ac)(aczoned){};
+    \node[above left=3cm of ac](aczone){\texttt{ac}ゾーン};
+    \node[fit={(kut)(sceng)(info)(www)(host1)(host2)(lkut)(lsceng)(linfo)(lwww)(lhost1)(lhost2)},draw,rounded corners](warp_kut){};
+    \node[right=1cm of warp_kut](lwarp_kut){高知工科大学が管理};
+    \draw[-latex](aczone)to[bend right](aczoned.west);
+    \draw[-latex](lwarp_kut)--(warp_kut.east);
+    \node[fit={(info)(www)(host1)(host2)(linfo)(lwww)(lhost1)(lhost2)},rounded corners,fill=gray,opacity=0.1](warp_infozone){};
+    \node[below=.5cm of lwarp_kut](lwarp_infozone){\footnotesize\texttt{info.kochi-tech.ac.jp}ゾーン};
+    \draw[-latex](lwarp_infozone.west)--(warp_infozone.east);
+\end{tikzpicture}
