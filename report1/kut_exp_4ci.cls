@@ -2,7 +2,7 @@
 \ProvidesClass{kut_exp_4ci}[2023.06.23 K.MIZOGUCHI]
 \usepackage{silence}
 \WarningFilter{caption}{Unknown document}
-\usepackage[top=20truemm,bottom=20truemm,left=15truemm,right=15truemm,headheight=10truemm,footskip=10truemm]{geometry}
+\usepackage[top=20truemm,bottom=20truemm,left=15truemm,right=15truemm,headheight=10truemm,footskip=10truemm,showframe]{geometry}
 \usepackage{fancyhdr,lastpage,abstract,listings,float,wrapfig,tabularx,multirow,multicol}
 \usepackage{hyperref,graphics,graphicx,framed}
 \usepackage[symbol]{footmisc}
