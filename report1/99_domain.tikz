@@ -23,7 +23,7 @@
         (ac)--(uec)
     };
     \node[ellipse,minimum width=3.5cm,minimum height=1.5cm,fill=gray,opacity=0.1]at (ac)(aczoned){};
-    \node[above left=3cm of ac](aczone){\texttt{ac}ゾーン};
+    \node[above left=3cm of ac](aczone){\texttt{ac.jp}ゾーン};
     \node[fit={(kut)(sceng)(info)(www)(host1)(host2)(lkut)(lsceng)(linfo)(lwww)(lhost1)(lhost2)},draw,rounded corners](warp_kut){};
     \node[right=1cm of warp_kut](lwarp_kut){高知工科大学が管理};
     \draw[-latex](aczone)to[bend right](aczoned.west);

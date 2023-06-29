@@ -8,7 +8,8 @@
 \newcommand{\smtp}{\texttt{SMTP}}
 \newcommand{\pop}{\texttt{POP}}
 \newcommand{\imap}{\texttt{IMAP}}
-\subsection{メール送受信フロー}
+\subsection{システムの原理}
+\paragraph{メール送受信フロー}
 ここで，メールを送信してから宛先に届くまでの大まかな手続きを確認する（\figref{fig:メール送受信フロー}）．
 送り手は，MUA（Mail User Agent）と呼ばれるソフトウェア（ThunderbirdやMicrosoft Outlookなど）から\smtp を利用してMTAにメールを転送する．
 この際，MUAはMTAのドメイン名を保持しており，DNSを用いてMTAのIPアドレスを取得後，\smtp を利用してMTAへメールを転送する．
@@ -16,9 +17,8 @@
 Spoolとは，宛先のMUAが，メールを受け取るまで一時的に保存する場所である．
 Spool内のメールは，\pop を利用して宛先のMUAへ転送されると，Spoolから削除される．
 \footnotetext[1]{本レポートで用いる図の一部はヤマハ株式会社の公開済図形（\url{https://network.yamaha.com/support/download/tool/}）を利用している．}
-\subsection{名前解決フロー}
-DNSを利用して，ドメイン名とIPアドレスの対応づけ，その対応を呼び出して利用することを「名前解決」と呼ぶ．
-ドメインに関しては\chapref{chap:DNS}で詳解する．
+\paragraph{名前解決フロー}
+DNSを利用して，ドメイン名とIPアドレスの対応づけ，その対応を呼び出すことを「名前解決」と呼ぶ．
 DNSにおけるデータは，リソースレコードと呼ばれる各種レコードで構成される．
 IPアドレスやネームサーバ，ホスト名エイリアス，メールルーティングなどを記述することで，DNSを構成する\cite[p.88]{Postfix実用ガイド}．
 以下には代表的なレコードと役割は以下の通りである．
@@ -32,13 +32,15 @@ IPアドレスやネームサーバ，ホスト名エイリアス，メールル
     \end{description}
     \hfill\cite[p.88\ -\ p.89]{Postfix実用ガイド}
 \end{oframed}
-レコードの設定は，\chapref{chap:ゾーンの設定}で詳解する．
+名前解決の手順を解説する．
+
 \newcommand{\alias}{\texttt{alias}}
 \newcommand{\user}{ユーザ}
-\subsection{\texttt{\bfseries alias} ファイル}
+\subsection{用いる要素技術}
+\paragraph{\texttt{\bfseries alias} ファイル}
 通常，メールサーバを設定をしない限り，メールアドレスは「\texttt{username@domain}」になる．
 ここで，\texttt{username@domain}の名\texttt{username}宛に送りたいが，\user 名\texttt{username}を公開したくない場合，
-\alias ファイルに\texttt{dummy}と\texttt{username}を対応づける設定をすることで，
-\texttt{dummy@domain}でのメール受信が可能になる．
+\alias ファイルに\texttt{anonymous}と\texttt{username}を対応づける設定をすることで，
+\texttt{anonymous@domain}でのメール受信が可能になる．
 この機能は\user 名を秘匿にしたい場合だけでなく，たとえば\texttt{usernameA}，\texttt{usernameB}，\texttt{usernameC}の3\user を1つのエイリアス\texttt{group}と対応づけて，
 \texttt{group@domain}宛に送信したメールを3\user で受信できる．
