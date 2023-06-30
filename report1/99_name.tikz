@@ -1,0 +1,23 @@
+\begin{tikzpicture}
+    \newcommand{\server}{\includegraphics[keepaspectratio,width=0.1\textwidth]{../network_iconset/server.pdf}}
+    \node(root){\server};
+    \node[below=.1cm of root](jp){\server};
+    \node[below=.1cm of jp](ac){\bfseries\Large\vdots};
+    \node[below=.1cm of ac](info){\server};
+    \coordinate (A) at ($(root)!0.5!(info)$);
+    \node[left=2.8cm of A](ns){\server};
+    \node[below=.5cm of ns](rs){\includegraphics[keepaspectratio,width=0.1\textwidth]{../network_iconset/laptop.pdf}};
+    \node[below=-.5cm of rs]{\scriptsize リゾルバ};
+    \foreach \u \v in {root/{\normalfont ``''}(root),jp/jp,info/info}{
+    \node[right=-.3cm of \u]{\ttfamily\scriptsize\v};
+    }
+    \draw[thick,-latex]($(rs.north)+(-.1cm,0)$)--($(ns.south)+(-.1cm,0)$)node[midway,left]{\tiny\ttfamily 1.www Addr?};
+    \draw[thick,-latex]($(ns.north)+(-.1cm,0)$)|-($(root.west)+(0,0.1cm)$)node[midway,above]{\tiny\ttfamily 2.jp's Addr?};
+    \draw[thick,-latex]($(root.west)+(0,-0.1cm)$)-|($(ns.north)+(.1cm,0)$)node[midway,below right]{\tiny\ttfamily 3.jp's Addr};
+    \draw[thick,-latex]($(ns.east)+(0,.2cm)$)--($(jp.west)+(0,.1cm)$)node[midway,above=-.1cm]{\rotatebox{12}{\tiny\ttfamily 4.ac's Addr?}};
+    \draw[thick,-latex]($(jp.west)+(0,0cm)$)--($(ns.east)+(0,.1cm)$)node[midway,below=-.1cm]{\rotatebox{12}{\tiny\ttfamily 5.ac's Addr}};
+    \draw[thick,-latex]($(ns.east)+(0,0.-.1cm)$)--($(info.west)+(0,.1cm)$)node[midway,above=-.3cm]{\rotatebox{-50}{\tiny\ttfamily 10.www's Addr?}};
+    \draw[thick,-latex]($(info.west)+(0,-.05cm)$)--($(ns.east)+(0,-.25cm)$)node[midway,below=-.3cm]{\rotatebox{-50}{\tiny\ttfamily\hspace{1em} 11.www's Addr}};
+    \draw[thick,-latex]($(ns.south)+(.1cm,0)$)--($(rs.north)+(.1cm,0)$)node[midway,right,align=left]{\tiny\ttfamily 12.www's Addr};
+    \node[fill=white,opacity=.5,text=black,text opacity=1] at (ns.center){\scriptsize ネームサーバ};
+\end{tikzpicture}

@@ -32,8 +32,19 @@ IPアドレスやネームサーバ，ホスト名エイリアス，メールル
     \end{description}
     \hfill\cite[p.88\ -\ p.89]{Postfix実用ガイド}
 \end{oframed}
+\begin{wrapfigure}{r}[0mm]{.45\textwidth}
+    \vspace{-1cm}
+    \centering
+    \input{99_name.tikz}
+    \caption{名前解決}
+    \vspace{-1cm}
+\end{wrapfigure}
 名前解決の手順を解説する．
-
+ここでは例としてWebサイト\texttt{www.info.kochi-tech.ac.jp}のIPアドレスを，DNSを用いて取得する．
+まず，リゾルバ（ネームサーバへアクセスするクライアント）は，自身のネットワーク設定により指定されたネームサーバへ\texttt{www.info.kochi-tech.ac.jp}のIPアドレスを問い合わせる．
+そのネームサーバが，\texttt{www.info.kochi-tech.ac.jp}のIPアドレスを持っていない場合，まずは\texttt{root}ネームサーバへ，\texttt{jp}ネームサーバのIPアドレスを問い合わせる．
+次に\texttt{jp}ネームサーバへ\texttt{ac}ネームサーバのIPアドレスを問い合わせる．これを繰り返し，最後に\texttt{info}ネームサーバが\texttt{www}のIPアドレスを，リゾルバが最初に問い合わせたネームサーバへ返し，
+リゾルバへ応答する．
 \newcommand{\alias}{\texttt{alias}}
 \newcommand{\user}{ユーザ}
 \subsection{用いる要素技術}
