@@ -30,4 +30,6 @@ DNSでは，各ドメインをいくつかのサブドメインに分割し，�
 これは「委任（委譲）」という行為で，\texttt{ac.jp}から，高知工科大学へ\texttt{kochi-tech}以下サブドメインの管理を委任する．
 つまり，\texttt{ac.jp}は，\texttt{kochi-tech.ac.jp}のサブドメインを管理しないので，\texttt{ac.jp}のゾーンではない．
 \subsection{\smtp と \popt}
+\paragraph{\smtp}\smtp とは，OSI参照モデル第7層に属する，メール転送プロトコルである．ポート番号は\texttt{25}番である．
+\figref{fig:メール送受信フロー}にも示したが，MUAからMTA，MTAからMTAへのメール転送に用いられる．
 \subsection{第3者リレー}
