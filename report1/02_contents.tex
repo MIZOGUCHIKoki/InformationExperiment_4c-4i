@@ -36,12 +36,12 @@ DNSを用いた名前解決の手順を解説する．
 そのネームサーバが，\texttt{www.info.kochi-tech.ac.jp}のIPアドレスを持っていない場合，まずは\texttt{root}ネームサーバへ，\texttt{jp}ネームサーバのIPアドレスを問い合わせる．
 次に\texttt{jp}ネームサーバへ\texttt{ac}ネームサーバのIPアドレスを問い合わせる．これを繰り返し，最後に\texttt{info}ネームサーバが\texttt{www}のIPアドレスを，リゾルバが最初に問い合わせたネームサーバへ返し，
 リゾルバへ応答する．\hfill\cite[p.8]{DNSBIND}
-\newcommand{\alias}{\texttt{alias}}
+\newcommand{\aliases}{\texttt{aliases}}
 \newcommand{\user}{ユーザ}
-\paragraph{\texttt{\bfseries alias} ファイル}
+\paragraph{\texttt{\bfseries aliases} ファイル}
 通常，メールサーバを設定をしない限り，メールアドレスは「\texttt{username@domain}」になる．
 ここで，\texttt{username@domain}の\user 名\texttt{username}を公開したくない場合，
-\alias ファイルに\texttt{anonymous}と\texttt{username}を対応づける設定をすることで，
+\aliases ファイルに\texttt{anonymous}と\texttt{username}を対応づける設定をすることで，
 \texttt{anonymous@domain}でのメール受信が可能になる．
 この機能は\user 名を秘匿にしたい場合だけでなく，たとえば\texttt{usernameA}，\texttt{usernameB}，\texttt{usernameC}の3\user を1つのエイリアス\texttt{group}と対応づけて，
 \texttt{group@domain}宛に送信したメールを3\user で受信できる．

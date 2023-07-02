@@ -76,6 +76,10 @@ literate =    {---}{{\ProcessThreeDashes}}3
 
 \newcommand\ProcessThreeDashes{\llap{\color{cyan}\mdseries-{-}-}}
 
+\lstdefinelanguage{dns}{
+    keywords = {IN, NS, A, CNAME, SOA, \$TTL, MX},
+    sensitive = true,
+}
 \lstset{
     %backgroundcolor={\color[gray]{.90}},
     breaklines = true,

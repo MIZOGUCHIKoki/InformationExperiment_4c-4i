@@ -1,7 +1,10 @@
 \section{作業記録}
+ネットワークの設定（IPアドレスやデフォルトゲートウェイの設定）は完了している．
 \begin{table}[H]
     \caption{設定事項}
     \begin{tabularx}{\textwidth}{clR}
+        \hline
+        \textbf{ネットワーク}                   & デフォルトゲートウェイ              & \texttt{192.168.0.9}                          \\
         \hline
         \multirow{5}{*}{\bfseries サーバ}    & IPアドレス                   & \texttt{192.168.0.161}                        \\
         \cline{2-3}
@@ -18,10 +21,10 @@
     \end{tabularx}
 \end{table}
 \subsection{DNSサーバ構築}
-BINDというソフトウェアを用いてDNSサーバを構築する．BINDのバージョンは\texttt{9.18.16}である．
+BINDを用いてDNSサーバを構築する．BINDのバージョンは\texttt{9.18.16}である．
 \newcommand{\enter}{\ovalbox{Enter⏎}}
 \begin{enumerate}
-    \renewcommand{\labelenumi}{\textbf{\theenumi}.\ }
+    \renewcommand{\labelenumi}{\textbf{\theenumi.}\ }
     \item パッケージマネジャ\texttt{apt}をアップデートした後，\texttt{apt}を用いてBINDをインストールする．
           \begin{lstlisting}
 $ sudo su %\enter%
@@ -83,7 +86,7 @@ zone "." {
               \item[\bfseries\texttt{CNAME}レコード] ホスト名の別名を設定する．
               \item[\bfseries\texttt{MX}レコード] メールアドレスのドメイン名とサーバのFQDNを対応づける．\hfill\cite[p.69\ -\ p.71]{DNSBIND}
           \end{description}
-          \begin{lstlisting}[style=file,caption={\ttfamily /etc/bind/c5.zone}]
+          \begin{lstlisting}[style=file,caption={\ttfamily /etc/bind/c5.zone},language=dns]
 $TTL 100
 @ IN SOA server.c5.exp.info.kochi-tech.ac.jp. postmaster.c5.exp.info.kochi-tech.ac.jp. (
     2023061901
@@ -100,6 +103,83 @@ pop         IN  CNAME   server
 
 c5.exp.info.kochi-tech.ac.jp IN MX server.c5.exp.info.kochi-tech.ac.jp.
     \end{lstlisting}
-    \item
+    \item DNSクライアントの設定を変更し，変更を適用する．
+          \begin{lstlisting}[style=file,language=yaml,caption={\ttfamily /etc/netlpan/00-install-config.yaml}]
+# This is network config written by 'subiquity'
+network:
+    version: 2
+    ethernets:
+        enp0s31f6:
+            addresses:
+                - 192.168.0.161/24
+            routes:
+                - to: default
+                    via: 192.168.0.9
+            nameservers:
+                addresses:
+                    - 127.0.0.1 # 自分自身
+                search: [c5.exp.info.kochi-tech.ac.jp] # ドメイン名
+            dhcp4: false
+\end{lstlisting}
+          \begin{lstlisting}
+# netplan apply %\enter%
+\end{lstlisting}
+    \item \texttt{bind9}と\texttt{named}を再起動して，設定を反映させる．
+          \begin{lstlisting}
+# systemctl restart bind9 %\enter%
+# systemctl restart named %\enter%
+    \end{lstlisting}
 \end{enumerate}
 \subsection{メールサーバの構築}
+Postfixを用いてメールサーバを構築する．Postfixのバージョンは\texttt{3.8.1}である．
+\begin{enumerate}
+    \renewcommand{\labelenumi}{\textbf{\theenumi.}\ }
+    \item パッケージマネジャ\texttt{apt}をアップデートした後，\texttt{apt}を用いてPostfix，POPをインストールする．
+          \begin{lstlisting}
+$ sudo su %\enter%
+# apt update %\enter%
+# apt install postfix %\enter%
+~~~in Menu~~~
+1. [Internet Site] %\enter%
+2. mail name: c5.exp.info.kochi-tech.ac.jp %\enter%
+~~~~~~~~~~~~~
+# apt install dovecot-pop3d %\enter%
+\end{lstlisting}
+    \item 各種設定をする．
+          \begin{lstlisting}[style=file,caption={\ttfamily /etc/postfix/main.cf}]
+myhostname = server.c5.exp.info.kochi-tech.ac.jp.
+mynetworks = 192.168.0.0/24
+    \end{lstlisting}
+    \item POP3認証を有効にする．
+          \begin{lstlisting}[style=file,caption={\ttfamily /etc/dovecot/conf.d/10-auth.conf}]
+disable_plaintext_auth = no
+\end{lstlisting}
+    \item Postfix，dovecotを再起動する．
+          \begin{lstlisting}
+# systemctl restart postfix %\enter%
+# systemctl restart dovecot %\enter%
+    \end{lstlisting}
+    \item \aliases ファイルを編集し，\texttt{newaliases}コマンドで適用する．\texttt{list@c5.exp.info.kochi-tech.ac.jp}宛のメールが記述した4ユーザへ配信される．
+          \begin{lstlisting}[style=file,caption={\ttfamily /etc/aliases}]
+list: k.mizo, s.shio, k,kikk, k.fuku
+    \end{lstlisting}
+\end{enumerate}
+\clearpage
+\subsection{MUAの設定}
+MUAとしてThunderbirdを用いる．以下の項目を適切に入力する．
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{lR}
+        \hline
+        設定済みユーザ名  & \texttt{k.mizo}                              \\
+        パスワード     & \texttt{********}                            \\
+        \hline
+        名前        & \texttt{MIZOGUCHI Koki}                      \\
+        電子メールアドレス & \texttt{k.mizo@c5.exp.info.kochi-tech.ac.jp} \\
+        送信メールサーバ  & \texttt{smtp.c5.exp.info.kochi-tech.ac.jp}   \\
+        受信メールサーバ  & \texttt{pop.c5.exp.info.kochi-tech.ac.jp}    \\
+        POP3アカウント & \texttt{k.mizo}                              \\
+        パスワード     & \texttt{********}                            \\
+        \hline
+    \end{tabularx}
+\end{table}
