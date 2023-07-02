@@ -42,7 +42,7 @@
 \@addtoreset{footnote}{page}
 \makeatother
 \AtBeginDocument{
-    \renewcommand{\thelstlisting}{\thechapter-\arabic{lstlisting}}
+    \renewcommand{\thelstlisting}{\thesection-\arabic{lstlisting}}
     \maketitle
 }
 \newcommand\YAMLcolonstyle{\color{red}\mdseries}
@@ -96,5 +96,6 @@ literate =    {---}{{\ProcessThreeDashes}}3
     numberstyle = \small,
     tabsize = 4,
     captionpos = t,
-    otherkeywords = {}
+    otherkeywords = {},
+    xleftmargin = 2em
 }

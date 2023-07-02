@@ -1,9 +1,10 @@
 \section{内容}
 \begin{wrapfigure}{r}[0mm]{.48\textwidth}
+    \vspace{-.5cm}
     \input{99_mail.tikz}
     \caption{メール送受信フロー\footnotemark[1]}
     \label{fig:メール送受信フロー}
-    \vspace{-1cm}
+    \vspace{-.5cm}
 \end{wrapfigure}
 \newcommand{\smtp}{\texttt{SMTP}}
 \newcommand{\pop}{\texttt{POP}}
@@ -12,42 +13,30 @@
 \paragraph{メール送受信フロー}
 ここで，メールを送信してから宛先に届くまでの大まかな手続きを確認する（\figref{fig:メール送受信フロー}）．
 送り手は，MUA（Mail User Agent）と呼ばれるソフトウェア（ThunderbirdやMicrosoft Outlookなど）から\smtp を利用してMTAにメールを転送する．
-この際，MUAはMTAのドメイン名を保持しており，DNSを用いてMTAのIPアドレスを取得後，\smtp を利用してMTAへメールを転送する．
-転送されたメッセージは，\smtp を利用して宛先MTAへ転送され，Mail Spool（以下，Spool）へ保存される．
+この際，MUAはMTAのドメイン名を保持しており，DNSの\texttt{MX}レコードを用いてMTAのホスト名を取得後，\texttt{A}レコードを用いてそのIPアドレスを調べて\smtp を利用してMTAへメールを転送する．
+転送されたメールは，\smtp を利用して宛先MTAへ転送され，Mail Spool（以下，Spool）へ保存される．
 Spoolとは，宛先のMUAが，メールを受け取るまで一時的に保存する場所である．
 Spool内のメールは，\pop を利用して宛先のMUAへ転送されると，Spoolから削除される．
 \footnotetext[1]{本レポートで用いる図の一部はヤマハ株式会社の公開済図形（\url{https://network.yamaha.com/support/download/tool/}）を利用している．}
 \paragraph{名前解決フロー}
-DNSを利用して，ドメイン名とIPアドレスの対応づけ，その対応を呼び出すことを「名前解決」と呼ぶ．
-DNSにおけるデータは，リソースレコードと呼ばれる各種レコードで構成される．
-IPアドレスやネームサーバ，ホスト名エイリアス，メールルーティングなどを記述することで，DNSを構成する\cite[p.88]{Postfix実用ガイド}．
-以下には代表的なレコードと役割は以下の通りである．
-\begin{oframed}
-    \begin{description}
-        \item[A] ホスト名とIPアドレスを対応づける．
-        \item[CNAME] エイリアスホスト名が指し示す「正規名」を提供する．
-            たとえば，ホスト名が\texttt{serevr}であるサーバをWebサーバとして利用したいとき，\texttt{www}をCNAMEを用いて\texttt{server}と対応づけると，\texttt{server}へのアクセスがホスト名を\texttt{www}に指定しても可能になる．
-        \item[MX] メールルーティングを示す．MXレコードには，ドメインのメールエクスチェンジャを指定する．つまり，ドメイン宛のメールを処理するメールハブの名前を指定する．
-            メールをどの場所に送れば良いかMTAに教える役割を果たしている．
-    \end{description}
-    \hfill\cite[p.88\ -\ p.89]{Postfix実用ガイド}
-\end{oframed}
+ドメイン名に対して，対応付けられたIPアドレスへの名前解決をする．
+名前解決をする主な方法としてDNS，ブロードキャストで問い合わせる方法\cite[p.135]{いちばんやさしいネットワークの本}，WINS（Windows Internet Name Service），NIS（Network Information Service），\texttt{HOSTS}ファイルの適用などがある．
+ここではOSに依存せず，データベースを分散管理でき，大規模ネットワークでも耐えうるDNSを用いた名前解決方法を適用する\cite[p.10\ -\ p.11]{DNSBIND}．
+
 \begin{wrapfigure}{r}[0mm]{.45\textwidth}
-    \vspace{-1cm}
     \centering
     \input{99_name.tikz}
     \caption{名前解決}
-    \vspace{-1cm}
+    \vspace{-.5cm}
 \end{wrapfigure}
-名前解決の手順を解説する．
+DNSを用いた名前解決の手順を解説する．
 ここでは例としてWebサイト\texttt{www.info.kochi-tech.ac.jp}のIPアドレスを，DNSを用いて取得する．
 まず，リゾルバ（ネームサーバへアクセスするクライアント）は，自身のネットワーク設定により指定されたネームサーバへ\texttt{www.info.kochi-tech.ac.jp}のIPアドレスを問い合わせる．
 そのネームサーバが，\texttt{www.info.kochi-tech.ac.jp}のIPアドレスを持っていない場合，まずは\texttt{root}ネームサーバへ，\texttt{jp}ネームサーバのIPアドレスを問い合わせる．
 次に\texttt{jp}ネームサーバへ\texttt{ac}ネームサーバのIPアドレスを問い合わせる．これを繰り返し，最後に\texttt{info}ネームサーバが\texttt{www}のIPアドレスを，リゾルバが最初に問い合わせたネームサーバへ返し，
-リゾルバへ応答する．
+リゾルバへ応答する．\hfill\cite[p.8]{DNSBIND}
 \newcommand{\alias}{\texttt{alias}}
 \newcommand{\user}{ユーザ}
-\subsection{用いる要素技術}
 \paragraph{\texttt{\bfseries alias} ファイル}
 通常，メールサーバを設定をしない限り，メールアドレスは「\texttt{username@domain}」になる．
 ここで，\texttt{username@domain}の\user 名\texttt{username}を公開したくない場合，

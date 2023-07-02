@@ -7,11 +7,12 @@
     \input{99_url.tikz}
     \vspace{1em}
     \caption{高知工科大学情報学群ホームページURI}
-    \vspace{-1cm}
+    \vspace{-.5cm}
 \end{wrapfigure}
 DNSはUNIXファイルシステムと同様に木構造を持っている．ファイルシステムの根（root）は\texttt{\ /\ }であるのに対して，DNSの根（ルートDNS）は空ラベル（``''）で表現される．
 UNIXファイルシステムにおける木構造の各節は，「ディレクトリ」であり，DNSにおいてはドメインである．
 DNSでは木構造全体の，ルートまでのラベルをドット（``\texttt{.}''）で連結したものがDNSの絶対名となる．これをFQDN（Full Qualified Domain Name）と呼ぶ．
+ホスト名\texttt{www.info.kochi-tech.ac.jp}のFQDNは\texttt{www.info.kochi-tech.ac.jp.}である．最後の``\texttt{.}''は，後ろに空ラベル（``''）があることを表現している．
 当然，FQDNは世界に同じものが存在しないように作成する必要がある．
 つまり，ドメインとは木構造の部分木を構成するものであり，部分木における根のFQDNがその部分木のドメイン名となる．
 DNSでは，各ドメインをいくつかのサブドメインに分割し，サブドメインの管理をサブドメイン内で完結できる．
@@ -23,13 +24,51 @@ DNSでは，各ドメインをいくつかのサブドメインに分割し，�
     \input{99_domain.tikz}
     \caption{ドメインの木構造とゾーン}
     \label{fig:ドメインの木構造とゾーン}
+    \vspace{-1cm}
 \end{wrapfigure}
 ここで，ゾーンという概念が登場する．ゾーンとは，名前空間において独立し，自治管理される部分である．
 \figref{fig:ドメインの木構造とゾーン}での\texttt{info.kochi-tech.ac.jp}ゾーンには\texttt{www}，\texttt{host1}，\texttt{host2}の3クライアントがあり，これらは\texttt{info.kochi-tech.ac.jp}によりドメインを管理されている．
 さらに，\texttt{ac.jp}ゾーンには\texttt{kochi-tech}ドメインは含まれていない．
 これは「委任（委譲）」という行為で，\texttt{ac.jp}から，高知工科大学へ\texttt{kochi-tech}以下サブドメインの管理を委任する．
 つまり，\texttt{ac.jp}は，\texttt{kochi-tech.ac.jp}のサブドメインを管理しないので，\texttt{ac.jp}のゾーンではない．
+\hfill\cite[p.23]{DNSBIND}
 \subsection{\smtp と \popt}
 \paragraph{\smtp}\smtp とは，OSI参照モデル第7層に属する，メール転送プロトコルである．ポート番号は\texttt{25}番である．
-\figref{fig:メール送受信フロー}にも示したが，MUAからMTA，MTAからMTAへのメール転送に用いられる．
+\figref{fig:メール送受信フロー}より，MUAからMTA，MTAからMTAへのメール転送に用いられる．
+\smtp サーバには\texttt{telnet}でアクセスし，コマンドを入力することでメールを配信する．
+\texttt{telnet}で電子メールサーバにアクセスし，メールを配信する手続きを示す．ここでは\texttt{mail.example.com}へアクセスする．
+\begin{lstlisting}[escapechar=\%,frame={single},caption={\smtp コマンド入力},label={src:smtpコマンド入力}]
+$%\textbf{ telnet mail.example.com 25}%
+Trying 10.232.45.151
+Connected to mail.example.com.
+Escape character is '^]'
+220 mail.example.com ESMTP Postfix
+%\textbf{HELLO mail.example.com}%
+250 mail.oreilly.com
+%\textbf{MAIL FROM: <info.oreilly.com>}%
+250 Ok
+%\textbf{RCPT TO: kdent@example.com}%
+250 Ok
+
+%\textbf{DATA}%
+354 End data with <CR><LF>.<CR><LF>
+
+%\textbf{Date: Mon, 8 Apr 2003 15:38:21 -0500}%
+%\textbf{From: Customer Service <info@oreilly.com>}%
+%\textbf{To: <kdant@example.com>}%
+%\textbf{Reply-To: <service@oreilly.com>}%
+%\textbf{Message-ID 01a4e2238200842@mail.oreilly.com}%
+%\textbf{Subject: Have you read RFC 2822?}%
+
+%\textbf{This is the start of the body of the message. It could continue}%
+%\textbf{for many lines, but it dosen't.}%
+.
+
+250 Ok: queued as 5FA26B3DFE
+%\textbf{quit}%
+221 Bey
+Connection closed by foreign host.
+\end{lstlisting}
+\hfill 引用\cite[p.18]{Postfix実用ガイド}
+
 \subsection{第3者リレー}
