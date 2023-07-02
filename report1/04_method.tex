@@ -1,21 +1,28 @@
 \section{作業記録}
 \begin{table}[H]
+    \caption{設定事項}
     \begin{tabularx}{\textwidth}{clR}
         \hline
-        \multirow{3}{*}{\bfseries サーバ}    & IPアドレス  & \texttt{192.168.0.161}                        \\
-                                          & FQDN    & \texttt{server.c5.exp.info.kochi-tech.ac.jp.} \\
-                                          & ホスト名の別名 & \texttt{www}                                  \\
+        \multirow{5}{*}{\bfseries サーバ}    & IPアドレス                   & \texttt{192.168.0.161}                        \\
+        \cline{2-3}
+                                          & FQDN                     & \texttt{server.c5.exp.info.kochi-tech.ac.jp.} \\
+        \cline{2-3}
+                                          & \multirow{3}{*}{ホスト名の別名} & \texttt{www.c5.exp.info.kochi-tech.ac.jp.}    \\
+                                          &                          & \texttt{smtp.c5.exp.info.kochi-tech.ac.jp.}   \\
+                                          &                          & \texttt{pop.c5.exp.info.kochi-tech.ac.jp.}    \\
         \hline
-        \multirow{2}{*}{\bfseries クライアント} & IPアドレス  & \texttt{192.168.0.162}                        \\
-                                          & FQDN    & \texttt{client.c5.exp.info.kochi-tech.ac.jp.} \\
+        \multirow{2}{*}{\bfseries クライアント} & IPアドレス                   & \texttt{192.168.0.162}                        \\
+        \cline{2-3}
+                                          & FQDN                     & \texttt{client.c5.exp.info.kochi-tech.ac.jp.} \\
         \hline
     \end{tabularx}
 \end{table}
 \subsection{DNSサーバ構築}
-DNSサーバを構築する．今回はBINDというソフトウェアを用いてDNSを構築する．
+BINDというソフトウェアを用いてDNSサーバを構築する．BINDのバージョンは\texttt{9.18.16}である．
 \newcommand{\enter}{\ovalbox{Enter⏎}}
 \begin{enumerate}
-    \item BINDをインストールする．
+    \renewcommand{\labelenumi}{\textbf{\theenumi}.\ }
+    \item パッケージマネジャ\texttt{apt}をアップデートした後，\texttt{apt}を用いてBINDをインストールする．
           \begin{lstlisting}
 $ sudo su %\enter%
 # apt update %\enter%
@@ -60,10 +67,21 @@ zone "." {
     files   "/usr/share/dns/root.hints";
 }
     \end{lstlisting}
-    \item ゾーンを設定する．
+    \item ゾーンを設定する．最後に``\texttt{.}''がない場合はゾーンのドメイン名が補完される．
           \begin{description}
-              \item[\texttt{TTL}] キャッシュの有効期限を記す．
-              \item[\texttt{SOA}レコード] ``このサーバがこのゾーンのデータとして最も信頼情報源であることを示すもの．''
+              \item[\bfseries\texttt{TTL}] キャッシュの有効期限を記す．
+              \item[\bfseries\texttt{SOA}レコード] このサーバがゾーン内で最も信頼するに値するものであることを示すもの．\texttt{SOA}レコードの中には次の項目を設定する．
+                  \begin{itemize}
+                      \item サーバのFQDN，メールアドレスのFQDN（``\texttt{@}''を``\texttt{.}''に置換する）．
+                      \item シリアル番号．
+                      \item セカンダリサーバがプライマリサーバに情報更新がないか問い合わせる間隔．
+                      \item リフレッシュ失敗時に，際リフレッシュする時間間隔．
+                      \item 生存時間．
+                  \end{itemize}
+              \item[\bfseries\texttt{NS}レコード] ネームサーバのFQDNを記す．
+              \item[\bfseries\texttt{A}レコード]  ホスト名とIPアドレスを対応づける．
+              \item[\bfseries\texttt{CNAME}レコード] ホスト名の別名を設定する．
+              \item[\bfseries\texttt{MX}レコード] メールアドレスのドメイン名とサーバのFQDNを対応づける．\hfill\cite[p.69\ -\ p.71]{DNSBIND}
           \end{description}
           \begin{lstlisting}[style=file,caption={\ttfamily /etc/bind/c5.zone}]
 $TTL 100
@@ -73,11 +91,15 @@ $TTL 100
     100
     100
     100 )
-IN          NS          server.c5.exp.info.kochi-tech.ac.jp.
+            IN  NS      server.c5.exp.info.kochi-tech.ac.jp.
 server      IN  A       192.168.0.161
-www         IN  CNAME   server
 client      IN  A       192.168.0.162
-    \end{lstlisting}
+www         IN  CNAME   server
+smtp        IN  CNAME   server
+pop         IN  CNAME   server
 
+c5.exp.info.kochi-tech.ac.jp IN MX server.c5.exp.info.kochi-tech.ac.jp.
+    \end{lstlisting}
+    \item
 \end{enumerate}
 \subsection{メールサーバの構築}
