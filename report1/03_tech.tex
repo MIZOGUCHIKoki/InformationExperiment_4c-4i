@@ -1,0 +1,53 @@
+\section{要素技術}
+\subsection{ドメイン}\label{chap:domain}
+\newcommand{\popt}{\texttt{POP3}}
+\begin{wrapfigure}{r}[0mm]{.55\textwidth}
+    \vspace{-1.5cm}
+    \centering
+    \input{99_url.tikz}
+    \vspace{1em}
+    \caption{高知工科大学情報学群ホームページURI}
+    \vspace{-.5cm}
+\end{wrapfigure}
+DNSはUNIXファイルシステムと同様に木構造を持っている．ファイルシステムの根（root）は\texttt{\ /\ }であるのに対して，DNSの根（ルートDNS）は空ラベル（``''）で表現される．
+UNIXファイルシステムにおける木構造の各節は，「ディレクトリ」であり，DNSにおいてはドメインである．
+DNSでは木構造全体の，ルートまでのラベルをドット（``\texttt{.}''）で連結したものがDNSの絶対名となる．これをFQDN（Full Qualified Domain Name）と呼ぶ．
+ホスト名\texttt{www.info.kochi-tech.ac.jp}のFQDNは\texttt{www.info.kochi-tech.ac.jp.}である．最後の``\texttt{.}''は，後ろに空ラベル（``''）があることを表現している．
+当然，FQDNは世界に同じものが存在しないように作成する必要がある．
+つまり，ドメインとは木構造の部分木を構成するものであり，部分木における根のFQDNがその部分木のドメイン名となる．
+DNSでは，各ドメインをいくつかのサブドメインに分割し，サブドメインの管理をサブドメイン内で完結できる．
+たとえば，ドメイン\texttt{info.kochi-tech.ac.jp}において，\texttt{jp}のサブドメインである\texttt{ac.jp}は，\texttt{ac.jp}で終わるドメインについて責任を持つ．
+また，\texttt{ac.jp}は，\texttt{kochi-tech}というサブドメインをもち，\texttt{kochi-tech.ac.jp}が末尾につくドメイン名の責任を高知工科大学に委任している．
+
+\begin{wrapfigure}{r}[0mm]{.62\textwidth}
+    \centering
+    \input{99_domain.tikz}
+    \caption{ドメインの木構造とゾーン}
+    \label{fig:ドメインの木構造とゾーン}
+    \vspace{-1cm}
+\end{wrapfigure}
+ここで，ゾーンという概念が登場する．ゾーンとは，名前空間において独立し，自治管理される部分である．
+\figref{fig:ドメインの木構造とゾーン}での\texttt{info.kochi-tech.ac.jp}ゾーンには\texttt{www}，\texttt{host1}，\texttt{host2}の3クライアントがあり，これらは\texttt{info.kochi-tech.ac.jp}によりドメインを管理されている．
+さらに，\texttt{ac.jp}ゾーンには\texttt{kochi-tech}ドメインは含まれていない．
+これは「委任（委譲）」という行為で，\texttt{ac.jp}から，高知工科大学へ\texttt{kochi-tech}以下サブドメインの管理を委任する．
+つまり，\texttt{ac.jp}は，\texttt{kochi-tech.ac.jp}のサブドメインを管理しないので，\texttt{ac.jp}のゾーンではない．
+\hfill\cite[p.23]{DNSBIND}
+\subsection{\bfseries\smtp と \popt}
+\paragraph{\smtp}\smtp とは，OSI参照モデル第7層に属する，メール転送プロトコルである．ポート番号は\texttt{25}番である．
+\figref{fig:メール送受信フロー}より，MUAからMTA，MTAからMTAへのメール転送に用いられる．これをメールリレーという．
+\smtp サーバには\texttt{telnet}でアクセスし，コマンドを入力することでメールを配信する．
+\texttt{telnet}で電子メールサーバにアクセスし，メールを配信する手続きを示す．ここでは\texttt{mail.example.com}へアクセスする．
+\input{98_smtpcommand.tex}
+また，\smtp には認証機能がないが，認証元が詐称されることを防ぐため，\texttt{POPbefreSMTP}や\smtp 認証が用いられる\cite[p.173]{インターネット工学}．
+\paragraph{\popt}
+\texttt{POP}とは，\figref{fig:メール送受信フロー}より，Spoolから外部MUAで受信するためのプロトコルである．
+\smtp を用いたメッセージの受信は，送信されたメッセージが宛先MUAまで到達するため，宛先MUAが常にメール受信可能状態でなければならない．
+これを解決するために\pop を用いることで，常に電源が入っている\pop サーバまで到達したメッセージはMUAの要求時にメッセージを受信できる．
+\pop を用いてメッセージを転送した場合，Spool内のメールは削除される．\popt は\pop のバージョン3である．\hfill\cite[p.200, p.281]{マスタリングTCP/IP}
+\subsection{第三者リレー}
+オープンリレー，第三者中継とも呼ぶ．
+オープンリレーは以下のように説明されている．
+\begin{quote}
+    ``メールリレーを誰にでも許可するメールサーバ''\hfill 引用\cite[p.53]{Postfix実用ガイド}
+\end{quote}
+つまり，オープンリレーを許可しているサーバでは，認証なく誰でもそのサーバを利用してメールを送信できるので，スパムメールなどの温床になる\cite[p.53]{Postfix実用ガイド}．

@@ -1,0 +1,47 @@
+\section{内容}
+\begin{wrapfigure}{r}[0mm]{.48\textwidth}
+    \vspace{-.5cm}
+    \input{99_mail.tikz}
+    \caption{メッセージの流れ\footnotemark[1]}
+    \label{fig:メール送受信フロー}
+    \vspace{-.5cm}
+\end{wrapfigure}
+\footnotetext[1]{本レポートで用いる図の一部はヤマハ株式会社の公開済図形（\url{https://network.yamaha.com/support/download/tool/}）を利用している．}
+\newcommand{\smtp}{\texttt{SMTP}}
+\newcommand{\pop}{\texttt{POP}}
+\newcommand{\imap}{\texttt{IMAP}}
+\paragraph{メール送受信フロー}
+ここで，メールを送信してから宛先に届くまでの大まかな手続きを確認する（\figref{fig:メール送受信フロー}）．
+送り手は，MUA（Mail User Agent）と呼ばれるソフトウェア（ThunderbirdやMicrosoft Outlookなど）から\smtp を利用してMTAにメールを転送する．
+この際，MUAはMTAのドメイン名を保持しており，DNSの\texttt{MX}レコードを用いてMTAのホスト名を取得後，\texttt{A}レコードを用いて送信先のIPアドレスを調べる．
+MDA（Mail Delivery Agent）に転送されたメッセージは，取得したIPアドレス宛に\smtp で転送される．MDAはメッセージをMTAにより指定された送信先に転送すること役割を担う．
+転送されたメールは，\smtp を利用して宛先MTAへ転送され，Mail Spool（以下，Spool）へ保存される．
+Spoolとは，宛先のMUAが，メッセージを受け取るまで一時的に保存する場所である．
+Spool内のメールは，\pop を利用して宛先のMUAへ転送されると，Spoolから削除される．
+\hfill\cite[p.9\ -\ p.11, p.13]{2004postfix詳解}
+\paragraph{名前解決フロー}
+ドメイン名に対して，対応付けられたIPアドレスへの名前解決をする．
+名前解決をする主な方法としてDNS，ブロードキャストで問い合わせる方法\cite[p.135]{いちばんやさしいネットワークの本}，WINS（Windows Internet Name Service），NIS（Network Information Service），\texttt{HOSTS}ファイルの適用などがある．
+ここではOSに依存せず，データベースを分散管理でき，大規模ネットワークでも耐えうるDNSを用いた名前解決方法を適用する．
+
+\begin{wrapfigure}{r}[0mm]{.45\textwidth}
+    \centering
+    \input{99_name.tikz}
+    \caption{名前解決}
+    \vspace{-.5cm}
+\end{wrapfigure}
+DNSを用いた名前解決の手順を解説する．
+ここでは例としてWebサイト\texttt{www.info.kochi-tech.ac.jp}のIPアドレスを，DNSを用いて取得する．
+まず，リゾルバ（ネームサーバへアクセスするクライアント）は，自身のネットワーク設定により指定されたネームサーバへ\texttt{www.info.kochi-tech.ac.jp}のIPアドレスを問い合わせる．
+そのネームサーバが，\texttt{www.info.kochi-tech.ac.jp}のIPアドレスを持っていない場合，まずは\texttt{root}ネームサーバへ，\texttt{jp}ネームサーバのIPアドレスを問い合わせる．
+次に\texttt{jp}ネームサーバへ\texttt{ac}ネームサーバのIPアドレスを問い合わせる．これを繰り返し，最後に\texttt{info}ネームサーバが\texttt{www}のIPアドレスを，リゾルバが最初に問い合わせたネームサーバへ返し，
+リゾルバへ応答する．\hfill\cite[p.8]{DNSBIND}
+\newcommand{\aliases}{\texttt{aliases}}
+\newcommand{\user}{ユーザ}
+\paragraph{\texttt{\bfseries aliases} ファイル}
+通常，メールサーバを設定をしない限り，メールアドレスは「\texttt{username@domain}」になる．
+ここで，\texttt{username@domain}の\user 名\texttt{username}を公開したくない場合，
+\aliases ファイルに\texttt{anonymous}と\texttt{username}を対応づける設定をすることで，
+\texttt{anonymous@domain}でのメール受信が可能になる．
+この機能は\user 名を秘匿にしたい場合だけでなく，たとえば\texttt{usernameA}，\texttt{usernameB}，\texttt{usernameC}の3\user を1つのエイリアス\texttt{group}と対応づけて，
+\texttt{group@domain}宛に送信したメールを3\user で受信できる．

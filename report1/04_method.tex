@@ -1,0 +1,185 @@
+\section{作業記録}
+ネットワークの設定（IPアドレスやデフォルトゲートウェイの設定）は完了している．
+\begin{table}[H]
+    \caption{設定事項}
+    \begin{tabularx}{\textwidth}{clR}
+        \hline
+        \textbf{ネットワーク}                   & デフォルトゲートウェイ              & \texttt{192.168.0.9}                          \\
+        \hline
+        \multirow{5}{*}{\bfseries サーバ}    & IPアドレス                   & \texttt{192.168.0.161}                        \\
+        \cline{2-3}
+                                          & FQDN                     & \texttt{server.c5.exp.info.kochi-tech.ac.jp.} \\
+        \cline{2-3}
+                                          & \multirow{3}{*}{ホスト名の別名} & \texttt{www.c5.exp.info.kochi-tech.ac.jp.}    \\
+                                          &                          & \texttt{smtp.c5.exp.info.kochi-tech.ac.jp.}   \\
+                                          &                          & \texttt{pop.c5.exp.info.kochi-tech.ac.jp.}    \\
+        \hline
+        \multirow{2}{*}{\bfseries クライアント} & IPアドレス                   & \texttt{192.168.0.162}                        \\
+        \cline{2-3}
+                                          & FQDN                     & \texttt{client.c5.exp.info.kochi-tech.ac.jp.} \\
+        \hline
+    \end{tabularx}
+\end{table}
+\subsection{DNSサーバ構築}
+BINDを用いてDNSサーバを構築する．BINDのバージョンは\texttt{9.18.16}である．
+\newcommand{\enter}{\ovalbox{Enter⏎}}
+\begin{enumerate}
+    \renewcommand{\labelenumi}{\textbf{\theenumi.}\ }
+    \item パッケージマネジャ\texttt{apt}をアップデートした後，\texttt{apt}を用いてBINDをインストールする．
+          \begin{lstlisting}
+$ sudo su %\enter%
+# apt update %\enter%
+# apt install bind9 %\enter%
+    \end{lstlisting}
+    \item BIND全体の設定として\texttt{named.conf}を操作する．
+          \begin{lstlisting}[caption={\ttfamily /etc/bind/named.conf},style=file]
+// This is the primary configuration file for the BIND DNS server named.
+//
+// Please read /usr/share/doc/bind9/README.Debian.gz for information on the
+// structure of BIND configuration files in Debian, *BEFORE* you customize
+// this configuration file.
+//
+// If you are just adding zones, please do that in /etc/bind/named.conf.local
+include "/etc/bind/named.conf.options";
+include "/etc/bind/named.conf.local";
+include "/etc/bind/named.conf.default-zones";
+\end{lstlisting}
+    \item これから編集するファイル\texttt{named.conf.options}のデフォルトファイルを別名で保存する．
+          \begin{lstlisting}
+# cd /etc/bind %\enter%
+# cp -p named.conf.options named.conf.options.org %\enter%
+\end{lstlisting}
+    \item ここではBINDが動作するワーキングディレクトリの指定をするために\texttt{named.conf.options}を編集する．
+          \begin{lstlisting}[caption={\ttfamily /etc/bind/named.conf.options},style=file]
+options {
+    directory "/var/cache/bind";
+};
+\end{lstlisting}
+    \item ゾーンファイルを指定する．\texttt{named.conf.local}にはゾーンファイルのパスを記述する．
+          ドメイン名を\texttt{c5.exp.info.kochi-tech.ac.jp}に設定し，ゾーンファイルのパスを\texttt{/etc/bind/c5.zone}にする．
+          \begin{lstlisting}[style=file,caption={\ttfamily /etc/bind/named.conf.local}]
+zone "c5.exp.info.kochi-tech.ac.jp" {
+    type primary;
+    file "/etc/bind/c5.zone";
+};
+    \end{lstlisting}
+    \item ルートゾーンの設定を確認する．ルートゾーンは``\texttt{.}''で表されており，ルートサーバのアドレスは\texttt{/usr/share/dns/root.hints}に記述されている．
+          \begin{lstlisting}[caption={\ttfamily /etc/bind/named.conf.default-zones},style=file]
+zone "." {
+    type    hint;
+    files   "/usr/share/dns/root.hints";
+}
+    \end{lstlisting}
+    \item ゾーンを設定する．最後に``\texttt{.}''がない場合はゾーンのドメイン名が補完される．
+          \begin{description}
+              \item[\bfseries\texttt{TTL}] キャッシュの有効期限を記す．
+              \item[\bfseries\texttt{SOA}レコード] このサーバがゾーン内で最も信頼するに値するものであることを示すもの．\texttt{SOA}レコードの中には次の項目を設定する．
+                  \begin{itemize}
+                      \item サーバのFQDN，メールアドレスのFQDN（``\texttt{@}''を``\texttt{.}''に置換する）．
+                      \item シリアル番号．
+                      \item セカンダリサーバがプライマリサーバに情報更新がないか問い合わせる間隔．
+                      \item リフレッシュ失敗時に，際リフレッシュする時間間隔．
+                      \item 生存時間．
+                  \end{itemize}
+              \item[\bfseries\texttt{NS}レコード] ネームサーバのFQDNを記す．
+              \item[\bfseries\texttt{A}レコード]  ホスト名とIPアドレスを対応づける．
+              \item[\bfseries\texttt{CNAME}レコード] ホスト名の別名を設定する．
+              \item[\bfseries\texttt{MX}レコード] メールアドレスのドメイン名とサーバのFQDNを対応づける．\hfill\cite[p.69\ -\ p.71]{DNSBIND}
+          \end{description}
+          \begin{lstlisting}[style=file,caption={\ttfamily /etc/bind/c5.zone},language=dns]
+$TTL 100
+@ IN SOA server.c5.exp.info.kochi-tech.ac.jp. postmaster.c5.exp.info.kochi-tech.ac.jp. (
+    2023061901
+    100
+    100
+    100
+    100 )
+            IN  NS      server.c5.exp.info.kochi-tech.ac.jp.
+server      IN  A       192.168.0.161
+client      IN  A       192.168.0.162
+www         IN  CNAME   server
+smtp        IN  CNAME   server
+pop         IN  CNAME   server
+
+c5.exp.info.kochi-tech.ac.jp IN MX server.c5.exp.info.kochi-tech.ac.jp.
+    \end{lstlisting}
+    \item DNSクライアントの設定を変更し，変更を適用する．
+          \begin{lstlisting}[style=file,language=yaml,caption={\ttfamily /etc/netlpan/00-install-config.yaml}]
+# This is network config written by 'subiquity'
+network:
+    version: 2
+    ethernets:
+        enp0s31f6:
+            addresses:
+                - 192.168.0.161/24
+            routes:
+                - to: default
+                    via: 192.168.0.9
+            nameservers:
+                addresses:
+                    - 127.0.0.1 # 自分自身
+                search: [c5.exp.info.kochi-tech.ac.jp] # ドメイン名
+            dhcp4: false
+\end{lstlisting}
+          \begin{lstlisting}
+# netplan apply %\enter%
+\end{lstlisting}
+    \item \texttt{bind9}と\texttt{named}を再起動して，設定を反映させる．
+          \begin{lstlisting}
+# systemctl restart bind9 %\enter%
+# systemctl restart named %\enter%
+    \end{lstlisting}
+\end{enumerate}
+\subsection{メールサーバの構築}
+Postfixを用いてメールサーバを構築する．Postfixのバージョンは\texttt{3.8.1}である．
+\begin{enumerate}
+    \renewcommand{\labelenumi}{\textbf{\theenumi.}\ }
+    \item パッケージマネジャ\texttt{apt}をアップデートした後，\texttt{apt}を用いてPostfix，POPをインストールする．
+          \begin{lstlisting}
+$ sudo su %\enter%
+# apt update %\enter%
+# apt install postfix %\enter%
+~~~in Menu~~~
+1. [Internet Site] %\enter%
+2. mail name: c5.exp.info.kochi-tech.ac.jp %\enter%
+~~~~~~~~~~~~~
+# apt install dovecot-pop3d %\enter%
+\end{lstlisting}
+    \item 各種設定をする．
+          \begin{lstlisting}[style=file,caption={\ttfamily /etc/postfix/main.cf}]
+myhostname = server.c5.exp.info.kochi-tech.ac.jp.
+mynetworks = 192.168.0.0/24
+    \end{lstlisting}
+    \item POP3認証を有効にする．
+          \begin{lstlisting}[style=file,caption={\ttfamily /etc/dovecot/conf.d/10-auth.conf}]
+disable_plaintext_auth = no
+\end{lstlisting}
+    \item Postfix，dovecotを再起動する．
+          \begin{lstlisting}
+# systemctl restart postfix %\enter%
+# systemctl restart dovecot %\enter%
+    \end{lstlisting}
+    \item \aliases ファイルを編集し，\texttt{newaliases}コマンドで適用する．\texttt{list@c5.exp.info.kochi-tech.ac.jp}宛のメールが記述した4\user へ配信される．
+          \begin{lstlisting}[style=file,caption={\ttfamily /etc/aliases}]
+list: k.mizo, s.shio, k,kikk, k.fuku
+    \end{lstlisting}
+\end{enumerate}
+\clearpage
+\subsection{MUAの設定}
+MUAとしてThunderbirdを用いる．以下の項目を適切に入力する．
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{lR}
+        \hline
+        設定済み\user 名 & \texttt{k.mizo}                              \\
+        パスワード       & \texttt{********}                            \\
+        \hline
+        名前          & \texttt{MIZOGUCHI Koki}                      \\
+        電子メールアドレス   & \texttt{k.mizo@c5.exp.info.kochi-tech.ac.jp} \\
+        送信メールサーバ    & \texttt{smtp.c5.exp.info.kochi-tech.ac.jp}   \\
+        受信メールサーバ    & \texttt{pop.c5.exp.info.kochi-tech.ac.jp}    \\
+        POP3アカウント   & \texttt{k.mizo}                              \\
+        パスワード       & \texttt{********}                            \\
+        \hline
+    \end{tabularx}
+\end{table}
