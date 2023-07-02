@@ -159,7 +159,7 @@ disable_plaintext_auth = no
 # systemctl restart postfix %\enter%
 # systemctl restart dovecot %\enter%
     \end{lstlisting}
-    \item \aliases ファイルを編集し，\texttt{newaliases}コマンドで適用する．\texttt{list@c5.exp.info.kochi-tech.ac.jp}宛のメールが記述した4ユーザへ配信される．
+    \item \aliases ファイルを編集し，\texttt{newaliases}コマンドで適用する．\texttt{list@c5.exp.info.kochi-tech.ac.jp}宛のメールが記述した4\user へ配信される．
           \begin{lstlisting}[style=file,caption={\ttfamily /etc/aliases}]
 list: k.mizo, s.shio, k,kikk, k.fuku
     \end{lstlisting}
@@ -171,15 +171,15 @@ MUAとしてThunderbirdを用いる．以下の項目を適切に入力する．
     \centering
     \begin{tabularx}{\textwidth}{lR}
         \hline
-        設定済みユーザ名  & \texttt{k.mizo}                              \\
-        パスワード     & \texttt{********}                            \\
+        設定済み\user 名 & \texttt{k.mizo}                              \\
+        パスワード       & \texttt{********}                            \\
         \hline
-        名前        & \texttt{MIZOGUCHI Koki}                      \\
-        電子メールアドレス & \texttt{k.mizo@c5.exp.info.kochi-tech.ac.jp} \\
-        送信メールサーバ  & \texttt{smtp.c5.exp.info.kochi-tech.ac.jp}   \\
-        受信メールサーバ  & \texttt{pop.c5.exp.info.kochi-tech.ac.jp}    \\
-        POP3アカウント & \texttt{k.mizo}                              \\
-        パスワード     & \texttt{********}                            \\
+        名前          & \texttt{MIZOGUCHI Koki}                      \\
+        電子メールアドレス   & \texttt{k.mizo@c5.exp.info.kochi-tech.ac.jp} \\
+        送信メールサーバ    & \texttt{smtp.c5.exp.info.kochi-tech.ac.jp}   \\
+        受信メールサーバ    & \texttt{pop.c5.exp.info.kochi-tech.ac.jp}    \\
+        POP3アカウント   & \texttt{k.mizo}                              \\
+        パスワード       & \texttt{********}                            \\
         \hline
     \end{tabularx}
 \end{table}
