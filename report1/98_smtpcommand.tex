@@ -1,0 +1,33 @@
+\begin{lstlisting}[escapechar=\%,frame={single},caption={\smtp コマンド入力},label={src:smtpコマンド入力}]
+$%\textbf{ telnet mail.example.com 25}%
+Trying 10.232.45.151
+Connected to mail.example.com.
+Escape character is '^]'
+220 mail.example.com ESMTP Postfix
+%\textbf{HELLO mail.example.com}%
+250 mail.oreilly.com
+%\textbf{MAIL FROM: <info.oreilly.com>}%
+250 Ok
+%\textbf{RCPT TO: kdent@example.com}%
+250 Ok
+
+%\textbf{DATA}%
+354 End data with <CR><LF>.<CR><LF>
+
+%\textbf{Date: Mon, 8 Apr 2003 15:38:21 -0500}%
+%\textbf{From: Customer Service <info@oreilly.com>}%
+%\textbf{To: <kdant@example.com>}%
+%\textbf{Reply-To: <service@oreilly.com>}%
+%\textbf{Message-ID 01a4e2238200842@mail.oreilly.com}%
+%\textbf{Subject: Have you read RFC 2822?}%
+
+%\textbf{This is the start of the body of the message. It could continue}%
+%\textbf{for many lines, but it dosen't.}%
+.
+
+250 Ok: queued as 5FA26B3DFE
+%\textbf{quit}%
+221 Bey
+Connection closed by foreign host.
+    \end{lstlisting}
+\hfill 引用\cite[p.18]{Postfix実用ガイド}

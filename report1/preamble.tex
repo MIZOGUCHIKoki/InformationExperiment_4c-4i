@@ -26,23 +26,20 @@
 \renewcommand{\listfigurename}{図目次}
 \renewcommand{\listtablename}{表目次}
 \renewcommand{\lstlistlistingname}{ソースコード}
-\renewcommand{\thefigure}{\thesection-\arabic{figure}}
-\renewcommand{\thetable}{\thesection-\arabic{table}}
-\renewcommand{\theequation}{\thesection.\arabic{equation}}
-\renewcommand{\labelenumi}{\textbf{\theenumi}.\ }
+\renewcommand{\thefigure}{\arabic{figure}}
+\renewcommand{\thetable}{\arabic{table}}
+\renewcommand{\theequation}{\arabic{equation}}
+\renewcommand{\labelenumi}{\theenumi.\ }
 \renewcommand{\eqref}[1]{式(\ref{#1})}
 \newcommand{\figref}[1]{図\ref{#1}}
 \newcommand{\tblref}[1]{表\ref{#1}}
 \newcommand{\srcref}[1]{src.\ref{#1}}
 \newcommand{\chapref}[1]{\ref{#1}節}
 \makeatletter
-\@addtoreset{figure}{section}
-\@addtoreset{table}{section}
-\@addtoreset{lstlisting}{section}
 \@addtoreset{footnote}{page}
 \makeatother
 \AtBeginDocument{
-    \renewcommand{\thelstlisting}{\thesection-\arabic{lstlisting}}
+    \renewcommand{\thelstlisting}{\arabic{lstlisting}}
     \maketitle
 }
 \newcommand\YAMLcolonstyle{\color{red}\mdseries}

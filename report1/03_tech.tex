@@ -32,43 +32,22 @@ DNSでは，各ドメインをいくつかのサブドメインに分割し，�
 これは「委任（委譲）」という行為で，\texttt{ac.jp}から，高知工科大学へ\texttt{kochi-tech}以下サブドメインの管理を委任する．
 つまり，\texttt{ac.jp}は，\texttt{kochi-tech.ac.jp}のサブドメインを管理しないので，\texttt{ac.jp}のゾーンではない．
 \hfill\cite[p.23]{DNSBIND}
-\subsection{\smtp と \popt}
+\subsection{\bfseries\smtp と \popt}
 \paragraph{\smtp}\smtp とは，OSI参照モデル第7層に属する，メール転送プロトコルである．ポート番号は\texttt{25}番である．
-\figref{fig:メール送受信フロー}より，MUAからMTA，MTAからMTAへのメール転送に用いられる．
+\figref{fig:メール送受信フロー}より，MUAからMTA，MTAからMTAへのメール転送に用いられる．これをメールリレーという．
 \smtp サーバには\texttt{telnet}でアクセスし，コマンドを入力することでメールを配信する．
 \texttt{telnet}で電子メールサーバにアクセスし，メールを配信する手続きを示す．ここでは\texttt{mail.example.com}へアクセスする．
-\begin{lstlisting}[escapechar=\%,frame={single},caption={\smtp コマンド入力},label={src:smtpコマンド入力}]
-$%\textbf{ telnet mail.example.com 25}%
-Trying 10.232.45.151
-Connected to mail.example.com.
-Escape character is '^]'
-220 mail.example.com ESMTP Postfix
-%\textbf{HELLO mail.example.com}%
-250 mail.oreilly.com
-%\textbf{MAIL FROM: <info.oreilly.com>}%
-250 Ok
-%\textbf{RCPT TO: kdent@example.com}%
-250 Ok
-
-%\textbf{DATA}%
-354 End data with <CR><LF>.<CR><LF>
-
-%\textbf{Date: Mon, 8 Apr 2003 15:38:21 -0500}%
-%\textbf{From: Customer Service <info@oreilly.com>}%
-%\textbf{To: <kdant@example.com>}%
-%\textbf{Reply-To: <service@oreilly.com>}%
-%\textbf{Message-ID 01a4e2238200842@mail.oreilly.com}%
-%\textbf{Subject: Have you read RFC 2822?}%
-
-%\textbf{This is the start of the body of the message. It could continue}%
-%\textbf{for many lines, but it dosen't.}%
-.
-
-250 Ok: queued as 5FA26B3DFE
-%\textbf{quit}%
-221 Bey
-Connection closed by foreign host.
-\end{lstlisting}
-\hfill 引用\cite[p.18]{Postfix実用ガイド}
-
-\subsection{第3者リレー}
+\input{98_smtpcommand.tex}
+また，\smtp には認証機能がないが，認証元が詐称されることを防ぐため，\texttt{POPbefreSMTP}や\smtp 認証が用いられる\cite[p.173]{インターネット工学}．
+\paragraph{\popt}
+\texttt{POP}とは，\figref{fig:メール送受信フロー}より，Spoolから外部MUAで受信するためのプロトコルである．
+\smtp を用いたメッセージの受信は，送信されたメッセージが宛先MUAまで到達するため，宛先MUAが常にメール受信可能状態でなければならない．
+これを解決するために\pop を用いることで，常に電源が入っている\pop サーバまで到達したメッセージはMUAの要求時にメッセージを受信できる．
+\pop を用いてメッセージを転送した場合，Spool内のメールは削除される．\popt は\pop のバージョン3である．\hfill\cite[p.200, p.281]{マスタリングTCP/IP}
+\subsection{第三者リレー}
+オープンリレー，第三者中継とも呼ぶ．
+オープンリレーは以下のように説明されている．
+\begin{quote}
+    ``メールリレーを誰にでも許可するメールサーバ''\hfill 引用\cite[p.53]{Postfix実用ガイド}
+\end{quote}
+つまり，オープンリレーを許可しているサーバでは，認証なく誰でもそのサーバを利用してメールを送信できるので，スパムメールなどの温床になる\cite[p.53]{Postfix実用ガイド}．
