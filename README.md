@@ -7,7 +7,6 @@
 - Network構成図作成用アイコン
   -   [YAMAHA](https://network.yamaha.com/support/download/tool/)
   
-⚠️  コード・レポートの剽窃はバレるので，行わないこと！！！（私も単位を落とします😭）
 ## レポート配点
 - 目的
   - システムを構築する理由：**1点**
