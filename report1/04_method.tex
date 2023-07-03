@@ -145,7 +145,7 @@ $ sudo su %\enter%
 ~~~~~~~~~~~~~
 # apt install dovecot-pop3d %\enter%
 \end{lstlisting}
-    \item 各種設定をする．
+    \item ネットワークセグメントとサーバのFQDNを追加する．
           \begin{lstlisting}[style=file,caption={\ttfamily /etc/postfix/main.cf}]
 myhostname = server.c5.exp.info.kochi-tech.ac.jp.
 mynetworks = 192.168.0.0/24
@@ -183,3 +183,6 @@ MUAとしてThunderbirdを用いる．以下の項目を適切に入力する．
         \hline
     \end{tabularx}
 \end{table}
+\subsection{動作確認}
+ある\user から\texttt{list@c5.exp.info.kochi-tech.ac.jp}宛にメールを送信する．
+設定した4\user へ，正しくメールが配信されていることが確認できた．
