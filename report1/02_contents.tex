@@ -7,17 +7,17 @@
     \vspace{-.5cm}
 \end{wrapfigure}
 \footnotetext[1]{本レポートで用いる図の一部はヤマハ株式会社の公開済図形（\url{https://network.yamaha.com/support/download/tool/}）を利用している．}
-\newcommand{\smtp}{\texttt{SMTP}}
-\newcommand{\pop}{\texttt{POP}}
-\newcommand{\imap}{\texttt{IMAP}}
+\newcommand{\smtp}{SMTP}
+\newcommand{\pop}{POP}
+\newcommand{\imap}{IMAP}
 \paragraph{メール送受信フロー}
 ここで，メールを送信してから宛先に届くまでの大まかな手続きを確認する（\figref{fig:メール送受信フロー}）．
-送り手は，MUA（Mail User Agent）と呼ばれるソフトウェア（ThunderbirdやMicrosoft Outlookなど）から\smtp を利用してMTAにメールを転送する．
+送り手は，MUA（Mail User Agent）と呼ばれるソフトウェア（ThunderbirdやMicrosoft Outlookなど）から\smtp を利用してMTAにメッセージを転送する．
 この際，MUAはMTAのドメイン名を保持しており，DNSの\texttt{MX}レコードを用いてMTAのホスト名を取得後，\texttt{A}レコードを用いて送信先のIPアドレスを調べる．
 MDA（Mail Delivery Agent）に転送されたメッセージは，取得したIPアドレス宛に\smtp で転送される．MDAはメッセージをMTAにより指定された送信先に転送すること役割を担う．
-転送されたメールは，\smtp を利用して宛先MTAへ転送され，Mail Spool（以下，Spool）へ保存される．
+転送されたメッセージは，\smtp を利用して宛先MTAへ転送され，Mail Spool（以下，Spool）へ保存される．
 Spoolとは，宛先のMUAが，メッセージを受け取るまで一時的に保存する場所である．
-Spool内のメールは，\pop を利用して宛先のMUAへ転送されると，Spoolから削除される．
+Spool内のメッセージは\pop を利用して宛先のMUAへ転送されると，Spoolから削除される．
 \hfill\cite[p.9\ -\ p.11, p.13]{2004postfix詳解}
 \paragraph{名前解決フロー}
 ドメイン名に対して，対応付けられたIPアドレスへの名前解決をする．

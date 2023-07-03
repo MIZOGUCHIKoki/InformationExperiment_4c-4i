@@ -1,6 +1,6 @@
 \section{要素技術}
 \subsection{ドメイン}\label{chap:domain}
-\newcommand{\popt}{\texttt{POP3}}
+\newcommand{\popt}{POP3}
 \begin{wrapfigure}{r}[0mm]{.55\textwidth}
     \vspace{-1.5cm}
     \centering
@@ -42,7 +42,7 @@ DNSでは，各ドメインをいくつかのサブドメインに分割し，�
 \paragraph{\popt}
 \texttt{POP}とは，\figref{fig:メール送受信フロー}より，Spoolから外部MUAで受信するためのプロトコルである．
 \smtp を用いたメッセージの受信は，送信されたメッセージが宛先MUAまで到達するため，宛先MUAが常にメール受信可能状態でなければならない．
-これを解決するために\pop を用いることで，常に電源が入っている\pop サーバまで到達したメッセージはMUAの要求時にメッセージを受信できる．
+\pop を用いることで，常に電源が入っている\pop サーバまで到達したメッセージは，MUAの要求時にメッセージを受信できる．
 \pop を用いてメッセージを転送した場合，Spool内のメールは削除される．\popt は\pop のバージョン3である．\hfill\cite[p.200, p.281]{マスタリングTCP/IP}
 \subsection{第三者リレー}
 オープンリレー，第三者中継とも呼ぶ．
