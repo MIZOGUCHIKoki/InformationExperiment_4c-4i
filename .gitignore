@@ -9,3 +9,4 @@ main.pdf
 *.gnuplot
 node_modules
 !report4-[1-3]-1250373-mizoguchi.pdf
+*.pdf
