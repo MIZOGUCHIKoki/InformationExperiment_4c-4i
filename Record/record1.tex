@@ -1,0 +1,186 @@
+\documentclass{jlreq}
+\input{preamble.tex}
+\usepackage[margin=20truemm,headheight=20pt]{geometry}
+\usepackage{fancyhdr,lastpage}
+\fancypagestyle{fancy}{
+    \fancyhf{}
+    \fancyhead[R]{\thepage\ /\ \pageref{LastPage}}
+    \fancyhead[C]{作業記録（Group C5）}
+    \fancyhead[L]{July 13th, 2023}
+}
+\pagestyle{fancy}
+\begin{document}
+\begin{framed}
+    \tableofcontents
+\end{framed}
+\section{Webシステム}
+\subsection{HTTP通信}
+\newcommand{\apache}{\texttt{Apache}}
+\begin{enumerate}
+    \item \apache をインストールする．
+          \begin{lstlisting}
+$ sudo su %\enter%
+# apt update %\enter%
+# apt install apache2 %\enter%
+    \end{lstlisting}
+    \item Baisc認証を設定する．IDを\texttt{testuser}，パスワードを\texttt{root00}とする．
+          \begin{lstlisting}
+# htpasswd -c /etc/apache2/.htpasswd testuser %\enter%
+New password: root00 %\enter%
+Re-type new password: root00 %\enter%
+Adding password for user testuser
+\end{lstlisting}
+    \item \texttt{/var/www/html/}の下にある\texttt{index.html}の名前を変更し，新しく\texttt{index.html}を作成する．
+          \begin{lstlisting}[style=file,caption={\ttfamily /var/www/html/index.html},language=html]
+<h1>Group 5C</h1>
+<h2>/var/www/html/index.html</h2>
+    \end{lstlisting}
+    \item \texttt{/var/www/html/basic/}と\texttt{/var/www/html/inside/}に\texttt{index.html}を作成する．
+          \begin{lstlisting}[style=file,language=html,caption={\ttfamily /var/www/html/basic/index.html}]
+<h1>Group 5C</h1>
+<h2>/var/www/html/basic/index.html</h2>
+\end{lstlisting}
+          \begin{lstlisting}[style=file,language=html,caption={\ttfamily /var/www/html/inside/index.html}]
+<h1>Group 5C</h1>
+<h2>/var/www/html/inside/index.html</h2>
+    \end{lstlisting}
+    \item \texttt{/var/www/html/basic/}のディレクトリにBasic認証を適用する．（以下を追記する．）
+          \begin{lstlisting}[style=file,caption={\ttfamily /etc/apache2/sites-available/000-default.conf},label={src:basic}]
+<Directory /var/www/html/basic>
+    AuthType Basic
+    AuthUserFile /etc/apache2/.htpasswd
+    AuthName "basic auth"
+    Satisfy any
+    Order deny,allow
+    Deny from all
+    Require valid-user
+</Directory>
+\end{lstlisting}
+    \item \texttt{/var/www/html/inside/}ディレクトリにIPアドレスによるアクセス制限を設ける．（以下を追記する．）\texttt{192.168.0.161}，\texttt{192.168.0.162}以外からのアクセスを拒否する．
+          \begin{lstlisting}[style=file,caption={\ttfamily /etc/apache2/sites-available/000-default.conf},label={src:inside}]
+<Directory /var/www/html/inside>
+    Order deny,allow
+    Deny from all
+    Allow from 192.168.0.161
+    Allow from 192.168.0.162
+</Directory>
+    \end{lstlisting}
+    \item \apache を再起動する．
+          \begin{lstlisting}
+# systemctl restart apache2 %\enter%
+\end{lstlisting}
+\end{enumerate}
+\subsection{HTTPS通信と証明書}
+\begin{enumerate}
+    \item Ubuntu の\apache で\texttt{SSL/TLS}通信をするために必要なモジュールを使用する設定．
+          \begin{lstlisting}
+# a2emod ssl %\enter%
+# a2ensite default-ssl %\enter%
+# systemctl restart apache2 %\enter%
+\end{lstlisting}
+    \item \srcref{src:basic}，\srcref{src:inside}の内容を\texttt{/etc/apache2/sites-available/default-ssl.conf}にも追記する．
+    \item 秘密鍵を作成する．
+          \begin{lstlisting}
+# openssl genrsa -out server.key 2048 %\enter%
+\end{lstlisting}
+    \item 秘密鍵\texttt{server.key}に対応する証明書署名要求\texttt{CSR}を作成する．
+          \begin{lstlisting}
+# openssl req -new -key server.key -sha256 -out server.CSR %\enter%
+Country Name: JP %\enter%
+State or Privience Name: Kochi %\enter%
+Locality Name: Kochi-shi %\enter%
+Organization Name: Kochi Purefectual Public University Corporation %\enter%
+Organization Unit Name: . %\enter%
+Common Name: www.c5.exp.info.kochi-tech.ac.jp %\enter%
+Email Address: . %\enter%
+extra: %\enter% %\enter%
+# 
+\end{lstlisting}
+    \item 作成した証明書をTAに渡す．
+    \item 自分の秘密鍵\texttt{server.key}で署名する．証明書ファイルは\texttt{server.crt}．
+          \begin{lstlisting}
+# openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt %\enter%
+\end{lstlisting}
+    \item 証明書ファイルを設置する．
+          \begin{lstlisting}
+# mv server.key /etc/ssl/private/ %\enter%
+# mv server.crt /etc/ssl/certs/ %\enter%
+\end{lstlisting}
+          \begin{lstlisting}[style=file,caption={\ttfamily /etc/apache2/sites-available/default-ssl.conf}]
+SSLCertificateFile /etc/ssl/certs/server.crt
+SSLCertificateKeyFile /etc/ssl/private/server.key
+\end{lstlisting}
+    \item 鍵の権限を変更する．
+          \begin{lstlisting}
+# chown root:root /etc/ssl/certs/server.crt %\enter%
+# chmod 644 /etc/ssl/certs/server.crt %\enter%
+# chown root:ssl-cert /etc/ssl/private/server.key %\enter%
+# chmod 640 /etc/ssl/private/server.key %\enter%
+\end{lstlisting}
+    \item \apache を再起動する．
+\end{enumerate}
+\subsection{動的コンテンツの設定}
+\begin{enumerate}
+    \item \apache でCGIを利用できるようにする．
+          \begin{lstlisting}
+# a2enmod cgi %\enter%
+\end{lstlisting}
+          以下のコメントアウトを解除する．
+          \begin{lstlisting}[style=file,caption={\ttfamily /etc/apache2/mods-enabled/mime.conf}]
+AddHandler cgi-script .cgi
+\end{lstlisting}
+          \texttt{/var/www/html/cig/}ディレクトリのCGIを許可する．（以下を追記する．）
+          \begin{lstlisting}[style=file,caption={\ttfamily /etc/apache2/sites-available/default-ssl.conf}]
+<Directory /var/www/html/cgi>
+    Options +ExecCGI
+</Directory>
+\end{lstlisting}
+    \item \apache でSSIを利用できるようにする．
+          \begin{lstlisting}
+# a2enmod include %\enter%
+\end{lstlisting}
+          以下の2行が有効であることを確認する．
+          \begin{lstlisting}[style=file,caption={\ttfamily /etc/apache2/mods-enabled/mime.conf}]
+AddType text/html .shtml
+AddOutputFilter INCLUDES .shtml
+\end{lstlisting}
+          \texttt{/var/www/html/ssi/}ディレクトリのSSIを許可する．
+          \begin{lstlisting}[style=file,caption={\ttfamily /etc/apache2/sites-available/default-ssl.conf}]
+<Directory /var/www/html/ssi>
+    Options Includes
+</Directory>
+\end{lstlisting}
+    \item \apache を再起動する．
+    \item PHPと\apache のPHP呼び出しモジュールをインストールする．
+          \begin{lstlisting}
+# apt install php
+# apt install libapache2-mod-php
+\end{lstlisting}
+    \item PHPプログラムを取得する．
+          \begin{lstlisting}
+# wget ftp://222.229.69.11/00/time.cgi %\enter%
+# wget ftp://222.229.69.11/00/time.shtml %\enter%
+# wget ftp://222.229.69.11/00/counter.cgi %\enter%
+# wget ftp://222.229.69.11/00/time.php
+\end{lstlisting}
+    \item これらを，適切な場所に配置する．
+          \begin{lstlisting}
+# mkdir /var/www/html/cgi/ %\enter%
+# mv time.cgi /var/www/html/cgi/ %\enter%
+# mkdir /var/www/html/ssi %\enter%
+# mv time.shtml /var/www/html/ssi/ %\enter%
+# mv counter.cgi /var/www/html/cgi/ %\enter%
+\end{lstlisting}
+    \item \texttt{time.cgi}，\texttt{counter.cgi}に実行権限を与える．
+          \begin{lstlisting}
+# chmod 755 /var/www/html/cgi/time.cgi %\enter%
+# chmod 755 /var/www/html/cgi/counter.cgi %\enter%
+\end{lstlisting}
+    \item \texttt{counter.cgi}で用いるカウンタファイルを作成する．
+          \begin{lstlisting}
+# echo "0" > /var/www/html/cgi/count.dat %\enter%
+# chmod 644 count.dat %\enter%
+# chown www-data:www-data count.dat %\enter%
+\end{lstlisting}
+\end{enumerate}
+\end{document}
