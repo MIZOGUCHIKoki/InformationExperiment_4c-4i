@@ -2,12 +2,16 @@
 \input{preamble.tex}
 \usepackage[margin=20truemm,headheight=20pt]{geometry}
 \usepackage{fancyhdr,lastpage}
+\renewcommand{\labelenumi}{\textbf{\theenumi}.\ }
+\renewcommand{\labelenumii}{\textbf{\theenumii)}\ }
 \fancypagestyle{fancy}{
     \fancyhf{}
     \fancyhead[R]{\thepage\ /\ \pageref{LastPage}}
     \fancyhead[C]{作業記録（Group C5）}
     \fancyhead[L]{July 13th, 2023}
+    \fancyfoot[R]{吉川，塩澤，福島，溝口}
 }
+
 \pagestyle{fancy}
 \begin{document}
 \begin{framed}
@@ -97,27 +101,37 @@ extra: %\enter% %\enter%
 # 
 \end{lstlisting}
     \item 作成した証明書をTAに渡す．
-    \item 自分の秘密鍵\texttt{server.key}で署名する．証明書ファイルは\texttt{server.crt}．
+    \item 大学からの署名済み証明書と中間証明書を取得する．
           \begin{lstlisting}
-# openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt %\enter%
+# cd /etc/ssl %\enter%
+# ftp 222.229.69.11 %\enter%
+Connected to 222.229.69.11.
+220 mainserver FTP server (Version 6.00LS) ready.
+Name (222.229.69.11:exp): ftp %\enter%
+331 Guest login ok, send your email address as password. 
+Password: %\enter%
+ftp> cd 01 %\enter%
+ftp> get www.c5.exp.info.kochi-tech.ac.jp.cer %\enter%
+ftp> get nii-odca4g7rsa.cer %\enter%
+ftp> quit %\enter%
 \end{lstlisting}
     \item 証明書ファイルを設置する．
           \begin{lstlisting}
-# mv server.key /etc/ssl/private/ %\enter%
-# mv server.crt /etc/ssl/certs/ %\enter%
+# mv www.c5.exp.info.kochi-tech.ac.jp.cer certs/ %\enter%
+# mv nii-odca4g7rsa.cer certs/ %\enter%
 \end{lstlisting}
-          \begin{lstlisting}[style=file,caption={\ttfamily /etc/apache2/sites-available/default-ssl.conf}]
-SSLCertificateFile /etc/ssl/certs/server.crt
+          \begin{lstlisting}[style=file,caption={\ttfamily /etc/apache2/sites-enabled/default-ssl.conf}]
+SSLCertificateFile /etc/ssl/certs/www.c5.exp.info.kochi-tech.ac.jp.cer
 SSLCertificateKeyFile /etc/ssl/private/server.key
+SSLCertificateChainFile /etc/ssl/certs/nii-odca4g7rsa.cer
 \end{lstlisting}
     \item 鍵の権限を変更する．
           \begin{lstlisting}
-# chown root:root /etc/ssl/certs/server.crt %\enter%
-# chmod 644 /etc/ssl/certs/server.crt %\enter%
 # chown root:ssl-cert /etc/ssl/private/server.key %\enter%
 # chmod 640 /etc/ssl/private/server.key %\enter%
 \end{lstlisting}
     \item \apache を再起動する．
+    \item wiresharkを用いてHTTP通信時のBasic認証通信をパケットキャプチャし，IDとパスワードを抽出する．また，HTTPS通信時にはIDとパスワードが秘匿にされていることを確認する．
 \end{enumerate}
 \subsection{動的コンテンツの設定}
 \begin{enumerate}
@@ -183,8 +197,7 @@ AddOutputFilter INCLUDES .shtml
 # chown www-data:www-data count.dat %\enter%
 \end{lstlisting}
 \end{enumerate}
-\clearpage
-\section{データベース・Webシステム}
+\section{データベースとWebシステム}
 \subsection{Windowsの端末ソフトウェア}
 \begin{enumerate}
     \item \texttt{PuTTY}をインストールする．
@@ -493,5 +506,56 @@ mysql> select date,sales.food,amount,foodgroup from sales,foodgroup,price where 
 5 rows in set (0.00 sec)
 \end{lstlisting}
 \end{enumerate}
-\subsection{WordPressとか}
+\subsection{MediaWiki}
+\begin{enumerate}
+    \item PHPのMySQL拡張機能，そのほかのパッケージをインストールする．
+          \begin{lstlisting}
+# apt update %\enter%        
+# apt install php-mysql %\enter%
+# apt install php-xml %\enter%
+# apt install php-mbstring %\enter%
+# apt install php-intl %\enter%
+    \end{lstlisting}
+    \item MediaWikiをインストールする．
+          \begin{lstlisting}
+# cd /var/www/html %\enter%
+# wget https://releases.wikimedia.org/mediawiki/1.40/mediawiki-1.40.0.tar.gz %\enter%
+# tar xvzf mediawiki-1.40.0.tar.gz %\enter%
+# mv mediawiki-1.40.0 mediawiki %\enter%
+# chown -R www-data mediawiki %\enter%
+\end{lstlisting}
+    \item MediaWikiで利用するデータベースを作成する．
+          \begin{lstlisting}
+# mysql -u root -p %\enter%
+mysql> create database mediawiki; %\enter%
+mysql> create user ’mediawiki’@’localhost’ identified by ’root00’; %\enter%
+mysql> grant all on mediawiki.* to ’mediawiki’@’localhost’; %\enter%
+\end{lstlisting}
+    \item MediaWikiを設定する．
+          \begin{enumerate}
+              \item クライアントのブラウザ（Chrome）で\texttt{https://www.c5.exp.info.kochi-tech.ac.jp}ヘアクセする．
+              \item 以下の項目を入力する．
+                    \begin{lstlisting}
+wikiname: mediawikic5
+mail: list@c5.exp.info.kochi-tech.ac.jp
+Language: Japanese
+Database: mediawiki
+DB username: mediawiki
+DB password: root00
+                \end{lstlisting}
+              \item \texttt{LocalSettings.php}をサーバへ転送する．
+                    \begin{lstlisting}[caption={Windows のクライアントて実行}]
+sftp exp@192.168.0.161 %\enter%
+exp@192.168.0.161's password: %\enter%
+sftp> put LocalSettings.php %\enter%
+sftp> quit %\enter%
+\end{lstlisting}
+              \item サーバで以下のコマンドを実行し，権限を設定する．
+                    \begin{lstlisting}
+# cd /var/www/html/mediawiki %\enter%
+# mv ~exp/LocalSettings.php . %\enter%
+# chown www-data LocalSettings.php %\enter%
+\end{lstlisting}
+          \end{enumerate}
+\end{enumerate}
 \end{document}
