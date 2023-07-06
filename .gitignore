@@ -3,10 +3,11 @@
 *.bbl
 *.lol
 *.gz
-*.log
 main.pdf
 *.app
 *.gnuplot
 node_modules
 !report4-[1-3]-1250373-mizoguchi.pdf
 *.pdf
+*.nav
+*.snm
