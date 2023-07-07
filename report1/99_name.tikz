@@ -11,7 +11,7 @@
     \foreach \u \v in {root/{\normalfont ``''}(root),jp/jp,info/info}{
     \node[right=-.3cm of \u]{\ttfamily\scriptsize\v};
     }
-    \draw[thick,-latex]($(rs.north)+(-.1cm,0)$)--($(ns.south)+(-.1cm,0)$)node[midway,left]{\tiny\ttfamily 1.www Addr?};
+    \draw[thick,-latex]($(rs.north)+(-.1cm,0)$)--($(ns.south)+(-.1cm,0)$)node[midway,left]{\tiny\ttfamily 1.www's Addr?};
     \draw[thick,-latex]($(ns.north)+(-.1cm,0)$)|-($(root.west)+(0,0.1cm)$)node[midway,above]{\tiny\ttfamily 2.jp's Addr?};
     \draw[thick,-latex]($(root.west)+(0,-0.1cm)$)-|($(ns.north)+(.1cm,0)$)node[midway,below right]{\tiny\ttfamily 3.jp's Addr};
     \draw[thick,-latex]($(ns.east)+(0,.2cm)$)--($(jp.west)+(0,.1cm)$)node[midway,above=-.1cm]{\rotatebox{12}{\tiny\ttfamily 4.ac's Addr?}};
