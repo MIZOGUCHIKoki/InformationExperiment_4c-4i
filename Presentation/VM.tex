@@ -26,13 +26,13 @@
             \node[str,fill=gray!40,text width=.9\textwidth,above=.1cm of hos](hsw){ホスト型仮想化ソフトウェア};
             \node[str,fill=gray!30,text width=.43\textwidth,above=.1cm of hsw.north west,anchor=south west](gos1){ゲストOS};
             \node[str,fill=gray!30,text width=.43\textwidth,above=.1cm of hsw.north east,anchor=south east](gos2){ゲストOS};
-            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos1.north west,anchor=south west](sw1){アプリ};
-            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos1.north east,anchor=south east](sw2){アプリ};
-            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos2.north west,anchor=south west](sw3){アプリ};
-            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos2.north east,anchor=south east](sw4){アプリ};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos1.north west,anchor=south west](sw1){\tiny アプリケーション};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos1.north east,anchor=south east](sw2){\tiny アプリケーション};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos2.north west,anchor=south west](sw3){\tiny アプリケーション};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos2.north east,anchor=south east](sw4){\tiny アプリケーション};
         \end{tikzpicture}
     \end{figure}
-    % \hyperlink{ハイパーバイザー型}{\beamergotobutton{ハイパーバイザー型}}\hypertarget{ホスト型}{}
+    % \hyperlink{ハイパーバイザ型}{\beamergotobutton{ハイパーバイザ型}}\hypertarget{ホスト型}{}
 \end{frame}
 \begin{frame}[t]{\ftitle}
     \begin{exampleblock}{ホスト型仮想化ソフトウェア 例}
@@ -65,28 +65,28 @@
     \end{minipage}\\
     \hfill\cite{itmanage}
 \end{frame}
-\subsection{ハイパーバイザー型}
+\subsection{ハイパーバイザ型}
 \begin{frame}[t]{\ftitle}
-    ハイパーバイザー型はホストOSが不要なものが現在は主流．ハイパーバイザーとは「仮想化のためのOS」のようなもの．
+    ハイパーバイザとは「仮想化のためのOS」のようなもの．
     \begin{figure}[b]
         \centering
         \begin{tikzpicture}
             \node[str,fill=gray!60,text width=.9\textwidth](hw){ハードウェア};
-            \node[str,fill=gray!45,text width=.9\textwidth,above=.1cm of hw,minimum height=2.1cm](hpv){ハイパーバイザー};
+            \node[str,fill=gray!45,text width=.9\textwidth,above=.1cm of hw,minimum height=2.1cm](hpv){ハイパーバイザ};
             \node[str,fill=gray!30,text width=.43\textwidth,above=.1cm of hpv.north west,anchor=south west](gos1){ゲストOS};
             \node[str,fill=gray!30,text width=.43\textwidth,above=.1cm of hpv.north east,anchor=south east](gos2){ゲストOS};
-            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos1.north west,anchor=south west](sw1){アプリ};
-            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos1.north east,anchor=south east](sw2){アプリ};
-            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos2.north west,anchor=south west](sw3){アプリ};
-            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos2.north east,anchor=south east](sw4){アプリ};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos1.north west,anchor=south west](sw1){\tiny アプリケーション};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos1.north east,anchor=south east](sw2){\tiny アプリケーション};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos2.north west,anchor=south west](sw3){\tiny アプリケーション};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos2.north east,anchor=south east](sw4){\tiny アプリケーション};
         \end{tikzpicture}
     \end{figure}
-    % \hyperlink{ホスト型}{\beamergotobutton{ホスト型}}\hypertarget{ハイパーバイザー型}{}
+    % \hyperlink{ホスト型}{\beamergotobutton{ホスト型}}\hypertarget{ハイパーバイザ型}{}
 \end{frame}
 \begin{frame}[t]{\ftitle}
-    \begin{exampleblock}{ハイパーバイザー 例}
+    \begin{exampleblock}{ハイパーバイザ 例}
         \begin{itemize}
-            \item Vmware ESXi
+            \item VMware ESXi
             \item Linux KVM
             \item Microsoft Hyper-V
         \end{itemize}
@@ -117,8 +117,8 @@
             \node[str,fill=gray!40,text width=.9\textwidth,above=.1cm of hos](hsw){Docker または Kubernetes};
             \node[str,fill=gray!30,text width=.2\textwidth,above=.1cm of hsw.north west,anchor=south west](gos1){ミドルウェア};
             \node[str,fill=gray!30,text width=.2\textwidth,above=.1cm of hsw.north east,anchor=south east](gos2){ミドルウェア};
-            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos1.north west,anchor=south west](sw1){アプリ};
-            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos2.north east,anchor=south east](sw4){アプリ};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos1.north west,anchor=south west](sw1){\tiny アプリケーション};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos2.north east,anchor=south east](sw4){\tiny アプリケーション};
             \node[inner sep=.5mm,fit={(gos1)(sw1)},draw,thick,dotted,rounded corners](wrap1){};
             \node[inner sep=.5mm,fit={(gos2)(sw4)},draw,thick,dotted,rounded corners](wrap2){};
             \node at ($(wrap1)!0.5!(wrap2)+(0,.5cm)$)(cont){コンテナ};
