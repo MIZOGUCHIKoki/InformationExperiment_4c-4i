@@ -1,6 +1,6 @@
 \section{Docker（Option）}\label{chap:docker}
 \tocc
-\subsection{Docker 利用手順}
+\subsection{コンテナ立ち上げと利用}
 \begin{frame}[t]{\ftitle}
     \begin{itemize}
         \setlength{\itemsep}{1em}
@@ -21,14 +21,19 @@
               \end{enumerate}
     \end{itemize}
 \end{frame}
-\subsection{\texttt{Dockerfile}}
+\subsection{イメージ作成・取得}
 \begin{frame}[containsverbatim,t]{\ftitle}
-    \begin{lstlisting}[language=docker-compose-2]
-FROM: ubuntu:latest
-RUN apt-get update # イメージ作成時
-CMD ["ping","-c","3","1.1.1.1"] # コンテナ作成時
-EXPOSE 3306 # ポートの解放
-\end{lstlisting}
+    \begin{itemize}
+        \item \texttt{Dockerfile}
+              \begin{lstlisting}[language=docker-compose-2]
+FROM mysql:latest
+ENV MYSQL_ROOT_PASSWORD root00
+            \end{lstlisting}
+        \item レジストリからイメージを取得（Pull）する．
+              \begin{lstlisting}[backgroundcolor={\color{black}},basicstyle={\color{white}\ttfamily},]
+$ docker pull mysql:latest
+            \end{lstlisting}
+    \end{itemize}
 \end{frame}
 \subsection{実演}
 \begin{frame}{\ftitle}

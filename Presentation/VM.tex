@@ -46,7 +46,7 @@
         \end{minipage}
         \begin{minipage}[b]{.15\textwidth}
             \centering
-            \includegraphics[keepaspectratio,width=\textwidth]{virtualbox_logo.png}\\
+            \includegraphics[keepaspectratio,width=.8\textwidth]{virtualbox_logo.png}\\
             {\tiny Virtualbox\cite{VMBox}}
         \end{minipage}
     \end{exampleblock}
@@ -74,11 +74,11 @@
             \node[str,fill=gray!60,text width=.9\textwidth](hw){ハードウェア};
             \node[str,fill=gray!45,text width=.9\textwidth,above=.1cm of hw,minimum height=2.1cm](hpv){ハイパーバイザ};
             \node[str,fill=gray!30,text width=.43\textwidth,above=.1cm of hpv.north west,anchor=south west](gos1){ゲストOS};
-            \node[str,fill=gray!30,text width=.43\textwidth,above=.1cm of hpv.north east,anchor=south east](gos2){ゲストOS};
+            \node[str,fill=gray!30,text width=.43\textwidth,above=.1cm of hpv.north east,anchor=south east](gos2){Linux};
             \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos1.north west,anchor=south west](sw1){\tiny アプリケーション};
             \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos1.north east,anchor=south east](sw2){\tiny アプリケーション};
-            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos2.north west,anchor=south west](sw3){\tiny アプリケーション};
-            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos2.north east,anchor=south east](sw4){\tiny アプリケーション};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos2.north west,anchor=south west](sw3){Apache};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos2.north east,anchor=south east](sw4){Python};
         \end{tikzpicture}
     \end{figure}
     % \hyperlink{ホスト型}{\beamergotobutton{ホスト型}}\hypertarget{ハイパーバイザ型}{}
@@ -106,7 +106,7 @@
     \end{minipage}\\
     \hfill\cite{itmanage}
 \end{frame}
-\subsection{コンテナ}
+\subsection{コンテナ型}
 \begin{frame}[t]{\ftitle}
     ``アプリケーションを実行するための領域（ユーザ空間）を複数に分割して利用するもの''\cite{itmanage}．
     \begin{figure}[b]
@@ -116,9 +116,9 @@
             \node[str,fill=gray!50,text width=.9\textwidth,above=.1cm of hw](hos){ホストOS};
             \node[str,fill=gray!40,text width=.9\textwidth,above=.1cm of hos](hsw){Docker または Kubernetes};
             \node[str,fill=gray!30,text width=.2\textwidth,above=.1cm of hsw.north west,anchor=south west](gos1){ミドルウェア};
-            \node[str,fill=gray!30,text width=.2\textwidth,above=.1cm of hsw.north east,anchor=south east](gos2){ミドルウェア};
+            \node[str,fill=gray!30,text width=.2\textwidth,above=.1cm of hsw.north east,anchor=south east](gos2){DBMS};
             \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos1.north west,anchor=south west](sw1){\tiny アプリケーション};
-            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos2.north east,anchor=south east](sw4){\tiny アプリケーション};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos2.north east,anchor=south east](sw4){MySQL};
             \node[inner sep=.5mm,fit={(gos1)(sw1)},draw,thick,dotted,rounded corners](wrap1){};
             \node[inner sep=.5mm,fit={(gos2)(sw4)},draw,thick,dotted,rounded corners](wrap2){};
             \node at ($(wrap1)!0.5!(wrap2)+(0,.5cm)$)(cont){コンテナ};
@@ -126,4 +126,13 @@
             \draw[-latex](cont.east)--(wrap2.west);
         \end{tikzpicture}
     \end{figure}
+\end{frame}
+\begin{frame}[t]{\ftitle}
+    \begin{block}{ミドルウェア}
+        システムソフトウェアは，基本ソフトウェア（OS）とミドルウェアに分類される．
+        ミドルウェアはOSとアプリケーションソフトウェアの中立ちをする．\hfill\cite{ITの基礎}
+    \end{block}
+    \begin{exampleblock}{ミドルウェアの例}
+        たとえば，データベースを管理するには，データベースを操作する基本ソフトウェア（DBMS\footnote{Data Base Management System}）がある．
+    \end{exampleblock}
 \end{frame}
