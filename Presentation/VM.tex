@@ -2,9 +2,10 @@
 \tocc
 \newcommand{\ie}{\tikz{\draw[arrows={-Latex[line width=1pt,fill=white,length=10pt]}](0,0)--(1,0)}\ }
 \begin{frame}[t]{\thesection.\ \secname}
+    \newcommand{\server}{サーバー}
     \begin{block}{仮想化}
         ``コンピューターの物理的資源を論理的に分割して，それぞれ独立並列した状態で利用できるようにすること．
-        1台のサーバーで，複数の基本ソフトを独立並列に動作させるサーバー仮想化など．''\hfill\cite{スーパー大辞林}
+        1台の\server で，複数の基本ソフトを独立並列に動作させる\server 仮想化など．''\hfill\cite{スーパー大辞林}
     \end{block}
     \ie 1台の計算機で複数のOSやアプリケーションなどを並列に動作させること．
     \vspace{.5em}
@@ -51,14 +52,14 @@
         \end{minipage}
     \end{exampleblock}
     \begin{minipage}[t]{.48\textwidth}
-        \textbf{メリット}
+        \textbf{\cmark メリット}
         \begin{itemize}
             \item 既存マシンが利用できる点．
             \item 仮想化に必要なソフトウェアが扱いやすい．
         \end{itemize}
     \end{minipage}
     \begin{minipage}[t]{.48\textwidth}
-        \textbf{デメリット}
+        \textbf{\xmark デメリット}
         \begin{itemize}
             \item ホストOSを動作させるための物理リソースが必要．
         \end{itemize}
@@ -67,7 +68,7 @@
 \end{frame}
 \subsection{ハイパーバイザ型}
 \begin{frame}[t]{\ftitle}
-    ハイパーバイザとは「仮想化のためのOS」のようなもの．
+    ハイパーバイザとは「仮想化のためのOS」のようなもの．ホストOSを必要としない，仮想化ソフトウェア．
     \begin{figure}[b]
         \centering
         \begin{tikzpicture}
@@ -92,16 +93,17 @@
         \end{itemize}
     \end{exampleblock}
     \begin{minipage}[t]{.48\textwidth}
-        \textbf{メリット}
+        \textbf{\cmark メリット}
         \begin{itemize}
-            \item システム全体の観点から見てリソースの使用効率がよい．
-            \item ホストOSが不要でハードウェアを直接制御が可能．
+            \item ホスト型に比べて，システム全体の観点から見てリソースの使用効率がよい．
+            \item 物理サーバに比べて，運用にかかるコストを削減できる．
         \end{itemize}
     \end{minipage}
     \begin{minipage}[t]{.48\textwidth}
-        \textbf{デメリット}
+        \textbf{\xmark デメリット}
         \begin{itemize}
-            \item 仮想化環境の高度な管理を実現するツールが標準装備されていない場合がある．
+            \item 物理サーバに比べて，性能が劣る．
+            \item 物理サーバに比べて，障害の範囲は大きくなる（ことがある．）
         \end{itemize}
     \end{minipage}\\
     \hfill\cite{itmanage}
@@ -133,6 +135,6 @@
         ミドルウェアはOSとアプリケーションソフトウェアの中立ちをする．\hfill\cite{ITの基礎}
     \end{block}
     \begin{exampleblock}{ミドルウェアの例}
-        たとえば，データベースを管理するには，データベースを操作する基本ソフトウェア（DBMS\footnote{Data Base Management System}）がある．
+        データベースを管理する，データベースを操作する基本ソフトウェア（DBMS\footnote{Data Base Management System}）がある．
     \end{exampleblock}
 \end{frame}

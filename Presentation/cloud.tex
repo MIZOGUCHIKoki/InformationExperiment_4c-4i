@@ -8,9 +8,36 @@
     \end{block}
     クラウドは以下の4つに分類されることが多い．
     \begin{itemize}
-        \item IaaS（Insfrastructure as a Service）
+        \item IaaS（Infrastructure as a Service）
         \item PaaS（Platform as a Service）
         \item SaaS（Software as a Service）
         \item DaaS（Desktop as a Service）% VDIとの違い
+    \end{itemize}
+\end{frame}
+\begin{frame}[t]{\ftitle}
+    \begin{itemize}
+        \item \textbf{IaaS}\\
+              仮想サーバやストレージ，ネットワークサービスなどをインターネット経由で提供する．\\（AWS，Azure，IBM Cloudなど）
+        \item \textbf{PasS}\\
+              ミドルウェアをサービスとして提供する．
+              OSとミドルウェアの管理はサービス提供者で行われ，ユーザはミドルウェアを直接操作できる．\\（AWS，Azure，Google Cloud Platformなど）
+        \item \textbf{SaaS}\\
+              ソフトウェアをサービスとして提供する．\\（Slack，Zoom，Google Calendarなど）
+    \end{itemize}
+    \hfill\cite{2015amazon}
+\end{frame}
+\begin{frame}[t]{\ftitle}
+    \begin{itemize}
+        \item \textbf{DaaS}\\
+              ``クラウドサービスとして提供される仮想デスクトップ環境を組織として利用するしかけ．''\hfill\cite{ISディジタル辞典DaaS}
+              \begin{itemize}
+                  \item[{\bfseries\Large\cmark}] \underline{クライアントを安価に抑えることができる．}（クライアントが依頼した処理をサーバが処理するため）
+                  \item[{\bfseries\Large\xmark}] \underline{ネットワークネットワーク負荷が大きくなる．}（ディスクトップ環境を提供するため）
+              \end{itemize}
+              （Azure Virtual Desktopなど）\\
+              \hrulefill
+        \item \textbf{VDI}（Virtual Desktop Infrastructure）\\
+              ``クライアントPCのディスクトップサーバ上に仮想化して集約し，稼働させる仕組み．''\hfill\cite{ISディジタル辞典VDI}
+              \item[\textbf{\large !}]DaaSはVDIの一種である．
     \end{itemize}
 \end{frame}
