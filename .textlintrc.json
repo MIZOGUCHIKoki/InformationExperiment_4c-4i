@@ -33,6 +33,12 @@
         "comments": {
             "enablingComment": "textlint-enable",
             "disablingComment": "textlint-disable"
+        },
+				"allowlist": {
+            "allow": [
+							"ユーザ",
+							"/``[\\s\\S]*?''/m"
+            ]
         }
     }
 }
