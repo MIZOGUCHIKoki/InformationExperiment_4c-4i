@@ -1,0 +1,129 @@
+\section{仮想化技術と仮想マシン}
+\tocc
+\newcommand{\ie}{\tikz{\draw[arrows={-Latex[line width=1pt,fill=white,length=10pt]}](0,0)--(1,0)}\ }
+\begin{frame}[t]{\thesection.\ \secname}
+    \begin{block}{仮想化}
+        ``コンピューターの物理的資源を論理的に分割して，それぞれ独立並列した状態で利用できるようにすること．
+        1台のサーバーで，複数の基本ソフトを独立並列に動作させるサーバー仮想化など．''\hfill\cite{スーパー大辞林}
+    \end{block}
+    \ie 1台の計算機で複数のOSやアプリケーションなどを並列に動作させること．
+    \vspace{.5em}
+    \begin{block}{Virtual Machine（仮想機械，仮想マシン）}
+        ``あるコンピューターシステムの動作を，別システムで再現するソフトウエア．また，そのような動作環境．あるOSの動作を別のOS上で再現する場合など．バーチャルマシン．VM．''\hfill\cite{スーパー大辞林}
+    \end{block}
+    \ie 仮想化するためのソフトウェアや動作環境．
+\end{frame}
+\section{仮想化の方式}
+\tocc
+\subsection{ホスト型}
+\begin{frame}[t]{\ftitle}
+    ハードウェアの中のOS上に，土台となる仮想ソフトウェアをインストールし，仮想化ソフトウェアで仮想マシンを稼働させる．
+    \begin{figure}[b]
+        \centering
+        \begin{tikzpicture}
+            \node[str,fill=gray!60,text width=.9\textwidth](hw){ハードウェア};
+            \node[str,fill=gray!50,text width=.9\textwidth,above=.1cm of hw](hos){ホストOS};
+            \node[str,fill=gray!40,text width=.9\textwidth,above=.1cm of hos](hsw){ホスト型仮想化ソフトウェア};
+            \node[str,fill=gray!30,text width=.43\textwidth,above=.1cm of hsw.north west,anchor=south west](gos1){ゲストOS};
+            \node[str,fill=gray!30,text width=.43\textwidth,above=.1cm of hsw.north east,anchor=south east](gos2){ゲストOS};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos1.north west,anchor=south west](sw1){アプリ};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos1.north east,anchor=south east](sw2){アプリ};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos2.north west,anchor=south west](sw3){アプリ};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos2.north east,anchor=south east](sw4){アプリ};
+        \end{tikzpicture}
+    \end{figure}
+    % \hyperlink{ハイパーバイザー型}{\beamergotobutton{ハイパーバイザー型}}\hypertarget{ホスト型}{}
+\end{frame}
+\begin{frame}[t]{\ftitle}
+    \begin{exampleblock}{ホスト型仮想化ソフトウェア 例}
+        \begin{minipage}[b]{.8\textwidth}
+            \begin{itemize}
+                \setlength{\itemsep}{1em}
+                \item VMware Workstation Player
+                \item VMware Fusion
+                \item Oracle VM Virtualbox
+            \end{itemize}
+        \end{minipage}
+        \begin{minipage}[b]{.15\textwidth}
+            \centering
+            \includegraphics[keepaspectratio,width=\textwidth]{virtualbox_logo.png}\\
+            {\tiny Virtualbox\cite{VMBox}}
+        \end{minipage}
+    \end{exampleblock}
+    \begin{minipage}[t]{.48\textwidth}
+        \textbf{メリット}
+        \begin{itemize}
+            \item 既存マシンが利用できる点．
+            \item 仮想化に必要なソフトウェアが扱いやすい．
+        \end{itemize}
+    \end{minipage}
+    \begin{minipage}[t]{.48\textwidth}
+        \textbf{デメリット}
+        \begin{itemize}
+            \item ホストOSを動作させるための物理リソースが必要．
+        \end{itemize}
+    \end{minipage}\\
+    \hfill\cite{itmanage}
+\end{frame}
+\subsection{ハイパーバイザー型}
+\begin{frame}[t]{\ftitle}
+    ハイパーバイザー型はホストOSが不要なものが現在は主流．ハイパーバイザーとは「仮想化のためのOS」のようなもの．
+    \begin{figure}[b]
+        \centering
+        \begin{tikzpicture}
+            \node[str,fill=gray!60,text width=.9\textwidth](hw){ハードウェア};
+            \node[str,fill=gray!45,text width=.9\textwidth,above=.1cm of hw,minimum height=2.1cm](hpv){ハイパーバイザー};
+            \node[str,fill=gray!30,text width=.43\textwidth,above=.1cm of hpv.north west,anchor=south west](gos1){ゲストOS};
+            \node[str,fill=gray!30,text width=.43\textwidth,above=.1cm of hpv.north east,anchor=south east](gos2){ゲストOS};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos1.north west,anchor=south west](sw1){アプリ};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos1.north east,anchor=south east](sw2){アプリ};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos2.north west,anchor=south west](sw3){アプリ};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos2.north east,anchor=south east](sw4){アプリ};
+        \end{tikzpicture}
+    \end{figure}
+    % \hyperlink{ホスト型}{\beamergotobutton{ホスト型}}\hypertarget{ハイパーバイザー型}{}
+\end{frame}
+\begin{frame}[t]{\ftitle}
+    \begin{exampleblock}{ハイパーバイザー 例}
+        \begin{itemize}
+            \item Vmware ESXi
+            \item Linux KVM
+            \item Microsoft Hyper-V
+        \end{itemize}
+    \end{exampleblock}
+    \begin{minipage}[t]{.48\textwidth}
+        \textbf{メリット}
+        \begin{itemize}
+            \item システム全体の観点から見てリソースの使用効率がよい．
+            \item ホストOSが不要でハードウェアを直接制御が可能．
+        \end{itemize}
+    \end{minipage}
+    \begin{minipage}[t]{.48\textwidth}
+        \textbf{デメリット}
+        \begin{itemize}
+            \item 仮想化環境の高度な管理を実現するツールが標準装備されていない場合がある．
+        \end{itemize}
+    \end{minipage}\\
+    \hfill\cite{itmanage}
+\end{frame}
+\subsection{コンテナ}
+\begin{frame}[t]{\ftitle}
+    ``アプリケーションを実行するための領域（ユーザ空間）を複数に分割して利用するもの''\cite{itmanage}．
+    \begin{figure}[b]
+        \centering
+        \begin{tikzpicture}
+            \node[str,fill=gray!60,text width=.9\textwidth](hw){ハードウェア};
+            \node[str,fill=gray!50,text width=.9\textwidth,above=.1cm of hw](hos){ホストOS};
+            \node[str,fill=gray!40,text width=.9\textwidth,above=.1cm of hos](hsw){Docker または Kubernetes};
+            \node[str,fill=gray!30,text width=.2\textwidth,above=.1cm of hsw.north west,anchor=south west](gos1){ミドルウェア};
+            \node[str,fill=gray!30,text width=.2\textwidth,above=.1cm of hsw.north east,anchor=south east](gos2){ミドルウェア};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos1.north west,anchor=south west](sw1){アプリ};
+            \node[str,fill=gray!20,text width=.2\textwidth,above=.1cm of gos2.north east,anchor=south east](sw4){アプリ};
+            \node[inner sep=.5mm,fit={(gos1)(sw1)},draw,thick,dotted,rounded corners](wrap1){};
+            \node[inner sep=.5mm,fit={(gos2)(sw4)},draw,thick,dotted,rounded corners](wrap2){};
+            \node at ($(wrap1)!0.5!(wrap2)+(0,.5cm)$)(cont){コンテナ};
+            \draw[-latex](cont.west)--(wrap1.east);
+            \draw[-latex](cont.east)--(wrap2.west);
+        \end{tikzpicture}
+    \end{figure}
+\end{frame}

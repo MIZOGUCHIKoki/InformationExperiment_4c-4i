@@ -1,0 +1,15 @@
+\section{クラウドコンピューティング}
+\subsection{クラウドとは}
+\begin{frame}[t]{\ftitle}
+    \begin{block}{クラウドコンピューティング}
+        クラウドコンピューティング（以下，クラウド）とは，コンピュータリソース尾の利用形態．
+        コンピュータの計算リソースやストレージ領域，アプリケーションによる処理をネットワーク経由で提供する．\hfill\cite{2015amazon}
+    \end{block}
+    クラウドは以下の4つに分類されることが多い．
+    \begin{itemize}
+        \item IaaS（Insfrastructure as a Service）
+        \item PaaS（Platform as a Service）
+        \item SaaS（Software as a Service）
+        \item DaaS（Desktop as a Service）% VDIとの違い
+    \end{itemize}
+\end{frame}
