@@ -17,10 +17,10 @@
 \begin{frame}[t]{\ftitle}
     \begin{itemize}
         \item \textbf{IaaS}\\
-              仮想サーバやストレージ，ネットワークサービスなどをインターネット経由で提供する．\\（AWS，Azure，IBM Cloudなど）
+              仮想サーバやストレージ，ネットワークサービスなどをインターネット経由で提供する．\\（AWS，Azure，GCP\footnote{Google Cloud Pratform}，IBM Cloudなど）
         \item \textbf{PasS}\\
               ミドルウェアをサービスとして提供する．
-              OSとミドルウェアの管理はサービス提供者で行われ，ユーザはミドルウェアを直接操作できる．\\（AWS，Azure，Google Cloud Platformなど）
+              OSとミドルウェアの管理はサービス提供者で行われ，ユーザはミドルウェアを直接操作できる．\\（AWS，Azure，GCPなど）
         \item \textbf{SaaS}\\
               ソフトウェアをサービスとして提供する．\\（Slack，Zoom，Google Calendarなど）
     \end{itemize}
@@ -40,4 +40,19 @@
               ``クライアントPCのディスクトップサーバ上に仮想化して集約し，稼働させる仕組み．''\hfill\cite{ISディジタル辞典VDI}
               \item[\textbf{\large !}]DaaSはVDIの一種である．
     \end{itemize}
+\end{frame}
+\subsection{AWS}
+\begin{frame}[t]{\ftitle}
+    \begin{block}{AWS}
+        Amazon Web Service の略称．Amazonが提供するクラウドサービスで，ネットワークを経由して仮想コンピュータやストレージなどのサービスを提供している．\hfill\cite{2015amazon}
+    \end{block}
+    \begin{minipage}{.33\textwidth}
+        \centering
+        \includegraphics[keepaspectratio,width=\textwidth]{Arch_Amazon-EC2_64@5x.png}\\
+        {\scriptsize Amazon Elastic Compute Cloud (Amazon EC2)}
+    \end{minipage}
+    \begin{minipage}{.33\textwidth}
+        \includegraphics[keepaspectratio,width=\textwidth]{Arch_Amazon-Simple-Storage-Service_64@5x.png}
+        {\scriptsize Amazon Simple Storage Service (Amazon S3)}
+    \end{minipage}
 \end{frame}

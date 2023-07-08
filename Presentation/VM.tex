@@ -137,16 +137,22 @@
     \begin{exampleblock}{ミドルウェアの例}
         データベースを管理する，データベースを操作する基本ソフトウェア（DBMS\footnote{Data Base Management System}）がある．
     \end{exampleblock}
-    \begin{minipage}{.48\textwidth}
+\end{frame}
+\begin{frame}[t]{\ftitle}
+    \begin{minipage}[t]{.48\textwidth}
         \textbf{\cmark メリット}
         \begin{itemize}
-            \item 環境依存が激しいもの向け．
+            \item バージョン依存が激しいもの（Python，JavaScript）などでも指定した環境を再現しやすい．（\texttt{Dockerfile}）
+            \item 環境構築が簡単．
+            \item ゲストOSが不要なので，アプリケーションの起動や処理が高速．
         \end{itemize}
     \end{minipage}
-    \begin{minipage}{.48\textwidth}
+    \begin{minipage}[t]{.48\textwidth}
         \textbf{\xmark デメリット}
         \begin{itemize}
-            \item
+            \item 同一基盤上で異なるOSを動かせない．
+            \item ホストOSで障害が生じると，全てのコンテナに影響が出る．
+            \item {\color{gray!60}学習コストが高い．（比較的新しい技術のため）}
         \end{itemize}
     \end{minipage}
 \end{frame}
