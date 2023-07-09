@@ -1,7 +1,7 @@
 \documentclass[aspectratio=43]{beamer}
 \usepackage{luatexja}
 \usepackage{hyperref,listings,tabularx,tikz,pifont}
-\usetikzlibrary{arrows.meta,positioning,calc,fit}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,shapes.geometric}
 \tikzset{str/.style={rounded corners, minimum height=1cm,align=center}}
 \usepackage[symbol]{footmisc}
 \newcommand{\cmark}{{\Large\bfseries\color{green!50!black}\ding{51}}}
@@ -98,10 +98,10 @@
     \begin{frame}[t]{\thesection.\ \secname}
         \begin{columns}[t]
             \begin{column}{.48\textwidth}
-                \tableofcontents[sections={1-3},currentsection,sectionstyle=show/shaded,subsectionstyle=show/show/shaded]
+                \tableofcontents[sections={1-4},currentsection,sectionstyle=show/shaded,subsectionstyle=show/show/shaded]
             \end{column}
             \begin{column}{.48\textwidth}
-                \tableofcontents[sections={4},currentsection,sectionstyle=show/shaded,subsectionstyle=show/show/shaded]
+                \tableofcontents[sections={5},currentsection,sectionstyle=show/shaded,subsectionstyle=show/show/shaded]
             \end{column}
         \end{columns}
     \end{frame}
@@ -118,10 +118,10 @@
 \begin{frame}[t]{お品書き}
     \begin{columns}[t]
         \begin{column}{.48\textwidth}
-            \tableofcontents[sections={1-3}]
+            \tableofcontents[sections={1-4}]
         \end{column}
         \begin{column}{.48\textwidth}
-            \tableofcontents[sections={4}]
+            \tableofcontents[sections={5}]
         \end{column}
     \end{columns}
 \end{frame}

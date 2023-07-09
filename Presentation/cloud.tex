@@ -8,6 +8,7 @@
     \end{block}
     クラウドは以下の4つに分類されることが多い．
     \begin{itemize}
+        \setlength{\itemsep}{1em}
         \item IaaS（Infrastructure as a Service）
         \item PaaS（Platform as a Service）
         \item SaaS（Software as a Service）
@@ -43,16 +44,38 @@
 \end{frame}
 \subsection{AWS}
 \begin{frame}[t]{\ftitle}
+    代表的なIaaS
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \underline{AWS}
+        \item Microsoft Azure
+        \item Google Cloud Pratform
+        \item さくらのクラウド（さくらインターネット）
+    \end{itemize}
+\end{frame}
+\begin{frame}[t]{\ftitle}
     \begin{block}{AWS}
         Amazon Web Service の略称．Amazonが提供するクラウドサービスで，ネットワークを経由して仮想コンピュータやストレージなどのサービスを提供している．\hfill\cite{2015amazon}
     \end{block}
-    \begin{minipage}{.33\textwidth}
+    \begin{minipage}{\textwidth}
         \centering
-        \includegraphics[keepaspectratio,width=\textwidth]{Arch_Amazon-EC2_64@5x.png}\\
-        {\scriptsize Amazon Elastic Compute Cloud (Amazon EC2)}
+        \begin{minipage}[t]{.32\textwidth}
+            \centering
+            \includegraphics[keepaspectratio,width=\textwidth]{Arch_Amazon-EC2_64@5x.png}\\
+            {\tiny Amazon Elastic Compute Cloud (Amazon EC2)\cite{aws}}
+        \end{minipage}
+        \begin{minipage}[t]{.32\textwidth}
+            \centering
+            \includegraphics[keepaspectratio,width=\textwidth]{Arch_Amazon-Simple-Storage-Service_64@5x.png}
+            {\tiny Amazon Simple Storage Service (Amazon S3)\cite{aws}}
+        \end{minipage}
+        \begin{minipage}[t]{.32\textwidth}
+            \centering
+            \includegraphics[keepaspectratio,width=\textwidth]{Arch_Amazon-RDS_64@5x.png}\\
+            {\tiny Amazon Relational Database Service (Amazon RDS)\cite{aws}}
+        \end{minipage}
     \end{minipage}
-    \begin{minipage}{.33\textwidth}
-        \includegraphics[keepaspectratio,width=\textwidth]{Arch_Amazon-Simple-Storage-Service_64@5x.png}
-        {\scriptsize Amazon Simple Storage Service (Amazon S3)}
-    \end{minipage}
+\end{frame}
+\begin{frame}{\ftitle}
+
 \end{frame}

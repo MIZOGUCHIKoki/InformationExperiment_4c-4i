@@ -14,6 +14,39 @@
     \end{block}
     \ie 仮想化するためのソフトウェアや動作環境．
 \end{frame}
+\begin{frame}{\thesection.\ \secname}
+    \begin{figure}
+        \centering
+        \begin{minipage}[b]{.48\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \node[str,fill=gray!60,text width=.42\textwidth](hw1){物理サーバ};
+                \node[str,fill=gray!40,text width=.42\textwidth,above=.1cm of hw1](os1){OS};
+                \node[str,fill=gray!20,text width=.42\textwidth,above=.1cm of os1](sw1){\scriptsize アプリケーション};
+                \node[str,fill=gray!60,text width=.42\textwidth,right=.1cm of hw1](hw2){物理サーバ};
+                \node[str,fill=gray!40,text width=.42\textwidth,above=.1cm of hw2](os2){OS};
+                \node[str,fill=gray!20,text width=.42\textwidth,above=.1cm of os2](sw2){\scriptsize アプリケーション};
+                \node[inner sep=.05cm,draw,rounded corners,fit={(hw1)(os1)(sw1)}](warp1){};
+                \node[inner sep=.05cm,draw,rounded corners,fit={(hw2)(os2)(sw2)}](warp2){};
+            \end{tikzpicture}
+            仮想化前
+        \end{minipage}
+        \begin{minipage}[b]{.48\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \node[str,fill=gray!60,text width=.85\textwidth](hw1){ハードウェア};
+                \node[str,fill=gray!50,text width=.85\textwidth,above=.1cm of hw1](vmm){仮想化ソフトウェア};
+                \node[str,fill=gray!40,text width=.38\textwidth,above=.1cm of vmm.north east,anchor=south east](os1){OS};
+                \node[str,fill=gray!40,text width=.38\textwidth,above=.1cm of vmm.north west,anchor=south west](os2){OS};
+                \node[str,fill=gray!20,text width=.38\textwidth,above=.1cm of os1](sw1){\tiny アプリケーション};
+                \node[str,fill=gray!20,text width=.38\textwidth,above=.1cm of os2](sw2){\tiny アプリケーション};
+                \node[inner sep=.05cm,draw,rounded corners,fit={(hw1)(vmm)},draw=white](warp1){};
+
+            \end{tikzpicture}
+            仮想化後
+        \end{minipage}
+    \end{figure}
+\end{frame}
 \section{仮想化の方式}
 \tocc
 \subsection{ホスト型}
@@ -151,8 +184,47 @@
         \textbf{\xmark デメリット}
         \begin{itemize}
             \item 同一基盤上で異なるOSを動かせない．
-            \item ホストOSで障害が生じると，全てのコンテナに影響が出る．
+            \item ホストOSで障害が生じると，すべてのコンテナに影響が出る．
             \item {\color{gray!60}学習コストが高い．（比較的新しい技術のため）}
         \end{itemize}
     \end{minipage}
+\end{frame}
+\section{準仮想化と完全仮想化}
+\tocc
+\begin{frame}[t]{\thesection.\ \secname}
+    ホストOSとハイパーバイザ型を比較すると，性能的にはハイパーバイザ型が有利．
+    ハイパーバイザの中にも\textbf{完全仮想化}と\textbf{準仮想化}がある．
+    \begin{block}{完全仮想化}
+        ハイパーバイザ上で動作するゲストOSの中身に何も変更を加えないで動作させる方式．
+    \end{block}
+    \begin{block}{準仮想化}
+        ゲストOSに変更を加えて性能向上を図った方式．
+    \end{block}
+\end{frame}
+\begin{frame}[t]{\thesection.\ \secname}
+    命令\texttt{A}：特権命令\footnote{CPUのステータスを変更したり，オペレーティングシステムを動作させるための命令．}\\
+    命令\texttt{X}：
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}
+            \node[draw,fill=gray!60,minimum height=1cm,align=center,text width=.4\textwidth](vm1){命令\texttt{A}};
+            \node[draw,fill=gray!40,minimum height=1cm,align=center,text width=.4\textwidth,below=.5cm of vm1](vmm1){命令\texttt{A}\ \raisebox{.25\baselineskip}{\tikz{\draw[-latex](0,0)--(.5,0)}}\ \texttt{X}};
+            \node[draw,fill=gray!20,minimum height=1cm,align=center,text width=.4\textwidth,below=.5cm of vmm1](hw1){命令\texttt{X}};
+            \node[anchor=north west,draw,fill=white] at (vm1.north west){\tiny ゲストOS};
+            \node[anchor=north west,draw,fill=white] at (vmm1.north west){\fontsize{4pt}{0pt}\selectfont ハイパーバイザ};
+            \node[anchor=north west,draw,fill=white] at (hw1.north west){\tiny ハードウェア};
+            \node[draw,fill=gray!60,minimum height=1cm,align=center,text width=.4\textwidth,right=.5cm of vm1](vm2){命令\texttt{X}};
+            \node[draw,fill=gray!40,minimum height=1cm,align=center,text width=.4\textwidth,below=.5cm of vm2](vmm2){命令\texttt{X}};
+            \node[draw,fill=gray!20,minimum height=1cm,align=center,text width=.4\textwidth,below=.5cm of vmm2](hw2){命令\texttt{X}};
+            \node[anchor=north west,draw,fill=white] at (vm2.north west){\tiny ゲストOS};
+            \node[anchor=north west,draw,fill=white] at (vmm2.north west){\fontsize{4pt}{0pt}\selectfont ハイパーバイザ};
+            \node[anchor=north west,draw,fill=white] at (hw2.north west){\tiny ハードウェア};
+            \node[below] at (hw1.south){完全仮想化};
+            \node[below] at (hw2.south){準仮想化};
+            \foreach \u \v in {vm1/vmm1,vmm1/hw1,vm2/vmm2,vmm2/hw2}{
+                    \draw[-latex](\u)--(\v);
+                }
+            \node[ellipse,align=center,draw,fill=gray!60] at($(vm2.east)+(-.5cm,-.3cm)$) {\tiny 特権命令を変換する};
+        \end{tikzpicture}
+    \end{figure}
 \end{frame}
