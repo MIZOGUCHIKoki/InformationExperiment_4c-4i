@@ -27,10 +27,12 @@
         \item \texttt{Dockerfile}
               \begin{lstlisting}[language=docker-compose-2]
 FROM mysql:latest
-ENV MYSQL_ROOT_PASSWORD root00
             \end{lstlisting}
+              \begin{lstlisting}[backgroundcolor={\color{black}},basicstyle={\color{white}\ttfamily\fontsize{12pt}{24pt}\selectfont},frame=none]
+$ docker build ./ -t mysql
+                            \end{lstlisting}
         \item レジストリからイメージを取得（Pull）する．
-              \begin{lstlisting}[backgroundcolor={\color{black}},basicstyle={\color{white}\ttfamily},]
+              \begin{lstlisting}[backgroundcolor={\color{black}},basicstyle={\color{white}\ttfamily\fontsize{12pt}{24pt}\selectfont},frame=none]
 $ docker pull mysql:latest
             \end{lstlisting}
     \end{itemize}
