@@ -1,0 +1,94 @@
+\section{仮想化技術と仮想マシン}
+\tocc
+\subsection{仮想化と仮想マシン}
+\newcommand{\ie}{\tikz{\draw[arrows={-Latex[line width=1pt,fill=white,length=10pt]}](0,0)--(1,0)}\ }
+\begin{frame}[t]{\ftitle}
+    \newcommand{\server}{サーバー}
+    \begin{block}{仮想化}
+        ``コンピューターの物理的資源を論理的に分割して，それぞれ独立並列した状態で利用できるようにすること．
+        1台の\server で，複数の基本ソフトを独立並列に動作させる\server 仮想化など．''\hfill\cite{スーパー大辞林}
+    \end{block}
+    \ie 1台の計算機で複数のOSやアプリケーションなどを並列に動作させること．
+    \vspace{.5em}
+    \begin{block}{Virtual Machine（仮想機械，仮想マシン）}
+        ``あるコンピューターシステムの動作を，別システムで再現するソフトウエア．また，そのような動作環境．あるOSの動作を別のOS上で再現する場合など．バーチャルマシン．VM．''\hfill\cite{スーパー大辞林}
+    \end{block}
+    \ie 仮想化するためのソフトウェアや動作環境．
+\end{frame}
+\begin{frame}{\ftitle}
+    \begin{figure}
+        \centering
+        \begin{minipage}[b]{.48\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \node[str,fill=gray!60,text width=.42\textwidth](hw1){物理サーバ};
+                \node[str,fill=gray!40,text width=.42\textwidth,above=.1cm of hw1](os1){OS};
+                \node[str,fill=gray!20,text width=.42\textwidth,above=.1cm of os1](sw1){\scriptsize アプリケーション};
+                \node[str,fill=gray!60,text width=.42\textwidth,right=.1cm of hw1](hw2){物理サーバ};
+                \node[str,fill=gray!40,text width=.42\textwidth,above=.1cm of hw2](os2){OS};
+                \node[str,fill=gray!20,text width=.42\textwidth,above=.1cm of os2](sw2){\scriptsize アプリケーション};
+                \node[inner sep=.05cm,draw,rounded corners,fit={(hw1)(os1)(sw1)}](warp1){};
+                \node[inner sep=.05cm,draw,rounded corners,fit={(hw2)(os2)(sw2)}](warp2){};
+            \end{tikzpicture}
+            仮想化前
+        \end{minipage}
+        \begin{minipage}[b]{.48\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \node[str,fill=gray!60,text width=.85\textwidth](hw1){ハードウェア};
+                \node[str,fill=gray!50,text width=.85\textwidth,above=.1cm of hw1](vmm){仮想化ソフトウェア};
+                \node[str,fill=gray!40,text width=.38\textwidth,above=.1cm of vmm.north east,anchor=south east](os1){OS};
+                \node[str,fill=gray!40,text width=.38\textwidth,above=.1cm of vmm.north west,anchor=south west](os2){OS};
+                \node[str,fill=gray!20,text width=.38\textwidth,above=.1cm of os1](sw1){\tiny アプリケーション};
+                \node[str,fill=gray!20,text width=.38\textwidth,above=.1cm of os2](sw2){\tiny アプリケーション};
+                \node[inner sep=.05cm,draw,rounded corners,fit={(hw1)(vmm)},draw=white](warp1){};
+            \end{tikzpicture}
+            仮想化後
+        \end{minipage}
+    \end{figure}
+\end{frame}
+\subsection{仮想化の歴史と展望}
+\begin{frame}{\ftitle}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}
+            \tikzset{txt/.style={rounded corners,draw,text width=.9\textwidth,align=center}};
+            \node[txt](v1){2000年代の仮想化導入目的は\ \textbf{\color{red}コスト削減}};
+            \newcommand{\ga}{が}
+            \node[txt,below=1cm of v1](v2){仮想化の利用\ga 一巡する};
+            \node[txt,below=1cm of v2](v3){本来持つ利点\ga 認識される};
+            \node[txt,below=1cm of v3](v4){仮想化の\textbf{\color{red}俊敏性}・\textbf{\color{red}迅速性}・\textbf{\color{red}柔軟性}をビジネスに活かす};
+            \foreach \u \v in {v1/v2,v2/v3,v3/v4}{
+                    \draw[line width=.2cm,-latex](\u)--(\v);
+                }
+        \end{tikzpicture}
+    \end{figure}
+\end{frame}
+\begin{frame}[t]{\ftitle}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}
+            \tikzset{rc/.style={text width=.3\textwidth,minimum height=2cm,rounded corners,align=center}};
+            \tikzset{p/.style={align=center,rounded corners,fill=blue!60,minimum height=2cm,anchor=west,text=white,text width=.5cm,}};
+            \tikzset{sfit/.style={draw=blue!60,inner sep=-.1mm,rounded corners}};
+            \node[rc](p1){コスト削減};
+            \node[p,left=0cm of p1.west](p){目\\的};
+            \node[fit={(p)(p1)},sfit](pp1){};
+            \node[above=.1cm of pp1](1t){\LARGE 一巡};
+            \node[rc,below=.5cm of p1](a1){\small オンプレミスで構築された物理サーバを仮想サーバに集約};
+            \node[p,left=0cm of a1](a){\rotatebox{90}{Action}};
+            \node[fit={(a)(a1)},sfit](aa1){};
+            \node[fit={(1t)(aa1)(pp1)},draw,rounded corners](warp1){};
+
+            \node[rc,right=2.5cm of p1](p2){仮想化の俊敏性，迅速性，柔軟性をビジネスに活かす};
+            \node[p,left=0cm of p2.west](p){目\\的};
+            \node[fit={(p)(p2)},sfit](pp2){};
+            \node[above=.1cm of pp2](2t){\LARGE 二巡};
+            \node[rc,below=.5cm of p2,align=left](a2){\scriptsize ・システム開発の短縮化\\\scriptsize ・ITを駆使したビジネスのスピードアップ};
+            \node[p,left=0cm of a2](a){\rotatebox{90}{Action}};
+            \node[fit={(a)(a2)},sfit](aa2){};
+            \node[fit={(2t)(aa2)(pp2)},draw,rounded corners](warp2){};
+            \draw[-latex,line width=.2cm](warp1.east)--(warp2.west);
+        \end{tikzpicture}
+    \end{figure}
+\end{frame}

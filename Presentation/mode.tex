@@ -1,38 +1,32 @@
 \section{準仮想化と完全仮想化}
 \tocc
-\begin{frame}[t]{\thesection.\ \secname}
-    \begin{block}{完全仮想化}
-
-    \end{block}
-    \begin{block}{準仮想化}
-
-    \end{block}
-\end{frame}
-\subsection{特権モードと非特権モード}
-\begin{frame}[t]{\ftitle}
-    \begin{block}{特権モード（カーネルモード）}
-        OSにおける核となるプログラムであるカーネルを実行する際に用いられる権限．
-    \end{block}
-\end{frame}
-\subsection{準仮想化と完全仮想化}
-\begin{frame}[t]{\ftitle}
+\begin{frame}[t]{\fftitle}
     ホストOSとハイパーバイザ型を比較すると，性能的にはハイパーバイザ型が有利．
     ハイパーバイザの中にも\textbf{完全仮想化}と\textbf{準仮想化}がある．
     \begin{block}{完全仮想化}
-        ハイパーバイザ上で動作するゲストOSの中身に何も変更を加えないで動作させる方式．
+        ハードウェアも含めて，すべてを仮想化する方式．ハードウェアも論理ハードウェア．
     \end{block}
-    ゲストOSからハードウェアをアクセスすると，特権違反の割り込みが発生し，ハイパーバイザ内の例外処理に遷移．
-    ゲストOSは実際のハードウェアを模倣した仮想ハードウェア上で動作する．
+    \begin{block}{準仮想化}
+        ゲストOSを少し改造して，ゲストOSから直接ハードウェアを操作できる方式．
+        処理速度が大きくなる．（理由は次頁．）
+    \end{block}
 \end{frame}
-\begin{frame}[t]{\ftitle}
+\begin{frame}[t]{\fftitle （詳しく）}
+    \begin{block}{完全仮想化}
+        ハイパーバイザ上で動作するゲストOSの中身に何も変更を加えないで動作させる方式．
+        ゲストOSからハードウェアを操作する（特権命令の実行）は許されないので，ハイパーバイザで処理を変換する．
+    \end{block}
     \begin{block}{準仮想化}
         ゲストOSに変更を加えて性能向上を図った方式．
-        ゲストOSがあらかじめ特権命令を非特権命令に変換することで，ハイパーバイザでの命令変換時にかかるオーバーヘッドを削減する
+        ゲストOSからハードウェアを操作する部分（特権命令）を，ハイパーバイザに直接処理が渡るように変更を加える．
+        ハイパーバイザでの命令変換時にかかるオーバーヘッドを削減する
     \end{block}
+    \hfill\cite{仮想化技術}
 \end{frame}
-\begin{frame}[t]{\ftitle}
-    命令\texttt{A}：特権命令\footnote{CPUのステータスを変更したり，オペレーティングシステムを動作させるための命令．}\\
-    命令\texttt{X}：非特権命令
+\begin{frame}[t]{\fftitle （詳しく）}
+    \newcommand{\karano}{からの}
+    命令\texttt{A}：ゲストOSからの特権命令\footnote{CPUのステータスを変更したり，オペレーティングシステムを動作させるための命令．}．\\
+    命令\texttt{X}：ハイパーバイザからの特権命令．
     \begin{figure}
         \centering
         \begin{tikzpicture}
