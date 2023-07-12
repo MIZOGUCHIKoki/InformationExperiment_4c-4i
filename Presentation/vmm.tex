@@ -100,21 +100,24 @@
     \begin{minipage}[t]{.49\textwidth}
         \textbf{\cmark メリット}\\\hspace{1\zw}（仮想化導入の目的）
         \begin{itemize}
+            \setlength{\itemsep}{1em}
             \item 無駄なリソースの削減
             \item コスト削減
                   \begin{itemize}
-                      \item ハードウェアを減らせる
+                      \item[\faArrowCircleORight] ハードウェアを減らせる
                   \end{itemize}
-            \item 障害への対応強化
+            \item リソースを集約できる
                   \begin{itemize}
-                      \item バックアップ作業が簡便
+                      \item[\faArrowCircleORight] 管理が簡便になる
                   \end{itemize}
         \end{itemize}
     \end{minipage}
     \begin{minipage}[t]{.49\textwidth}
         \textbf{\xmark デメリット}\\
         \begin{itemize}
-            \item
+            \setlength{\itemsep}{1em}
+            \item 物理サーバに比べて性能が劣る．
+            \item 物理層の故障による障害範囲が広くなる．
         \end{itemize}
     \end{minipage}
 \end{frame}
