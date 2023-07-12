@@ -1,11 +1,12 @@
 \documentclass[aspectratio=43]{beamer}
 \usepackage{luatexja}
-\usepackage{hyperref,listings,tabularx,tikz,pifont}
+\usepackage{hyperref,listings,tabularx,tikz,pifont,fontawesome}
+\usepackage[symbol]{footmisc}
 \usetikzlibrary{arrows.meta,positioning,calc,fit,shapes.geometric}
 \tikzset{str/.style={rounded corners, minimum height=1cm,align=center}}
-\usepackage[symbol]{footmisc}
 \newcommand{\cmark}{{\Large\bfseries\color{green!50!black}\ding{51}}}
 \newcommand{\xmark}{{\Large\bfseries\color{red!50!black}\ding{55}}}
+\renewcommand{\insertreturnsymbol}{\faSmileO\faArrowRight\space}
 \hypersetup{
     colorlinks=true,
     linkcolor=black,
@@ -23,11 +24,11 @@
 \bibliographystyle{junsrt}
 \setbeamertemplate{bibliography item}[text]
 \setbeamertemplate{section in toc}{
-    {\color{structure}\inserttocsectionnumber.}\ \inserttocsection\vspace{.3em}
+    {\color{structure}\inserttocsectionnumber.}\ \inserttocsection\vspace{.2em}
 }
 
 \setbeamertemplate{subsection in toc}{
-    \hspace{1.2em}{\color{structure}\rule[.3ex]{3pt}{3pt}}\ \inserttocsubsection\par\vspace{.3em}
+    \hspace{1.2em}{\color{structure}\rule[.3ex]{3pt}{3pt}}\ \inserttocsubsection\par\vspace{.2em}
 }
 \setbeamertemplate{footline}{
     \leavevmode

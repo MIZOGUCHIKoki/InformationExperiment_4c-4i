@@ -61,8 +61,10 @@
             \foreach \u \v in {v1/v2,v2/v3,v3/v4}{
                     \draw[line width=.2cm,-latex](\u)--(\v);
                 }
+            \node[right=.1cm]at($(v1)!0.5!(v2)$){\scriptsize サイロ化\footnotemark の課題を引き継いでしまう};
         \end{tikzpicture}
     \end{figure}
+    \footnotetext{複数のサーバが乱立し，他のシステムとの連携が取れない状態．}
 \end{frame}
 \begin{frame}[t]{\ftitle}
     \begin{figure}
@@ -84,11 +86,35 @@
             \node[p,left=0cm of p2.west](p){目\\的};
             \node[fit={(p)(p2)},sfit](pp2){};
             \node[above=.1cm of pp2](2t){\LARGE 二巡};
-            \node[rc,below=.5cm of p2,align=left](a2){\scriptsize ・システム開発の短縮化\\\scriptsize ・ITを駆使したビジネスのスピードアップ};
+            \node[rc,below=.5cm of p2,align=left](a2){\scriptsize ・システム開発の短縮化};
             \node[p,left=0cm of a2](a){\rotatebox{90}{Action}};
             \node[fit={(a)(a2)},sfit](aa2){};
             \node[fit={(2t)(aa2)(pp2)},draw,rounded corners](warp2){};
             \draw[-latex,line width=.2cm](warp1.east)--(warp2.west);
         \end{tikzpicture}
     \end{figure}
+    \hfill\cite{仮想化歴史}
+\end{frame}
+\subsection{メリットとデメリット}
+\begin{frame}[t]{\ftitle}
+    \begin{minipage}[t]{.49\textwidth}
+        \textbf{\cmark メリット}\\\hspace{1\zw}（仮想化導入の目的）
+        \begin{itemize}
+            \item 無駄なリソースの削減
+            \item コスト削減
+                  \begin{itemize}
+                      \item ハードウェアを減らせる
+                  \end{itemize}
+            \item 障害への対応強化
+                  \begin{itemize}
+                      \item バックアップ作業が簡便
+                  \end{itemize}
+        \end{itemize}
+    \end{minipage}
+    \begin{minipage}[t]{.49\textwidth}
+        \textbf{\xmark デメリット}\\
+        \begin{itemize}
+            \item
+        \end{itemize}
+    \end{minipage}
 \end{frame}
