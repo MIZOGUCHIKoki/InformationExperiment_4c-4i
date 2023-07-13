@@ -26,7 +26,7 @@
 \end{frame}
 \subsection{オンプレミスとAWS}
 \begin{frame}[t]{\ftitle}
-    リソースを効率よく運用できる．\hfill\cite{2015amazon}
+    AWSはオンプレミスに比べてリソースを効率よく運用できる．\hfill\cite{2015amazon}
     \begin{figure}
         \centering
         \begin{minipage}[b]{.48\textwidth}
@@ -85,26 +85,44 @@
         ``1台のサーバを複数のユーザが共用で利用する形態''\hfill\cite{2015amazon}
     \end{block}
     \begin{table}
-        \fontsize{10pt}{10pt}\selectfont
         \centering
+        レンタルサーバの利用形態\\
+        \vspace{1em}
+        \fontsize{5pt}{10pt}\selectfont
         \renewcommand{\arraystretch}{1.3}
         \newcommand{\hobo}{ほぼ}
         \begin{tabularx}{\textwidth}{cRRR}
-                             & \multicolumn{1}{c}{共用サーバ} & \multicolumn{1}{c}{専用サーバ} & \multicolumn{1}{c}{仮想専用サーバ}          \\
+                             & \multicolumn{1}{c}{共用サーバ} & \multicolumn{1}{c}{専用サーバ} & \multicolumn{1}{c}{仮装専用サーバ} \\
             \hline
-            {\tiny 利用形態}     & 1台の物理サーバを分割して利用           & 1台の物理サーバを占有               & 1台の物理サーバ上に立てた仮想サーバを利用                \\
+            {\tiny 利用形態}     & {1台の物理サーバを分割して利用}         & {1台の物理サーバを占有}             & {1台の物理サーバ上に立てた仮想サーバを利用}     \\
             \hline
-            {\tiny コスト}      & 安い                        & 高い                        & \textcolor{red}{中間}                  \\
+            {\tiny コスト}      & 安い                        & 高い                        & 中間                          \\
             \hline
-            {\tiny カスタマイズ}   & \hobo 不可能                 & 可能                        & \textcolor{red}{可能}                  \\
+            {\tiny カスタマイズ}   & \hobo 不可能                 & 可能                        & 可能                          \\
             \hline
-            {\tiny セキュリティ}   & コントロール\textbf{不可}         & 高くコントロール\textbf{可能}       & \textcolor{red}{高くコントロール\textbf{可能}} \\
+            {\tiny セキュリティ}   & { コントロール不可}               & { 高くコントロール可能}             & { 高くコントロール可能}               \\
             \hline
-            {\tiny 他のユーザの影響} & 強く受ける                     & 受けない                      & 多少受ける                                \\
+            {\tiny 他のユーザの影響} & 強く受ける                     & 受けない                      & 多少受ける                       \\
             \hline
         \end{tabularx}
     \end{table}
     \hfill 引用\cite{2015amazon}
+\end{frame}
+\begin{frame}[t]{\ftitle}
+    \begin{block}{AWS\ EC2}
+        EC2は1台の物理マシン上に，複数の仮想コンピュータを立ち上げて使い，管理者権限（\texttt{root}）を持ったアカウントを使用し，その仮想コンピュータ内の全てを管理する．\hfill\cite{2015amazon}
+    \end{block}
+    「EC2」とレンタルサーバの「仮想専用サーバ」は似たサービス．しかし・・・・
+    \begin{exampleblock}{EC2の特徴}
+        \begin{itemize}
+            \item CPUやメモリを容易に変更できる．\hfill\tikz[remember picture]{\node(A){};}
+            \item ディスクを動的に追加\footnote{インスタンスの再起動なしに変更すること．}できる．
+                  \item[]\hfill などなど・・
+        \end{itemize}
+    \end{exampleblock}
+    \begin{tikzpicture}[remember picture,overlay]
+        \node[left=-.2cm,rounded corners,fill=yellow,align=center,thick,draw]at($(A)+(0,.2cm)$){\scriptsize これまでの\\\scriptsize レンタルサーバにはない！};
+    \end{tikzpicture}
 \end{frame}
 \subsection{AWS導入例}
 \begin{frame}[t]{\ftitle}
