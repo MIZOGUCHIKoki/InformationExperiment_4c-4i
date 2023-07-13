@@ -37,7 +37,7 @@
                 \coordinate (B) at (2,1.5);
                 \coordinate (C) at (3,3);
                 \coordinate (D) at (4,2);
-                \draw[red,thick, name path=curve, save path=\curve]plot[smooth, tension=0.7]coordinates {(O)(A)(B)(C)(D)};
+                \draw[red,thick, name path=curve]plot[smooth, tension=0.7]coordinates {(O)(A)(B)(C)(D)};
                 \draw[name path=line,thick,dashed](0,2.5)--(4,2.5);
                 \draw[thick,dashed](0,2.5)--(4,2.5);
                 \draw[thick,-latex](0,0)--(4,0);
@@ -47,6 +47,11 @@
                 \node[below,text=red]at(B){\scriptsize 実際のリソース};
                 \node[above]at(C){\scriptsize 機会損失};
                 \node[below right]at(0,2.5){\scriptsize 無駄になる};
+                \begin{scope}[on background layer]
+                    \clip plot[smooth, tension=0.7] coordinates {(O) (A) (B) (C) (D)} |- (0,4) -- cycle;
+                    \fill[yellow, name intersections={of=curve and line}] (intersection-1) rectangle (0,0);
+                    \fill[yellow, name intersections={of=curve and line}] (intersection-2) rectangle (4,0);
+                \end{scope}
             \end{tikzpicture}\\
             \vspace{1em}
             オンプレミス
@@ -67,7 +72,7 @@
                 \node[below] at ($(0,0)!0.5!(4,0)$){\scriptsize 時間};
                 \node[left] at ($(0,0)!0.5!(0,4.5)$){\scriptsize\rotatebox{90}{リソース量}};
                 \node[above]at($(C)+(0,\avv)$){\scriptsize 用意したリソース};
-                \node[below,text=red]at(B){\scriptsize 実際のリソース};
+                \node[below,text=red]at(B){\scriptsize 必要なリソース};
             \end{tikzpicture}\\
             \vspace{1em}
             AWSの利用
