@@ -1,15 +1,5 @@
 \section{AWS}
 \tocc
-\subsection{代表的なIaaS}
-\begin{frame}[t]{\ftitle}
-    \begin{itemize}
-        \setlength{\itemsep}{1em}
-        \item \underline{AWS}
-        \item Microsoft Azure
-        \item Google Cloud Pratform
-        \item さくらのクラウド（さくらインターネット）
-    \end{itemize}
-\end{frame}
 \subsection{AWSとは}
 \begin{frame}[t]{\ftitle}
     \begin{block}{AWS}
@@ -36,11 +26,80 @@
 \end{frame}
 \subsection{オンプレミスとAWS}
 \begin{frame}[t]{\ftitle}
-
+    リソースを効率よく運用できる．\hfill\cite{2015amazon}
+    \begin{figure}
+        \centering
+        \begin{minipage}[b]{.48\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \coordinate (O) at (0,0);
+                \coordinate (A) at (1,2);
+                \coordinate (B) at (2,1.5);
+                \coordinate (C) at (3,3);
+                \coordinate (D) at (4,2);
+                \draw[red,thick, name path=curve, save path=\curve]plot[smooth, tension=0.7]coordinates {(O)(A)(B)(C)(D)};
+                \draw[name path=line,thick,dashed](0,2.5)--(4,2.5);
+                \draw[thick,dashed](0,2.5)--(4,2.5);
+                \draw[thick,-latex](0,0)--(4,0);
+                \draw[thick,-latex](0,0)--(0,4.5);
+                \node[below] at ($(0,0)!0.5!(4,0)$){\scriptsize 時間};
+                \node[left] at ($(0,0)!0.5!(0,4.5)$){\scriptsize\rotatebox{90}{リソース量}};
+                \node[below,text=red]at(B){\scriptsize 実際のリソース};
+                \node[above]at(C){\scriptsize 機会損失};
+                \node[below right]at(0,2.5){\scriptsize 無駄になる};
+            \end{tikzpicture}\\
+            \vspace{1em}
+            オンプレミス
+        \end{minipage}
+        \begin{minipage}[b]{.48\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \coordinate (O) at (0,0);
+                \coordinate (A) at (1,2);
+                \coordinate (B) at (2,1.5);
+                \coordinate (C) at (3,3);
+                \coordinate (D) at (4,2);
+                \newcommand{\avv}{0.2cm}
+                \draw[red,thick]plot[smooth, tension=0.7]coordinates {(O)(A)(B)(C)(D)};
+                \draw[thick,dashed]plot[smooth,tension=0.7] coordinates {($(O)+(0,\avv)$)($(A)+(0,\avv)$)($(B)+(0,\avv)$)($(C)+(0,\avv)$)($(D)+(0,\avv)$)};
+                \draw[thick,-latex](0,0)--(4,0);
+                \draw[thick,-latex](0,0)--(0,4.5);
+                \node[below] at ($(0,0)!0.5!(4,0)$){\scriptsize 時間};
+                \node[left] at ($(0,0)!0.5!(0,4.5)$){\scriptsize\rotatebox{90}{リソース量}};
+                \node[above]at($(C)+(0,\avv)$){\scriptsize 用意したリソース};
+                \node[below,text=red]at(B){\scriptsize 実際のリソース};
+            \end{tikzpicture}\\
+            \vspace{1em}
+            AWSの利用
+        \end{minipage}
+    \end{figure}
 \end{frame}
 \subsection{レンタルサーバとAWS}
 \begin{frame}[t]{\ftitle}
-
+    \begin{block}{レンタルサーバ}
+        ``1台のサーバを複数のユーザが共用で利用する形態''\hfill\cite{2015amazon}
+    \end{block}
+    \begin{table}
+        \fontsize{10pt}{10pt}\selectfont
+        \centering
+        \renewcommand{\arraystretch}{1.3}
+        \newcommand{\hobo}{ほぼ}
+        \begin{tabularx}{\textwidth}{cRRR}
+                             & \multicolumn{1}{c}{共用サーバ} & \multicolumn{1}{c}{専用サーバ} & \multicolumn{1}{c}{仮想専用サーバ}          \\
+            \hline
+            {\tiny 利用形態}     & 1台の物理サーバを分割して利用           & 1台の物理サーバを占有               & 1台の物理サーバ上に立てた仮想サーバを利用                \\
+            \hline
+            {\tiny コスト}      & 安い                        & 高い                        & \textcolor{red}{中間}                  \\
+            \hline
+            {\tiny カスタマイズ}   & \hobo 不可能                 & 可能                        & \textcolor{red}{可能}                  \\
+            \hline
+            {\tiny セキュリティ}   & コントロール\textbf{不可}         & 高くコントロール\textbf{可能}       & \textcolor{red}{高くコントロール\textbf{可能}} \\
+            \hline
+            {\tiny 他のユーザの影響} & 強く受ける                     & 受けない                      & 多少受ける                                \\
+            \hline
+        \end{tabularx}
+    \end{table}
+    \hfill 引用\cite{2015amazon}
 \end{frame}
 \subsection{AWS導入例}
 \begin{frame}[t]{\ftitle}
