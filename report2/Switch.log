@@ -6,10 +6,7 @@ Escape character is '^]'.
 
 User Access Verification
 
-Password: Kerberos: No default realm defined for Kerberos!
-
-Password: 
-Password: 
+Password:
 switch5>enable 
 Password: 
 switch5#show vlan
