@@ -110,12 +110,11 @@ OSPFのコスト算出は，最大通信帯域が大きいほど小さな値が�
     \caption{OSPFでの経路選択\cite[p.284]{マスタリングTCPIP}}
     \label{fig:OSPFでの経路選択}
 \end{figure}
-
 \subsection{VLAN}
 VLAN（Virtual LAN）とは，1つのL2スイッチに接続されていても，異なるセグメントとして設定でき，VLANどうしの通信を一切遮断する技術である．
 この技術を用いることで，ポートごとのにセグメントを分割でき，ブロードキャストドメインを区切ることができる．これにより，ネットワーク負荷を軽減でき，安全性が向上する（\figref{fig:VLAN}）．
 さらに，スイッチをまたいだVLANの構築（\figref{fig:スイッチをまたいだVLAN}）の構築により，ネットワークの配線を変えずにネットワークの構造を変更でき，機器の節約にもつながる．
-この技術は，VLAN IDを各セグメントに定義し，EthernetヘッダにVLAN IDを付加することで，
+この技術はタグVLANと呼ばれ，VLAN IDを各セグメントに定義し，EthernetヘッダにVLAN IDを付加することで，どのセグメントにフレームを転送するか決める\cite[p.105\ -\ p.106]{マスタリングTCPIP}．
 \begin{figure}
     \centering
     \begin{minipage}[b]{.55\textwidth}
@@ -169,13 +168,13 @@ VLAN（Virtual LAN）とは，1つのL2スイッチに接続されていても�
             \tikzset{port/.style={rounded corners,draw,text width=.2cm,minimum height=.2cm,fill=#1!30,draw=#1!70!black}};
             \node[port=cyan](p11){};
             \node[port=cyan,right=.2cm of p11](p12){};
-            \node[port=magenta,right=.5cm of p12](p13){};
+            \node[port=magenta,right=.8cm of p12](p13){};
             \node[port=magenta,right=.2cm of p13](p14){};
             \node[port=magenta,right=.2cm of p14](p15){};
             \node[draw,thick,inner sep=.5mm,fit={(p11)(p12)(p13)(p14)(p15)}](switch1){};
             \node[port=cyan,below=1cm of p11](p21){};
             \node[port=cyan,right=.2cm of p21](p22){};
-            \node[port=magenta,right=.5cm of p22](p23){};
+            \node[port=magenta,right=.8cm of p22](p23){};
             \node[port=magenta,right=.2cm of p23](p24){};
             \node[port=magenta,right=.2cm of p24](p25){};
             \node[draw,thick,inner sep=.5mm,fit={(p21)(p22)(p23)(p24)(p25)}](switch2){};
@@ -208,3 +207,4 @@ VLAN（Virtual LAN）とは，1つのL2スイッチに接続されていても�
         \label{fig:スイッチをまたいだVLAN}
     \end{minipage}
 \end{figure}
+\subsection{パケットフィルタ}
