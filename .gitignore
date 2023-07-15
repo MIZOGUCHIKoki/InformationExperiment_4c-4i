@@ -14,3 +14,4 @@ node_modules
 *.log
 !Ruter.log
 !Switch.log
+!network_iconset/*.pdf
