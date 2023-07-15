@@ -11,3 +11,6 @@ node_modules
 *.pdf
 *.nav
 *.snm
+*.log
+!Ruter.log
+!Switch.log
