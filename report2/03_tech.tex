@@ -119,98 +119,114 @@ VLAN（Virtual LAN）とは，1つのL2スイッチに接続されていても�
     \centering
     \begin{minipage}[b]{.55\textwidth}
         \centering
-        \scalebox{.7}{
-            \begin{tikzpicture}
-                \tikzset{port/.style={rounded corners,draw,text width=.5cm,minimum height=.5cm,fill=#1!30,draw=#1!70!black}};
-                \node[port=magenta](p1){};
-                \node[port=magenta,right=.3cm of p1](p2){};
-                \node[port=magenta,right=.3cm of p2](p3){};
-                \node[port=cyan,right=.3cm of p3](p4){};
-                \node[port=cyan,right=.3cm of p4](p5){};
-                \node[port=cyan,right=.3cm of p5](p6){};
-                \node[inner sep=2mm,fit={(p1)(p2)(p3)(p4)(p5)(p6)},draw,very thick](switch){};
-                \node[above=.1cm]at(switch.north){スイッチ};
-                \node[below=1cm of p3](sg13){\includegraphics[keepaspectratio,width=1cm]{../network_iconset/laptop_nb.pdf}};
-                \node[left=.2cm of sg13](sg12){\includegraphics[keepaspectratio,width=1cm]{../network_iconset/laptop_nb.pdf}};
-                \node[left=.2cm of sg12](sg11){\includegraphics[keepaspectratio,width=1cm]{../network_iconset/laptop_nb.pdf}};
-                \node[below=1cm of p4](sg24){\includegraphics[keepaspectratio,width=1cm]{../network_iconset/laptop_nb.pdf}};
-                \node[right=.2cm of sg24](sg25){\includegraphics[keepaspectratio,width=1cm]{../network_iconset/laptop_nb.pdf}};
-                \node[right=.2cm of sg25](sg26){\includegraphics[keepaspectratio,width=1cm]{../network_iconset/laptop_nb.pdf}};
-                \begin{scope}[on background layer]
-                    \node[inner xsep=-1.1mm,inner ysep=3mm,fit={(sg11)(sg12)(sg13)(p1)(p2)(p3)},draw,rounded corners,fill=magenta!10,draw=magenta!70!black](sg1){};
-                    \node[inner xsep=-1.1mm,inner ysep=3mm,fit={(sg24)(sg25)(sg26)(p4)(p5)(p6)},draw,rounded corners,fill=cyan!10,draw=cyan!70!black](sg2){};
-                \end{scope}
-                \foreach \u in {1,2,3}{
-                        \draw[line width=1mm,draw=magenta!10,line cap=round](p\u.center)--(sg1\u.north);
-                        \draw[ultra thick,line cap=round](p\u.center)--(sg1\u.north);
-                    }
-                \foreach \u in {4,5,6}{
-                        \draw[line width=1mm,draw=cyan!10,line cap=round](p\u.center)--(sg2\u.north);
-                        \draw[ultra thick,line cap=round](p\u.center)--(sg2\u.north);
-                    }
-                \node[below]at(sg1.south){\scriptsize セグメントA};
-                \node[below]at(sg2.south){\scriptsize セグメントB};
-                \node[above=.5cm of p5](pcap){\scriptsize ポート};
-                \draw[-latex,draw=gray](pcap)--(p6);
-                \draw[-latex,draw=gray](pcap)--(p5);
-                \draw[-latex,draw=gray](pcap)--(p4);
-                \node[above=.5cm of p2](pcap){\scriptsize ポート};
-                \draw[-latex,draw=gray](pcap)--(p1);
-                \draw[-latex,draw=gray](pcap)--(p2);
-                \draw[-latex,draw=gray](pcap)--(p3);
-            \end{tikzpicture}
-        }
+        \begin{tikzpicture}
+            \tikzset{port/.style={rounded corners,draw,text width=.5cm,minimum height=.5cm,fill=#1!30,draw=#1!70!black}};
+            \node[port=magenta](p1){};
+            \node[port=magenta,right=.3cm of p1](p2){};
+            \node[port=magenta,right=.3cm of p2](p3){};
+            \node[port=cyan,right=.3cm of p3](p4){};
+            \node[port=cyan,right=.3cm of p4](p5){};
+            \node[port=cyan,right=.3cm of p5](p6){};
+            \node[inner sep=2mm,fit={(p1)(p2)(p3)(p4)(p5)(p6)},draw,very thick](switch){};
+            \node[above=.1cm]at(switch.north){スイッチ};
+            \node[below=1cm of p3](sg13){\includegraphics[keepaspectratio,width=1cm]{../network_iconset/laptop_nb.pdf}};
+            \node[left=.2cm of sg13](sg12){\includegraphics[keepaspectratio,width=1cm]{../network_iconset/laptop_nb.pdf}};
+            \node[left=.2cm of sg12](sg11){\includegraphics[keepaspectratio,width=1cm]{../network_iconset/laptop_nb.pdf}};
+            \node[below=1cm of p4](sg24){\includegraphics[keepaspectratio,width=1cm]{../network_iconset/laptop_nb.pdf}};
+            \node[right=.2cm of sg24](sg25){\includegraphics[keepaspectratio,width=1cm]{../network_iconset/laptop_nb.pdf}};
+            \node[right=.2cm of sg25](sg26){\includegraphics[keepaspectratio,width=1cm]{../network_iconset/laptop_nb.pdf}};
+            \begin{scope}[on background layer]
+                \node[inner xsep=-1.1mm,inner ysep=3mm,fit={(sg11)(sg12)(sg13)(p1)(p2)(p3)},draw,rounded corners,fill=magenta!10,draw=magenta!70!black](sg1){};
+                \node[inner xsep=-1.1mm,inner ysep=3mm,fit={(sg24)(sg25)(sg26)(p4)(p5)(p6)},draw,rounded corners,fill=cyan!10,draw=cyan!70!black](sg2){};
+            \end{scope}
+            \foreach \u in {1,2,3}{
+                    \draw[line width=1mm,draw=magenta!10,line cap=round](p\u.center)--(sg1\u.north);
+                    \draw[ultra thick,line cap=round](p\u.center)--(sg1\u.north);
+                }
+            \foreach \u in {4,5,6}{
+                    \draw[line width=1mm,draw=cyan!10,line cap=round](p\u.center)--(sg2\u.north);
+                    \draw[ultra thick,line cap=round](p\u.center)--(sg2\u.north);
+                }
+            \node[below]at(sg1.south){\scriptsize セグメントA};
+            \node[below]at(sg2.south){\scriptsize セグメントB};
+            \node[above=.5cm of p5](pcap){\scriptsize ポート};
+            \draw[-latex,draw=gray](pcap)--(p6);
+            \draw[-latex,draw=gray](pcap)--(p5);
+            \draw[-latex,draw=gray](pcap)--(p4);
+            \node[above=.5cm of p2](pcap){\scriptsize ポート};
+            \draw[-latex,draw=gray](pcap)--(p1);
+            \draw[-latex,draw=gray](pcap)--(p2);
+            \draw[-latex,draw=gray](pcap)--(p3);
+        \end{tikzpicture}
         \caption{VLAN}
         \label{fig:VLAN}
     \end{minipage}
     \begin{minipage}[b]{.43\textwidth}
         \centering
-        \scalebox{.7}{
-            \begin{tikzpicture}
-                \newcommand{\laptop}{\includegraphics[keepaspectratio,width=.5cm]{../network_iconset/laptop_nb.pdf}}
-                \tikzset{port/.style={rounded corners,draw,text width=.2cm,minimum height=.2cm,fill=#1!30,draw=#1!70!black}};
-                \node[port=cyan](p11){};
-                \node[port=cyan,right=.2cm of p11](p12){};
-                \node[port=magenta,right=.8cm of p12](p13){};
-                \node[port=magenta,right=.2cm of p13](p14){};
-                \node[port=magenta,right=.2cm of p14](p15){};
-                \node[draw,thick,inner sep=.5mm,fit={(p11)(p12)(p13)(p14)(p15)}](switch1){};
-                \node[port=cyan,below=1cm of p11](p21){};
-                \node[port=cyan,right=.2cm of p21](p22){};
-                \node[port=magenta,right=.8cm of p22](p23){};
-                \node[port=magenta,right=.2cm of p23](p24){};
-                \node[port=magenta,right=.2cm of p24](p25){};
-                \node[draw,thick,inner sep=.5mm,fit={(p21)(p22)(p23)(p24)(p25)}](switch2){};
-                \foreach \u in{1,2,...,4}{
-                        \node[below=.5cm of p2\u](lp2\u){\laptop};
-                        \node[above=.5cm of p1\u](lp1\u){\laptop};
-                    }
-                \foreach \u in{1,2}{
-                        \draw[line width=.6mm,draw=cyan!10,line cap=round](p1\u.center)--(lp1\u.south);
-                        \draw[thick,line cap=round](p1\u.center)--(lp1\u.south);
-                        \draw[line width=.6mm,draw=cyan!10,line cap=round](p2\u.center)--(lp2\u.north);
-                        \draw[thick,line cap=round](p2\u.center)--(lp2\u.north);
-                    }
-                \foreach \u in{3,4}{
-                        \draw[line width=.6mm,draw=magenta!10,line cap=round](p1\u.center)--(lp1\u.south);
-                        \draw[thick,line cap=round](p1\u.center)--(lp1\u.south);
-                        \draw[line width=.6mm,draw=magenta!10,line cap=round](p2\u.center)--(lp2\u.north);
-                        \draw[thick,line cap=round](p2\u.center)--(lp2\u.north);
-                    }
-                \draw[line width=.6mm,draw=magenta!10,line cap=round](p15.center)--(p25.center);
-                \draw[thick,line cap=round](p15.center)--(p25.center);
-                \begin{scope}[on background layer]
-                    \node[inner ysep=.1mm,fit={(lp11)(lp12)(lp21)(lp22)},draw,rounded corners,fill=cyan!10,draw=cyan!70!black,](sg1){};
-                    \node[inner ysep=.1mm,fit={(lp13)(lp14)(lp23)(lp24)(p15)($(p25)+(.37cm,0)$)},draw,rounded corners,fill=magenta!10,draw=magenta!70!black](sg2){};
-                \end{scope}
-                \node[below]at(sg1.south){\tiny セグメントB};
-                \node[below]at(sg2.south){\tiny セグメントA};
-                \node[above]at(sg1.north){\tiny VLAN ID: 11};
-                \node[above]at(sg2.north){\tiny VLAN ID: 10};
-            \end{tikzpicture}
-        }
+        \begin{tikzpicture}
+            \newcommand{\laptop}{\includegraphics[keepaspectratio,width=.5cm]{../network_iconset/laptop_nb.pdf}}
+            \tikzset{port/.style={rounded corners,draw,text width=.2cm,minimum height=.2cm,fill=#1!30,draw=#1!70!black}};
+            \node[port=cyan](p11){};
+            \node[port=cyan,right=.2cm of p11](p12){};
+            \node[port=magenta,right=.8cm of p12](p13){};
+            \node[port=magenta,right=.2cm of p13](p14){};
+            \node[port=magenta,right=.2cm of p14](p15){};
+            \node[draw,thick,inner sep=.5mm,fit={(p11)(p12)(p13)(p14)(p15)}](switch1){};
+            \node[port=cyan,below=1cm of p11](p21){};
+            \node[port=cyan,right=.2cm of p21](p22){};
+            \node[port=magenta,right=.8cm of p22](p23){};
+            \node[port=magenta,right=.2cm of p23](p24){};
+            \node[port=magenta,right=.2cm of p24](p25){};
+            \node[draw,thick,inner sep=.5mm,fit={(p21)(p22)(p23)(p24)(p25)}](switch2){};
+            \foreach \u in{1,2,...,4}{
+                    \node[below=.5cm of p2\u](lp2\u){\laptop};
+                    \node[above=.5cm of p1\u](lp1\u){\laptop};
+                }
+            \foreach \u in{1,2}{
+                    \draw[line width=.6mm,draw=cyan!10,line cap=round](p1\u.center)--(lp1\u.south);
+                    \draw[thick,line cap=round](p1\u.center)--(lp1\u.south);
+                    \draw[line width=.6mm,draw=cyan!10,line cap=round](p2\u.center)--(lp2\u.north);
+                    \draw[thick,line cap=round](p2\u.center)--(lp2\u.north);
+                }
+            \foreach \u in{3,4}{
+                    \draw[line width=.6mm,draw=magenta!10,line cap=round](p1\u.center)--(lp1\u.south);
+                    \draw[thick,line cap=round](p1\u.center)--(lp1\u.south);
+                    \draw[line width=.6mm,draw=magenta!10,line cap=round](p2\u.center)--(lp2\u.north);
+                    \draw[thick,line cap=round](p2\u.center)--(lp2\u.north);
+                }
+            \draw[line width=.6mm,draw=magenta!10,line cap=round](p15.center)--(p25.center);
+            \draw[thick,line cap=round](p15.center)--(p25.center);
+            \begin{scope}[on background layer]
+                \node[inner ysep=.1mm,fit={(lp11)(lp12)(lp21)(lp22)},draw,rounded corners,fill=cyan!10,draw=cyan!70!black,](sg1){};
+                \node[inner ysep=.1mm,fit={(lp13)(lp14)(lp23)(lp24)(p15)($(p25)+(.37cm,0)$)},draw,rounded corners,fill=magenta!10,draw=magenta!70!black](sg2){};
+            \end{scope}
+            \node[below]at(sg1.south){\tiny セグメントB};
+            \node[below]at(sg2.south){\tiny セグメントA};
+            \node[above]at(sg1.north){\tiny VLAN ID: 11};
+            \node[above]at(sg2.north){\tiny VLAN ID: 10};
+        \end{tikzpicture}
         \caption{スイッチをまたいだVLAN}
         \label{fig:スイッチをまたいだVLAN}
     \end{minipage}
 \end{figure}
 \subsection{パケットフィルタ}
+パケットフィルタ（パケットフィルタリング）とは，規定されたパケットのみを通過させる，ファイアウォールの一種である．
+LAN内の限定的なホストのみを外部から接続可能にすることが，パケットフィルタする目的の1つである．
+例として，ホストとサーバが同一ネットワーク上にあるとき，以下の制限を設ける．
+\begin{itemize}
+    \item 外部からホストへのアクセスを禁止する．
+    \item 外部からサーバへ，ポート80番でのアクセスのみ許可する．
+    \item 内部から外部へ任意の接続を許可する．
+\end{itemize}
+これにより，外部からホストへのアクセスされるリスクが減る．
+外部からサーバへのポート80番以外のアクセスもパケットフィルタによりアクセスできないため，安全性が向上する．
+TCPコネクションは，\texttt{ACK}，\texttt{SYN}フラグを確認することで，内部から外部へのコネクション確立要求のみを許可できる．
+TCPの3ウェイ・ハンド・シェイクでの最初の手続き（\texttt{SYN}フラグのみが立ったパケット）が外部から来た場合は，そのパケットを破棄することで実現できる\cite[p.343]{マスタリングTCPIP}．
+\subsection{NAPT}
+\paragraph{NAT}
+NAT（Network Address Translator）とは，LAN内で使用するプライベートIPアドレスと，インターネットに接続するとき使用するグローバルIPアドレスを変換する技術．
+しかし，変換先のグローバルIPアドレスが不足する．
+\paragraph{NAPT}
+IPアドレスだけでなく，TCPやUDPのポート番号も変換する技術．
+NATで生じた変換先のグローバルIPアドレスが不足する問題は，NAPTを用いて解決できる．
+つまり，1つのグローバルIPで複数のプライベートIPアドレスをポート番号により対応づけることで，グローバルIPアドレスを節約できる．
