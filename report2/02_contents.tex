@@ -17,3 +17,17 @@
 \subsection{ホストのネットワーク設定}
 サーバのIPアドレス，DNSゾーンの設定，ApacheのIPアドレス制限の設定を更新する．それに伴い，クライアントのネットワーク設定も更新する．
 \subsection{NAPT・ポートフォワーディングの設定}
+5C班LAN（内部）からバックボーン（外部），そして外部から内部へのアクセスを，以下のように\texttt{Ruter5}へ設定する．
+\begin{itemize}
+    \item 内部から外部へは，動的NAPTを用いて任意のアクセスを許可する．
+    \item 外部からサーバ以外ホストへのアクセスを禁止する．
+    \item 外部からサーバへ，静的NAPTを用いて以下のアクセスを許可する．
+          \begin{multicols}{2}
+              \begin{itemize}
+                  \item DNS（TCP，UDP）\\宛先ポート53番，転送先ポート53番
+                  \item Web（TCP）\\宛先ポート80番，転送先ポート80番
+                  \item SMTP（TCP）\\宛先ポート25番，転送先ポート25番
+                  \item SSH（TCP）\\宛先ポート8022番，転送先ポート22番
+              \end{itemize}
+          \end{multicols}
+\end{itemize}
