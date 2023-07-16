@@ -68,5 +68,20 @@
                     \draw[-latex,gray](cp\u)to[bend right=30](\u);
                 }
         \end{scope}
+        \coordinate (A) at ($(rtA)!0.5!(rtB)+(0cm,2.5cm)$);
+        \coordinate (B) at (rtA |- A);
+        \node at (B)(rtTA){\rt};
+        \node[below=.3cm,text=white]at(rtTA){\scriptsize TA用ルータ};
+        \node[left=1cm of rtTA.west](hostTA){\host};
+        \node[below] at (hostTA.south){\scriptsize TA用\texttt{server}};
+        \draw[ultra thick]{
+            (A)--(rtTA)
+            (rtTA)--(hostTA)
+        };
+        \draw[black,fill=black](rtTA.east)circle[radius=.5mm]node(rtTA){};
+        \draw[black,fill=black](hostTA.east)circle[radius=.5mm]node(hostTA){};
+        \node[below=1cm of rtTA,text=gray](caprtTA){\scriptsize\texttt{192.168.0.239}};
+        \draw[-latex,gray](caprtTA)--(rtTA);
+        \node[above=.5cm of hostTA](caprtAH){\scriptsize\texttt{172.21.33.0/24}};
     \end{tikzpicture}
 \end{framed}
