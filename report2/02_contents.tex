@@ -1,6 +1,12 @@
 \section{内容}
 本実験では\figref{fig:ネットワーク図}のネットワークを作成する．
 ルーティングの設定やNAPTは\figref{fig:ネットワーク図}の\texttt{Ruter5}に行う．
+\begin{figure}
+    \centering
+    \input{02_TIKZ_network.tikz}
+    \caption{論理ネットワーク図（L2スイッチは省略）}
+    \label{fig:ネットワーク図}
+\end{figure}
 \subsection{スイッチの設定}
 コンソールへ接続し，L2スイッチにIPアドレスを付与する．（\texttt{telnet}での操作を可能にするため．）
 スパニングツリー機能を停止した後VLANを用いて，1台のスイッチ内に3つのセグメント（\textbf{デフォルトセグメント}，\textbf{5C班セグメント}，\textbf{5i班セグメント}）を作成する．
@@ -11,9 +17,3 @@
 \subsection{ホストのネットワーク設定}
 サーバのIPアドレス，DNSゾーンの設定，ApacheのIPアドレス制限の設定を更新する．それに伴い，クライアントのネットワーク設定も更新する．
 \subsection{NAPT・ポートフォワーディングの設定}
-\begin{figure}
-    \centering
-    \input{02_TIKZ_network.tikz}
-    \caption{論理ネットワーク図（L2スイッチは省略）}
-    \label{fig:ネットワーク図}
-\end{figure}
