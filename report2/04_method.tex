@@ -1,1 +1,113 @@
 \section{作業記録}
+\subsection{スイッチの操作}
+\begin{enumerate}
+    \renewcommand{\labelenumi}{\textbf{\theenumi.}\ }
+    \item スイッチの電源を切り，スイッチから全ての配線を取り外す．コンソールケーブルをコンピュータのUSB端子に挿入し，\texttt{/dev/ttyUSB0}が存在するか確認したのち，以下のコマンドを実行する．
+          \begin{lstlisting}
+# chmod 777 /dev/ttyUSB0 
+    \end{lstlisting}
+    \item \texttt{cu}をインストールする．
+          \begin{lstlisting}
+# apt install cu            
+        \end{lstlisting}
+    \item コンソールに接続するため，以下のコマンドを実行する．
+          \begin{lstlisting}
+# cu -l ttyUSB0 -s 9600                
+            \end{lstlisting}
+    \item コンソールに接続できたら，スイッチのホスト名設定，パスワード設定，パスワードの暗号化，DNSルックアップの無効化，コンソールの設定をする
+          \begin{lstlisting}
+Switch> enable
+Switch# configure terminal
+Switch(config)# hostname switch5
+switch5(config)# username exp password 0 root00
+switch5(config)# service password-encryption
+switch5(config)# no ip domain-lookup
+switch5(config)# line console 0
+switch5(config-line)# logging synchronous
+\end{lstlisting}
+    \item VLAN1へ，スイッチに遠隔ログイン用IPアドレスを割り当てる．
+          \begin{lstlisting}
+switch5(config)# interface vlan1
+switch5(config-if)# ip address 192.168.0.58 255.255.255.0
+switch5(config-if)# no shutdown
+switch5(config-if)# exit
+\end{lstlisting}
+    \item \texttt{telnet}の許可設定をする．
+          \begin{lstlisting}
+switch5(config)# line vty 0 4
+switch5(config-line)# password 0 root00
+switch5(config-line)# login
+switch5(config-line)# exit
+\end{lstlisting}
+    \item スパニングツリーを無効にする．
+          \begin{lstlisting}
+switch5(config)# no spanning-tree vlan 1
+    \end{lstlisting}
+    \item VLANを定義する．ここでは，1から8番ポートをバックボーン用，9から16番ポートを5C班用，17から24番ポートを5i班用のVLANと定義する．
+          また，VLAN番号は班サブネットの第3オクテットとする．
+          \begin{lstlisting}
+switch5(config)# vlan 26
+switch5(config-vlan)# name group5c
+switch5(config-vlan)# exit
+switch5(config)# vlan 15
+switch5(config-vlan)# name group5i
+switch5(config-vlan)# exit
+switch5(config)# interface range fa0/9-16
+switch5(config-if-range)# switchport mode access
+switch5(config-if-range)# switchport access vlan 26
+switch5(config-if-range)# exit
+switch5(config)# interface range fa0/17-24
+switch5(config-if-range)# switchport mode access
+switch5(config-if-range)# switchport access vlan 15
+switch5(config-if-range)# exit
+\end{lstlisting}
+\end{enumerate}
+\subsection{配線}
+\figref{fig:ルータとスイッチの配線}のように，ルータとスイッチ間を接続し，サーバとクライアントをスイッチと接続する．
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+        \tikzset{port/.style={rectangle,minimum width=1cm,minimum height=1cm,draw}};
+        \node[port,fill=yellow!70!black](p00){};
+        \node[port,below=.2cm of p00,fill=yellow!70!black](p10){};
+        \foreach \u[evaluate=\u as \v using \u-1] in {1,2,...,11}{
+                \node[fill=\ifnum\u<4yellow!70!black\else\ifnum\u<8magenta\else cyan\fi\fi ,port,right=.2cm of p0\v](p0\u){};
+                \node[fill=\ifnum\u<4yellow!70!black\else\ifnum\u<8magenta\else cyan\fi\fi ,port,right=.2cm of p1\v](p1\u){};
+            }
+        \node[fit={(p00)(p111)},thick,draw](switch){};
+        \node[fit={(p00)(p13)},inner sep=.3mm](backborn){};
+        \node[fit={(p04)(p17)},inner sep=.3mm](5cvlan){};
+        \node[fit={(p08)(p111)},inner sep=.3mm](5ivlan){};
+        \node[below=.3cm]at(backborn.south){backborn用VLAN};
+        \node[below=.3cm]at(5cvlan.south){5C班用VLAN};
+        \node[below=.3cm]at(5ivlan.south){5i班用VLAN};
+        \node[above=1cm of p05,port,fill=gray!50](rp1){};
+        \node[above=1cm of p08,port,fill=gray!50](rp2){};
+        \node[above=.1cm of rp2,port,fill=gray!50](rp3){};
+        \node[above=1cm of p00,rectangle,minimum width=1cm,minimum height=1cm](nd1){};
+        \node[above=1cm of p011,rectangle,minimum width=1cm,minimum height=1cm](nd2){};
+        \node[above]at(rp1.north){\ttfamily FE2};
+        \node[right]at(rp2.east){\ttfamily FE0};
+        \node[right]at(rp3.east){\ttfamily FE1};
+        \node[fit={(nd1)(nd2)(rp3)},draw,thick](ruter){};
+        \node[left]at(switch.west){\rotatebox{90}{Switch}};
+        \node[left]at(ruter.west){\rotatebox{90}{Ruter}};
+        \draw[ultra thick]{
+            ($(p10.center)+(-1cm,-1cm)$)--($(p10.center)+(0,-1cm)$)node[midway,below]{\tiny backborn}--(p10.center)
+            (p03.center)|-(rp1.center)
+            (p06.center)|-(rp3.center)
+            (p08.center)--(rp2.center)
+            (p14.center)|-($(p14.center)+(-1cm,-1cm)$)node[midway,above left]{\tiny Serverへ}
+            (p17.center)|-($(p17.center)+(1cm,-1cm)$)node[midway,above right]{\tiny Clientへ}
+        };
+        \foreach \u in {p03,p10,p06,p08,rp1,rp2,rp3,p14,p17}{
+                \node[circle,fill=black,radius=.3cm]at(\u){};
+            }
+        \foreach \u[evaluate=\u as \v using \u*2+1,evaluate=\v as \w using \v+1] in {0,1,...,11}{
+                \node[below right,minimum size=.3cm,anchor=north west]at(p0\u.north west){\bfseries\tiny\pgfmathprintnumber[fixed,fixed zerofill,precision=0]{\v}};
+                \node[below right,minimum size=.3cm,anchor=north west]at(p1\u.north west){\bfseries\tiny\pgfmathprintnumber[fixed,fixed zerofill,precision=0]{\w}};
+            }
+    \end{tikzpicture}
+    \caption{ルータとスイッチの配線}
+    \label{fig:ルータとスイッチの配線}
+\end{figure}
