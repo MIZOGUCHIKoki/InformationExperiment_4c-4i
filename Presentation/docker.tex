@@ -1,0 +1,44 @@
+\section{Docker（Option）}\label{chap:docker}
+\tocc
+\subsection{コンテナ立ち上げと利用}
+\begin{frame}[t]{\ftitle}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item コンテナを利用する．
+              \begin{enumerate}
+                  \setlength{\itemsep}{.5em}
+                  \item イメージを作成（\texttt{build}）または，取得（\texttt{docker pull}）する．\\
+                        イメージの作成には\texttt{Dockerfile} を書く．
+                  \item コンテナを作成して起動（\texttt{run}）する．
+                  \item コンテナ内でコマンドを実行（\texttt{exec}）する．
+              \end{enumerate}
+        \item コンテナ利用後．
+              \begin{enumerate}
+                  \setlength{\itemsep}{.5em}
+                  \item コンテナを停止（\texttt{stop}）する．
+                  \item コンテナを削除（\texttt{rm}）する．
+                  \item イメージを削除（\texttt{rmi}）する．
+              \end{enumerate}
+    \end{itemize}
+\end{frame}
+\subsection{イメージ作成・取得}
+\begin{frame}[containsverbatim,t]{\ftitle}
+    \begin{itemize}
+        \item \texttt{Dockerfile}
+              \begin{lstlisting}[language=docker-compose-2]
+FROM mysql:latest
+            \end{lstlisting}
+              \begin{lstlisting}[backgroundcolor={\color{black}},basicstyle={\color{white}\ttfamily},]
+$ docker build ./ -t mysql
+                            \end{lstlisting}
+        \item レジストリからイメージを取得（Pull）する．
+              \begin{lstlisting}[backgroundcolor={\color{black}},basicstyle={\color{white}\ttfamily},]
+$ docker pull mysql:latest
+            \end{lstlisting}
+    \end{itemize}
+\end{frame}
+\subsection{実演}
+\begin{frame}{\ftitle}
+    \includegraphics[keepaspectratio,width=\textwidth]{docker_logo.png}\\\vspace{1em}
+    \hfill\cite{docker}
+\end{frame}

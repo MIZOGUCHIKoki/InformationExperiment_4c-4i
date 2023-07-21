@@ -1,0 +1,146 @@
+\section{AWS}
+\tocc
+\subsection{AWSとは}
+\begin{frame}[t]{\ftitle}
+    \begin{block}{AWS}
+        Amazon Web Service の略称．Amazonが提供するクラウドサービスで，ネットワークを経由して仮想コンピュータやストレージなどのサービスを提供している．\hfill\cite{2015amazon}
+    \end{block}
+    \begin{minipage}{\textwidth}
+        \centering
+        \begin{minipage}[t]{.32\textwidth}
+            \centering
+            \includegraphics[keepaspectratio,width=\textwidth]{Arch_Amazon-EC2_64@5x.png}\\
+            {\tiny Amazon Elastic Compute Cloud (Amazon EC2)\cite{aws}}
+        \end{minipage}
+        \begin{minipage}[t]{.32\textwidth}
+            \centering
+            \includegraphics[keepaspectratio,width=\textwidth]{Arch_Amazon-Simple-Storage-Service_64@5x.png}
+            {\tiny Amazon Simple Storage Service (Amazon S3)\cite{aws}}
+        \end{minipage}
+        \begin{minipage}[t]{.32\textwidth}
+            \centering
+            \includegraphics[keepaspectratio,width=\textwidth]{Arch_Amazon-RDS_64@5x.png}\\
+            {\tiny Amazon Relational Database Service (Amazon RDS)\cite{aws}}
+        \end{minipage}
+    \end{minipage}
+\end{frame}
+\subsection{オンプレミスとAWS}
+\begin{frame}[t]{\ftitle}
+    AWSはオンプレミスに比べてリソースを効率よく運用できる．\hfill\cite{2015amazon}
+    \begin{figure}
+        \centering
+        \begin{minipage}[b]{.48\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \coordinate (O) at (0,0);
+                \coordinate (A) at (1,2);
+                \coordinate (B) at (2,1.5);
+                \coordinate (C) at (3,3);
+                \coordinate (D) at (4,2);
+                \draw[red,thick, name path=curve]plot[smooth, tension=0.7]coordinates {(O)(A)(B)(C)(D)};
+                \draw[name path=line,thick,dashed](0,2.5)--(4,2.5);
+                \draw[thick,dashed](0,2.5)--(4,2.5);
+                \draw[thick,-latex](0,0)--(4,0);
+                \draw[thick,-latex](0,0)--(0,4.5);
+                \node[below] at ($(0,0)!0.5!(4,0)$){\scriptsize 時間};
+                \node[left] at ($(0,0)!0.5!(0,4.5)$){\scriptsize\rotatebox{90}{リソース量}};
+                \node[below,text=red]at(B){\scriptsize 実際のリソース};
+                \node[above]at(C){\scriptsize 機会損失};
+                \node[below right]at(0,2.5){\scriptsize 無駄になる};
+                \begin{scope}[on background layer]
+                    \clip plot[smooth, tension=0.7] coordinates {(O) (A) (B) (C) (D)} |- (0,4) -- cycle;
+                    \fill[yellow, name intersections={of=curve and line}] (intersection-1) rectangle (0,0);
+                    \fill[yellow, name intersections={of=curve and line}] (intersection-2) rectangle (4,0);
+                \end{scope}
+            \end{tikzpicture}\\
+            \vspace{1em}
+            オンプレミス
+        \end{minipage}
+        \begin{minipage}[b]{.48\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \coordinate (O) at (0,0);
+                \coordinate (A) at (1,2);
+                \coordinate (B) at (2,1.5);
+                \coordinate (C) at (3,3);
+                \coordinate (D) at (4,2);
+                \newcommand{\avv}{0.2cm}
+                \draw[red,thick]plot[smooth, tension=0.7]coordinates {(O)(A)(B)(C)(D)};
+                \draw[thick,dashed]plot[smooth,tension=0.7] coordinates {($(O)+(0,\avv)$)($(A)+(0,\avv)$)($(B)+(0,\avv)$)($(C)+(0,\avv)$)($(D)+(0,\avv)$)};
+                \draw[thick,-latex](0,0)--(4,0);
+                \draw[thick,-latex](0,0)--(0,4.5);
+                \node[below] at ($(0,0)!0.5!(4,0)$){\scriptsize 時間};
+                \node[left] at ($(0,0)!0.5!(0,4.5)$){\scriptsize\rotatebox{90}{リソース量}};
+                \node[above]at($(C)+(0,\avv)$){\scriptsize 用意したリソース};
+                \node[below,text=red]at(B){\scriptsize 必要なリソース};
+            \end{tikzpicture}\\
+            \vspace{1em}
+            AWSの利用
+        \end{minipage}
+    \end{figure}
+\end{frame}
+\subsection{レンタルサーバとAWS}
+\begin{frame}[t]{\ftitle}
+    \begin{block}{レンタルサーバ}
+        ``1台のサーバを複数のユーザが共用で利用する形態''\hfill\cite{2015amazon}
+    \end{block}
+    \begin{table}
+        \centering
+        レンタルサーバの利用形態\\
+        \vspace{1em}
+        \fontsize{5pt}{10pt}\selectfont
+        \renewcommand{\arraystretch}{1.3}
+        \newcommand{\hobo}{ほぼ}
+        \begin{tabularx}{\textwidth}{cRRR}
+                             & \multicolumn{1}{c}{共用サーバ} & \multicolumn{1}{c}{専用サーバ} & \multicolumn{1}{c}{仮装専用サーバ} \\
+            \hline
+            {\tiny 利用形態}     & {1台の物理サーバを分割して利用}         & {1台の物理サーバを占有}             & {1台の物理サーバ上に立てた仮想サーバを利用}     \\
+            \hline
+            {\tiny コスト}      & 安い                        & 高い                        & 中間                          \\
+            \hline
+            {\tiny カスタマイズ}   & \hobo 不可能                 & 可能                        & 可能                          \\
+            \hline
+            {\tiny セキュリティ}   & { コントロール不可}               & { 高くコントロール可能}             & { 高くコントロール可能}               \\
+            \hline
+            {\tiny 他のユーザの影響} & 強く受ける                     & 受けない                      & 多少受ける                       \\
+            \hline
+        \end{tabularx}
+    \end{table}
+    \hfill 引用\cite{2015amazon}
+\end{frame}
+\begin{frame}[t]{\ftitle}
+    \begin{block}{AWS\ EC2}
+        EC2は1台の物理マシン上に，複数の仮想コンピュータを立ち上げて使い，管理者権限（\texttt{root}）を持ったアカウントを使用し，その仮想コンピュータ内のすべてを管理する．\hfill\cite{2015amazon}
+    \end{block}
+    「EC2」とレンタルサーバの「仮想専用サーバ」は似たサービス．しかし\dots
+    \begin{exampleblock}{EC2の特徴}
+        \begin{itemize}
+            \item CPUやメモリを容易に変更できる．\hfill\tikz[remember picture]{\node(A){};}
+            \item ディスクを動的に追加\footnote{インスタンスの再起動なしに変更すること．}できる．
+                  \item[]\hfill 等々\dots
+        \end{itemize}
+    \end{exampleblock}
+    \begin{tikzpicture}[remember picture,overlay]
+        \node[left=-.2cm,rounded corners,fill=yellow,align=center,thick,draw]at($(A)+(0,.2cm)$){\scriptsize これまでの\\\scriptsize レンタルサーバにはない！};
+    \end{tikzpicture}
+\end{frame}
+\subsection{AWS導入例}
+\begin{frame}[t]{\ftitle}
+    \begin{itemize}
+        \item Cloud LaTeX（アカリク）
+              \begin{itemize}
+                  \item コンパイルなど（EC2）
+                  \item プロジェクト，テンプレート管理（S3，MySQL）
+              \end{itemize}
+        \item 株式会社任天堂
+              \begin{itemize}
+                  \item 『マリオカート ツアー』のDBに，「Amazon Aurora」（RDBMS） を採用．
+              \end{itemize}
+        \item 株式会社東京海上日動火災保険
+        \item JCB
+        \item 盛岡市
+        \item 浜松市
+        \item SUBARU
+    \end{itemize}
+    \hfill\cite{導入事例}
+\end{frame}
