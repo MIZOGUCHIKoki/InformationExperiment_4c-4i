@@ -12,6 +12,6 @@ node_modules
 *.nav
 *.snm
 *.log
-!Ruter.log
+!Router.log
 !Switch.log
 !network_iconset/*.pdf
