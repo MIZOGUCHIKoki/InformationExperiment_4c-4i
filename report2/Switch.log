@@ -1,15 +1,4 @@
-$ telnet 192.168.0.58
-Trying 192.168.0.58...
-Connected to 192.168.0.58.
-Escape character is '^]'.
-
-
-User Access Verification
-
-Password:
-switch5>enable 
-Password: 
-switch5#show vlan
+ switch5#show vlan
 
 VLAN Name                             Status    Ports
 ---- -------------------------------- --------- -------------------------------
