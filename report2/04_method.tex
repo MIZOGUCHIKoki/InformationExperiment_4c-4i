@@ -89,9 +89,9 @@ switch5(config-if-range)# exit
         \node[above]at(rp1.north){\ttfamily FE2};
         \node[right]at(rp2.east){\ttfamily FE0};
         \node[right]at(rp3.east){\ttfamily FE1};
-        \node[fit={(nd1)(nd2)(rp3)},draw,thick](ruter){};
+        \node[fit={(nd1)(nd2)(rp3)},draw,thick](router){};
         \node[left]at(switch.west){\rotatebox{90}{Switch}};
-        \node[left]at(ruter.west){\rotatebox{90}{Ruter}};
+        \node[left]at(router.west){\rotatebox{90}{Router}};
         \draw[ultra thick]{
             ($(p10.center)+(-1cm,-1cm)$)--($(p10.center)+(0,-1cm)$)node[midway,below]{\tiny backborn}--(p10.center)
             (p03.center)|-(rp1.center)
@@ -109,7 +109,7 @@ switch5(config-if-range)# exit
             }
         \begin{scope}[on background layer]
             \fill[gray!20](switch.north east)rectangle (switch.south west);
-            \fill[gray!20](ruter.north east)rectangle (ruter.south west);
+            \fill[gray!20](router.north east)rectangle (router.south west);
         \end{scope}
     \end{tikzpicture}
     \caption{ルータとスイッチの配線}

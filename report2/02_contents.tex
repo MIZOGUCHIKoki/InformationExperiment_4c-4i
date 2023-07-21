@@ -1,6 +1,6 @@
 \section{内容}
 本実験では\figref{fig:ネットワーク図}のネットワークを作成する．
-ルーティングの設定やNAPTは\figref{fig:ネットワーク図}の\texttt{Ruter5}に行う．
+ルーティングの設定やNAPTは\figref{fig:ネットワーク図}の\texttt{router5}に行う．
 \begin{figure}
     \centering
     \input{02_TIKZ_network.tikz}
@@ -17,7 +17,7 @@
 \subsection{ホストのネットワーク設定}
 サーバのIPアドレス，DNSゾーンの設定，ApacheのIPアドレス制限の設定を更新する．それに伴い，クライアントのネットワーク設定も更新する．
 \subsection{NAPT・ポートフォワーディングの設定}
-5C班LAN（内部）からバックボーン（外部），そして外部から内部へのアクセスを，以下のように\texttt{Ruter5}へ設定する．
+5C班LAN（内部）からバックボーン（外部），そして外部から内部へのアクセスを，以下のように\texttt{router5}へ設定する．
 \begin{itemize}
     \item 内部から外部へは，動的NAPTを用いて任意のアクセスを許可する．
     \item 外部からサーバ以外ホストへのアクセスを禁止する．

@@ -32,7 +32,7 @@
         \foreach \u \v in{A/server,B/client,C/server,D/client}{
                 \node[right=-.1cm]at(host\u.east)(cp\u){\footnotesize\texttt{\v}};
             }
-        \node[below=.3cm,text=white]at(rtB){\texttt{Ruter5}};
+        \node[below=.3cm,text=white]at(rtB){\texttt{router5}};
         \node[below=.3cm,text=white]at(rtA){\scriptsize メインルータ};
         \node[fit={(hostA)(hostB)(cpA)(cpB)},draw,dotted,thick,rounded corners](sg1){};
         \node[fit={(hostC)(hostD)(cpC)(cpD)},draw,dotted,thick,rounded corners](sg2){};
