@@ -2,7 +2,7 @@
 \subsection{スイッチの操作}
 \begin{enumerate}
     \renewcommand{\labelenumi}{\textbf{\theenumi.}\ }
-    \item スイッチの電源を切り，スイッチから全ての配線を取り外す．コンソールケーブルをコンピュータのUSB端子に挿入し，\texttt{/dev/ttyUSB0}が存在するか確認したのち，以下のコマンドを実行する．
+    \item スイッチの電源を切り，スイッチからすべての配線を取り外す．コンソールケーブルをコンピュータのUSB端子に挿入し，\texttt{/dev/ttyUSB0}が存在するか確認したのち，以下のコマンドを実行する．
           \begin{lstlisting}
 # chmod 777 /dev/ttyUSB0 
     \end{lstlisting}
@@ -43,7 +43,7 @@ switch5(config-line)# exit
           \begin{lstlisting}
 switch5(config)# no spanning-tree vlan 1
     \end{lstlisting}
-    \item VLANを定義する．ここでは，1から8番ポートをバックボーン用，9から16番ポートを5C班用，17から24番ポートを5i班用のVLANと定義する．
+    \item VLANを定義する．ここでは，1〜8番ポートをバックボーン用，9〜16番ポートを5C班用，17〜24番ポートを5i班用のVLANと定義する．
           また，VLAN番号は班サブネットの第3オクテットとする．
           \begin{lstlisting}
 switch5(config)# vlan 26
