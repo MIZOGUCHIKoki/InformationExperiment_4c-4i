@@ -256,3 +256,6 @@ client IN    A     172.21.26.3
 TAサーバ，メインルータ（\texttt{192.168.0.9}），インターネット（たとえば\texttt{8.8.8.8}）にpingが通るか確認する．
 また，TAサーバ上にある，アクセス者のIPアドレスを確認するCGI（\texttt{http://172.21.33.2/index.cgi}）にアクセスし，\texttt{192.168.0.59}と，バックボーン側のIPアドレスが表示されるか確認する．
 これはNAPTを通して，5C班LAN内のIPアドレスが秘匿になっていることを示している．最後に，\texttt{traceroute}コマンドで，TAサーバまで，2台のルータを経由していることを確認する．
+\subsection{設定確認}
+\lstinputlisting[caption={スイッチの設定情報}]{Switch.log}
+\lstinputlisting[caption={ルータの設定情報}]{Router.log}
