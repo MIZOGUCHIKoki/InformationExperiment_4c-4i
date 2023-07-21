@@ -61,6 +61,10 @@ switch5(config-if-range)# switchport mode access
 switch5(config-if-range)# switchport access vlan 15
 switch5(config-if-range)# exit
 \end{lstlisting}
+    \item 設定内容を保存する．
+          \begin{lstlisting}
+switch5# copy running-config startup-config
+\end{lstlisting}
 \end{enumerate}
 \subsection{ルータの設定}
 \begin{enumerate}
@@ -145,6 +149,10 @@ router5(config)# ip nat inside source static udp 172.21.26.2 53 192.168.0.59 53
 router5(config)# ip nat inside source static tcp 172.21.26.2 80 192.168.0.59 80
 router5(config)# ip nat inside source static tcp 172.21.26.2 443 192.168.0.59 443
 router5(config)# ip nat inside source static tcp 172.21.26.2 22 192.168.0.59 8022
+\end{lstlisting}
+    \item 設定内容を保存する．
+          \begin{lstlisting}
+switch5# copy running-config startup-config
 \end{lstlisting}
 \end{enumerate}
 \subsection{サーバとクライアントのネットワーク情報更新}
