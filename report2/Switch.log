@@ -1,4 +1,4 @@
- switch5#show vlan
+switch5#show vlan
 
 VLAN Name                             Status    Ports
 ---- -------------------------------- --------- -------------------------------
