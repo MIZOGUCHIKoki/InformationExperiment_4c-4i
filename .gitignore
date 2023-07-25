@@ -3,11 +3,9 @@
 *.bbl
 *.lol
 *.gz
-main.pdf
 *.app
 *.gnuplot
 node_modules
-!report4-[1-3]-1250373-mizoguchi.pdf
 *.pdf
 *.nav
 *.snm
@@ -15,3 +13,4 @@ node_modules
 !Router.log
 !Switch.log
 !network_iconset/*.pdf
+!report4-[1-3]-1250373-mizoguchi.pdf
