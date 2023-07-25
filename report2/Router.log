@@ -1,0 +1,174 @@
+router5#show running-config 
+Building configuration...
+
+Current configuration : 2632 bytes
+!
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname router5
+!
+boot-start-marker
+boot-end-marker
+!
+enable password 7 071D2E435A5949
+!
+no aaa new-model
+!
+!
+dot11 syslog
+!
+!
+ip cef
+!
+!
+no ip domain lookup
+!
+multilink bundle-name authenticated
+!
+!
+username exp password 7 095E41060D5547
+! 
+!
+archive
+ log config
+  hidekeys
+!
+!
+!
+!
+!
+interface BRI0
+ no ip address
+ encapsulation hdlc
+ shutdown
+!
+interface FastEthernet0
+ ip address 172.21.15.1 255.255.255.0
+ ip virtual-reassembly
+ duplex auto
+ speed auto
+!
+interface FastEthernet1
+ ip address 172.21.26.1 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly
+ duplex auto
+ speed auto
+!
+interface FastEthernet2
+!
+interface FastEthernet3
+!
+interface FastEthernet4
+!
+interface FastEthernet5
+!
+interface FastEthernet6
+!
+interface FastEthernet7
+!
+interface FastEthernet8
+!
+interface FastEthernet9
+!
+interface Vlan1
+ ip address 192.168.0.59 255.255.255.0
+ ip access-group 101 in
+ ip nat outside
+ ip virtual-reassembly
+!
+router ospf 1
+ log-adjacency-changes
+ network 172.21.15.0 0.0.0.255 area 0
+ network 172.21.26.0 0.0.0.255 area 0
+ network 192.168.0.0 0.0.0.255 area 0
+!
+ip forward-protocol nd
+ip route 0.0.0.0 0.0.0.0 192.168.0.9
+ip route 172.21.33.0 255.255.255.0 192.168.0.239
+!
+!
+no ip http server
+no ip http secure-server
+ip nat pool ipaddr 192.168.0.59 192.168.0.59 prefix-length 24
+ip nat inside source list 1 pool ipaddr overload
+ip nat inside source static tcp 172.21.26.2 25 192.168.0.59 25 extendable
+ip nat inside source static tcp 172.21.26.2 53 192.168.0.59 53 extendable
+ip nat inside source static udp 172.21.26.2 53 192.168.0.59 53 extendable
+ip nat inside source static tcp 172.21.26.2 80 192.168.0.59 80 extendable
+ip nat inside source static tcp 172.21.26.2 443 192.168.0.59 443 extendable
+ip nat inside source static tcp 172.21.26.2 22 192.168.0.59 8022 extendable
+!
+access-list 1 permit 172.21.26.0 0.0.0.255
+access-list 101 permit tcp any 172.21.15.0 0.0.0.255 established
+access-list 101 permit ip any host 192.168.0.59
+access-list 101 permit tcp any host 172.21.15.2 eq domain
+access-list 101 permit udp any host 172.21.15.2 eq domain
+access-list 101 permit tcp any host 172.21.15.2 eq smtp
+access-list 101 permit tcp any host 172.21.15.2 eq www
+access-list 101 permit tcp any host 172.21.15.2 eq 443
+access-list 101 permit tcp any host 172.21.15.2 eq 22
+access-list 101 permit icmp any host 172.21.15.2
+access-list 101 permit udp any eq domain host 172.21.15.2
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ logging synchronous
+ line aux 0
+line vty 0 4
+ password 7 1317181D1F5C54
+ login
+!
+end
+
+router5#show ip interface brief
+Interface                  IP-Address      OK? Method Status                Protocol
+BRI0                       unassigned      YES NVRAM  administratively down down    
+BRI0:1                     unassigned      YES unset  administratively down down    
+BRI0:2                     unassigned      YES unset  administratively down down    
+FastEthernet0              172.21.15.1     YES NVRAM  up                    down    
+FastEthernet1              172.21.26.1     YES NVRAM  up                    up      
+FastEthernet2              unassigned      YES unset  up                    up      
+FastEthernet3              unassigned      YES unset  up                    down    
+FastEthernet4              unassigned      YES unset  up                    down    
+FastEthernet5              unassigned      YES unset  up                    down    
+FastEthernet6              unassigned      YES unset  up                    down    
+FastEthernet7              unassigned      YES unset  up                    down    
+FastEthernet8              unassigned      YES unset  up                    down    
+FastEthernet9              unassigned      YES unset  up                    down    
+NVI0                       172.21.15.1     YES unset  up                    up      
+Vlan1                      192.168.0.59    YES NVRAM  up                    up      
+router5#show access-list
+Standard IP access list 1
+    10 permit 172.21.26.0, wildcard bits 0.0.0.255 (15 matches)
+Extended IP access list 101
+    10 permit tcp any 172.21.15.0 0.0.0.255 established
+    20 permit ip any host 192.168.0.59 (63 matches)
+    30 permit tcp any host 172.21.15.2 eq domain
+    40 permit udp any host 172.21.15.2 eq domain
+    50 permit tcp any host 172.21.15.2 eq smtp
+    60 permit tcp any host 172.21.15.2 eq www
+    70 permit tcp any host 172.21.15.2 eq 443
+    80 permit tcp any host 172.21.15.2 eq 22
+    90 permit icmp any host 172.21.15.2
+    100 permit udp any eq domain host 172.21.15.2
+router5#show ip nat trans
+router5#show ip nat translations 
+Pro Inside global         Inside local          Outside local         Outside global
+tcp 192.168.0.59:8022     172.21.26.2:22        ---                   ---
+tcp 192.168.0.59:25       172.21.26.2:25        ---                   ---
+tcp 192.168.0.59:53       172.21.26.2:53        ---                   ---
+udp 192.168.0.59:53       172.21.26.2:53        ---                   ---
+tcp 192.168.0.59:80       172.21.26.2:80        ---                   ---
+tcp 192.168.0.59:443      172.21.26.2:443       ---                   ---
+router5#exit

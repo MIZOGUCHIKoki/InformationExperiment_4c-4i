@@ -1,0 +1,87 @@
+\begin{framed}
+    \begin{tikzpicture}
+        \newcommand{\rt}{\includegraphics[keepaspectratio,width=2cm]{../network_iconset/router_01_nb.pdf}}
+        \newcommand{\host}{\includegraphics[keepaspectratio,width=1cm]{../network_iconset/laptop_nb.pdf}}
+        \node(rtA){\rt};
+        \node[right=3cm of rtA.east](rtB){\rt};
+        \coordinate (O) at ($(rtB.east)+(2.5cm,0)$);
+        \node[above=2cm of O](hostA){\host};
+        \node[above=1cm of O](hostB){\host};
+        \node[below=1cm of O](hostC){\host};
+        \node[below=2cm of O](hostD){\host};
+        \coordinate (O1) at ($(rtB.east)+(1cm,.2cm)$);
+        \coordinate (O2) at ($(rtB.east)+(1cm,-.2cm)$);
+        \draw[ultra thick]{
+            ($(rtA)!0.5!(rtB)$)--($(rtA)!0.5!(rtB)+(0,3cm)$)--($(rtA)!0.5!(rtB)+(1cm,3cm)$)
+            ($(rtA)!0.5!(rtB)+(0,1cm)$)--($(rtA)!0.5!(rtB)+(1cm,1cm)$)
+            ($(rtA)!0.5!(rtB)+(0,2cm)$)--($(rtA)!0.5!(rtB)+(1cm,2cm)$)
+            ($(rtA.west)+(-.5cm,0)$)node[left,ellipse,fill=gray!30]{\scriptsize インターネット}--(rtA)
+            (rtA)--(rtB)node[midway,ellipse,fill=black,text=white](bb){\scriptsize バックボーン}
+            (rtB.east|-O1)--(O1)--($(O1|-hostA.west)+(0,.5cm)$)
+            (rtB.east|-O2)--(O2)--($(O2|-hostD.west)+(0,-.5cm)$)
+            (hostA)--(O1|-hostA.west)
+            (hostB)--(O1|-hostB.west)
+            (hostC)--(O2|-hostC.west)
+            (hostD)--(O2|-hostD.west)
+        };
+        \draw[ultra thick,dashed]{
+            ($(rtA)!0.5!(rtB)+(1cm,1cm)$)--($(rtA)!0.5!(rtB)+(1.5cm,1cm)$)
+            ($(rtA)!0.5!(rtB)+(1cm,2cm)$)--($(rtA)!0.5!(rtB)+(1.5cm,2cm)$)
+            ($(rtA)!0.5!(rtB)+(1cm,3cm)$)--($(rtA)!0.5!(rtB)+(1.5cm,3cm)$)
+        };
+        \foreach \u \v in{A/server,B/client,C/server,D/client}{
+                \node[right=-.1cm]at(host\u.east)(cp\u){\footnotesize\texttt{\v}};
+            }
+        \node[below=.3cm,text=white]at(rtB){\texttt{router5}};
+        \node[below=.3cm,text=white]at(rtA){\scriptsize メインルータ};
+        \node[fit={(hostA)(hostB)(cpA)(cpB)},draw,dotted,thick,rounded corners](sg1){};
+        \node[fit={(hostC)(hostD)(cpC)(cpD)},draw,dotted,thick,rounded corners](sg2){};
+        \begin{scope}[on background layer]
+            \node[below]at(sg1.south){5C班LAN};
+            \node[above]at(sg2.north){5i班LAN};
+            \node[below]at(bb.south){\scriptsize\texttt{192.168.0.0/24}};
+            \node[left]at($(O1|-hostA.west)!0.5!(O1|-hostB.west)$){\scriptsize\texttt{172.21.26.0/24}};
+            \node[left]at($(O2|-hostC.west)!0.5!(O2|-hostD.west)$){\scriptsize\texttt{172.21.15.0/24}};
+            \node[left,text=gray]at(O1|-hostA.west)(cpA){\scriptsize\texttt{172.21.26.2}};
+            \node[left,text=gray]at(O1|-hostB.west)(cpB){\scriptsize\texttt{172.21.26.3}};
+            \node[left,text=gray]at(O2|-hostC.west)(cpC){\scriptsize\texttt{172.21.15.2}};
+            \node[left,text=gray]at(O2|-hostD.west)(cpD){\scriptsize\texttt{172.21.15.3}};
+            \node[right,text=gray]at(O1)(capO1){\scriptsize\texttt{172.21.26.1}};
+            \node[right,text=gray]at(O2)(capO2){\scriptsize\texttt{172.21.15.1}};
+            \node[below=1cm of rtB.west,text=gray](ipbb){\scriptsize\texttt{192.168.0.59}};
+            \draw[black,fill=black](rtB.west)circle[radius=.5mm]node(A){};
+            \draw[-latex,gray](ipbb)--(A);
+            \node[below=1cm of rtA.east,text=gray](ipbb){\scriptsize\texttt{192.168.0.9}};
+            \draw[black,fill=black](rtA.east)circle[radius=.5mm]node(A){};
+            \draw[-latex,gray](ipbb)--(A);
+            \draw[black,fill=black](rtB.east|-O1)circle[radius=.5mm]node(A){};
+            \draw[-latex,gray](capO1)to[bend right=30](A);
+            \draw[black,fill=black](rtB.east|-O2)circle[radius=.5mm]node(A){};
+            \draw[-latex,gray](capO2)to[bend left=30](A);
+            \foreach \u in{A,B,C,D}{
+            \draw[black,fill=black](host\u.west)circle[radius=.5mm]node(\u){};
+            }
+            \foreach \u in{A,C}{
+                    \draw[-latex,gray](cp\u)to[bend left=30](\u);
+                }
+            \foreach \u in{B,D}{
+                    \draw[-latex,gray](cp\u)to[bend right=30](\u);
+                }
+        \end{scope}
+        \coordinate (A) at ($(rtA)!0.5!(rtB)+(0cm,2.5cm)$);
+        \coordinate (B) at (rtA |- A);
+        \node at (B)(rtTA){\rt};
+        \node[below=.3cm,text=white]at(rtTA){\scriptsize TA用ルータ};
+        \node[left=1cm of rtTA.west](hostTA){\host};
+        \node[below] at (hostTA.south){\scriptsize TA用\texttt{server}};
+        \draw[ultra thick]{
+            (A)--(rtTA)
+            (rtTA)--(hostTA)
+        };
+        \draw[black,fill=black](rtTA.east)circle[radius=.5mm]node(rtTA){};
+        \draw[black,fill=black](hostTA.east)circle[radius=.5mm]node(hostTA){};
+        \node[below=1cm of rtTA,text=gray](caprtTA){\scriptsize\texttt{192.168.0.239}};
+        \draw[-latex,gray](caprtTA)--(rtTA);
+        \node[above=.5cm of hostTA](caprtAH){\scriptsize\texttt{172.21.33.0/24}};
+    \end{tikzpicture}
+\end{framed}

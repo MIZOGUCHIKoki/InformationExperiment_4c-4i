@@ -1,0 +1,33 @@
+\section{内容}
+本実験では\figref{fig:ネットワーク図}のネットワークを作成する．
+ルーティングの設定やNAPTは\figref{fig:ネットワーク図}の\texttt{router5}に行う．
+\begin{figure}
+    \centering
+    \input{02_TIKZ_network.tikz}
+    \caption{論理ネットワーク図（L2スイッチは省略）}
+    \label{fig:ネットワーク図}
+\end{figure}
+\subsection{スイッチの設定}
+コンソールへ接続し，\texttt{telnet}での操作を可能にするため，L2スイッチにIPアドレスを付与する．
+スパニングツリー機能を停止した後VLANを用いて，1台のスイッチ内に3つのセグメント（\textbf{デフォルトセグメント}，\textbf{5C班セグメント}，\textbf{5i班セグメント}）を作成する．
+\subsection{ルータの初期設定}
+コンソールへ接続し，バックボーンのIPアドレス，5C班のネットワークアドレス，5i班のネットワークアドレスと各サブネットマスクを決定する．
+ルータへIPアドレスを付与した後，ルーティングテーブルを作成する．
+動的ルーティングはOSPFを用い，デフォルトルートとしてメインルータ（\texttt{192.168.0.9}）を設定し，TA班用への経路を静的経路として設定する．
+\subsection{ホストのネットワーク設定}
+サーバのIPアドレス，DNSゾーンの設定，ApacheのIPアドレス制限の設定を更新する．それに伴い，クライアントのネットワーク設定も更新する．
+\subsection{NAPT・ポートフォワーディングの設定}
+5C班LAN（内部）からバックボーン（外部），そして外部から内部へのアクセスを，以下のように\texttt{router5}へ設定する．
+\begin{itemize}
+    \item 内部から外部へは，動的NAPTを用いて任意のアクセスを許可する．
+    \item 外部からサーバ以外ホストへのアクセスを禁止する．
+    \item 外部からサーバへ，静的NAPTを用いて以下のアクセスを許可する．
+          \begin{multicols}{2}
+              \begin{itemize}
+                  \item DNS（TCP，UDP）\\宛先ポート53番，転送先ポート53番
+                  \item Web（TCP）\\宛先ポート80番，転送先ポート80番
+                  \item SMTP（TCP）\\宛先ポート25番，転送先ポート25番
+                  \item SSH（TCP）\\宛先ポート8022番，転送先ポート22番
+              \end{itemize}
+          \end{multicols}
+\end{itemize}

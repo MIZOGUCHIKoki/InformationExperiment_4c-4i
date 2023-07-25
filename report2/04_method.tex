@@ -1,0 +1,261 @@
+\section{作業記録}
+\subsection{スイッチの設定}
+\begin{enumerate}
+    \renewcommand{\labelenumi}{\textbf{\theenumi.}\ }
+    \item スイッチの電源を切り，スイッチからすべての配線を取り外す．コンソールケーブルをコンピュータのUSB端子に挿入し，\texttt{/dev/ttyUSB0}が存在するか確認したのち，以下のコマンドを実行する．
+          \begin{lstlisting}
+# chmod 777 /dev/ttyUSB0 
+    \end{lstlisting}
+    \item \texttt{cu}をインストールする．
+          \begin{lstlisting}
+# apt install cu            
+        \end{lstlisting}
+    \item コンソールケーブルの一端をスイッチに挿入し，スイッチの電源を入れる．コンソールに接続するため，以下のコマンドを実行する．
+          \begin{lstlisting}
+# cu -l ttyUSB0 -s 9600                
+            \end{lstlisting}
+    \item コンソールに接続できたら，スイッチのホスト名設定，パスワード設定，パスワードの暗号化，DNSルックアップの無効化，コンソールの設定をする
+          \begin{lstlisting}
+Switch> enable
+Switch# configure terminal
+Switch(config)# hostname switch5
+switch5(config)# username exp password 0 root00
+switch5(config)# service password-encryption
+switch5(config)# no ip domain-lookup
+switch5(config)# line console 0
+switch5(config-line)# logging synchronous
+\end{lstlisting}
+    \item VLAN1へ，スイッチに遠隔ログイン用IPアドレスを割り当てる．
+          \begin{lstlisting}
+switch5(config)# interface vlan1
+switch5(config-if)# ip address 192.168.0.58 255.255.255.0
+switch5(config-if)# no shutdown
+switch5(config-if)# exit
+\end{lstlisting}
+    \item \texttt{telnet}の許可設定をする．
+          \begin{lstlisting}
+switch5(config)# line vty 0 4
+switch5(config-line)# password 0 root00
+switch5(config-line)# login
+switch5(config-line)# exit
+\end{lstlisting}
+    \item スパニングツリーを無効にする．
+          \begin{lstlisting}
+switch5(config)# no spanning-tree vlan 1
+    \end{lstlisting}
+    \item VLANを定義する．本実験では，1〜8番ポートをバックボーン用，9〜16番ポートを5C班用，17〜24番ポートを5i班用のVLANと定義する．
+          また，VLAN番号は班サブネットの第3オクテットとする．
+          \begin{lstlisting}
+switch5(config)# vlan 26
+switch5(config-vlan)# name group5c
+switch5(config-vlan)# exit
+switch5(config)# vlan 15
+switch5(config-vlan)# name group5i
+switch5(config-vlan)# exit
+switch5(config)# interface range fa0/9-16
+switch5(config-if-range)# switchport mode access
+switch5(config-if-range)# switchport access vlan 26
+switch5(config-if-range)# exit
+switch5(config)# interface range fa0/17-24
+switch5(config-if-range)# switchport mode access
+switch5(config-if-range)# switchport access vlan 15
+switch5(config-if-range)# exit
+\end{lstlisting}
+    \item 設定内容を保存する．
+          \begin{lstlisting}
+switch5# copy running-config startup-config
+\end{lstlisting}
+\end{enumerate}
+\subsection{ルータの設定}
+\begin{enumerate}
+    \renewcommand{\labelenumi}{\textbf{\theenumi.}\ }
+    \item ルータの電源を切り，スイッチからすべての配線を取り外す．コンソールケーブルをコンピュータのUSB端子に挿入し，\texttt{/dev/ttyUSB0}が存在するか確認したのち，以下のコマンドを実行する．
+          \begin{lstlisting}
+# chmod 777 /dev/ttyUSB0 
+    \end{lstlisting}
+    \item コンソールケーブルの一端をスイッチに挿入し，スイッチの電源を入れる．コンソールに接続するため，以下のコマンドを実行する．
+          \begin{lstlisting}
+# cu -l ttyUSB0 -s 9600                
+            \end{lstlisting}
+    \item コンソールに接続できたら，ルータのホスト名設定，パスワード設定，パスワードの暗号化，DNSルックアップの無効化，コンソールの設定をする
+          \begin{lstlisting}
+Router> enable
+Router# configure terminal
+Router(config)# hostname router5
+router5(config)# username exp password 0 root00
+router5(config)# service password-encryption
+router5(config)# no ip domain-lookup
+router5(config)# line console 0
+router5(config-line)# logging synchronous
+\end{lstlisting}
+    \item \texttt{telnet}の許可設定をする．
+          \begin{lstlisting}
+router5(config)# line vty 0 4
+router5(config-line)# password 0 root00
+router5(config-line)# login
+router5(config-line)# exit
+\end{lstlisting}
+    \item バックボーン側のIPアドレスを\texttt{192.168.0.59/24}に設定する．利用するインタフェースは\texttt{FastEthernet2}（\texttt{FE2}）．
+          \begin{lstlisting}
+router5(config)# interface fastEthernet2
+router5(config-if)# switchport access vlan 1
+router5(config-if)# no shutdown
+router5(config-if)# exit
+router5(config)# interface vlan1
+router5(config-if)# ip address 192.168.0.59 255.255.255.0
+router5(config-if)# no shutdown
+router5(config-if)# exit
+    \end{lstlisting}
+    \item \texttt{FastEthernet0}を5i班，\texttt{FastEthernet1}を5C班に割り当て，それぞれIPアドレスを設定する．
+          \begin{lstlisting}
+router5(config)# interface fastEthernet0
+router5(config-if)# ip address 172.21.15.1 255.255.255.0
+router5(config-if)# no shutdown
+router5(config-if)# exit
+router5(config)# interface fastEthernet1
+router5(config-if)# ip address 172.21.26.1 255.255.255.0
+router5(config-if)# no shutdown
+router5(config-if)# exit
+    \end{lstlisting}
+    \item ルーティングを設定する．ルーティングプロトコルはOSPFを採用する．
+          \begin{lstlisting}
+router5(config)# router ospf 1
+router5(config-router)# network 192.168.0.0 0.0.0.255 area 0
+router5(config-router)# network 172.21.26.0 0.0.0.255 area 0
+router5(config-router)# exit
+\end{lstlisting}
+    \item 静的経路を設定する．デフォルト経路をメインルータ（\texttt{192.168.0.9}），TA班への経路はTA班のバックボーンIPアドレスを指定する．
+          \begin{lstlisting}
+router5(config)# ip route 0.0.0.0 0.0.0.0 192.168.0.9
+router5(config)# ip route 172.21.33.0 255.255.255.0 192.168.0.239
+\end{lstlisting}
+    \item NAPTを設定する．内側から外側へ任意のアクセスを許可し，変換後の外側IPアドレスを定義する．また，NATの変換ルールを定義する．さらに，NATの内側・外側を定義する．
+          \begin{lstlisting}
+router5(config)# access-list 1 permit 172.21.26.0 0.0.0.255
+router5(config)# ip nat pool ipaddr 192.168.0.56 192.168.0.56 prefix-length 24
+router5(config)# ip nat inside source list 1 pool ipaddr overload
+router5(config)# interface vlan1
+router5(config-if)# ip nat outside
+router5(config-if)# exit
+router5(config)# interface fastEthernet1
+router5(config-if)# ip nat inside
+router5(config-if)# exit
+\end{lstlisting}
+    \item NAPTを設定する．パケットフィルタ用のアクセスリストを要件に従って設定する．
+          \begin{lstlisting}
+router5(config)# ip nat inside source static tcp 172.21.26.2 25 192.168.0.59 25
+router5(config)# ip nat inside source static tcp 172.21.26.2 53 192.168.0.59 53
+router5(config)# ip nat inside source static udp 172.21.26.2 53 192.168.0.59 53
+router5(config)# ip nat inside source static tcp 172.21.26.2 80 192.168.0.59 80
+router5(config)# ip nat inside source static tcp 172.21.26.2 443 192.168.0.59 443
+router5(config)# ip nat inside source static tcp 172.21.26.2 22 192.168.0.59 8022
+\end{lstlisting}
+    \item 設定内容を保存する．
+          \begin{lstlisting}
+switch5# copy running-config startup-config
+\end{lstlisting}
+\end{enumerate}
+\subsection{サーバとクライアントのネットワーク情報更新}
+各ホストのIPアドレスを\figref{fig:ネットワーク図}に従って変更する．
+\paragraph{サーバの設定}
+以下のファイルを編集する．ここで\texttt{c5.zone}ファイルの\texttt{A}レコード\texttt{server}は，サーバのIPアドレスではなく，VLAN1インタフェースのIPアドレスを入力する．
+これは，NATにより外から内部のIPアドレスがわからないからである．クライアントへのアクセスは，外部から許可していないため，\texttt{A}レコード\texttt{client}はクライアントのIPアドレスを入力しても問題ない．
+\begin{lstlisting}[language=yaml,style=file,caption={\ttfamily /etc/netplan/00-install-config.yaml}]
+ # This is network config written by 'subiquity'
+ network:
+     version: 2
+     ethernets:
+         enp0s31f6:
+             addresses:
+                 - 172.21.26.2/24
+             routes:
+                 - to: default
+                     via: 172.21.26.1
+             nameservers:
+                 addresses:
+                     - 172.21.26.2
+             dhcp4: false
+\end{lstlisting}
+\begin{lstlisting}[style=file,language=dns,caption={\ttfamily /etc/bind/c5.zone}]
+$TTL   100
+@      IN    SOA  server.c5.exp.info.kochi-tech.ac.jp. postmaster.c5.exp.info.kochi-tech.ac.jp. (
+             2023061901
+             100
+             100
+             100
+             100  )
+       IN    NS    server.c5.exp.info.kochi-tech.ac.jp.
+server IN    A     192.168.0.59
+www    IN    CNAME server
+client IN    A     172.21.26.3
+%$\cdots$ {\normalfont 略} $\cdots$%
+\end{lstlisting}
+ファイルの書き込みが終われば，以下のコマンドを実行する．
+\begin{lstlisting}
+# netplan apply
+# systemctl restart bind9
+# systemctl restart named
+\end{lstlisting}
+\paragraph{クライアントの設定}
+クライアントのネットワーク設定ウィザードで，IPアドレスを\texttt{172.21.26.3}へ設定する．DNSサーバを\texttt{172.21.26.2}，デフォルトゲートウェイを\texttt{172.21.26.1}へ設定する．
+\subsection{配線}
+\figref{fig:ルータとスイッチの配線}のように，ルータとスイッチ間を接続し，サーバとクライアントをスイッチと接続する．
+同じVLAN内なら，スイッチ上のどのポートに挿しても良い．
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+        \tikzset{port/.style={rectangle,minimum width=1cm,minimum height=1cm,draw}};
+        \node[port,fill=yellow!70!black!30](p00){};
+        \node[port,below=.2cm of p00,fill=yellow!70!black!30](p10){};
+        \foreach \u[evaluate=\u as \v using \u-1] in {1,2,...,11}{
+                \node[fill=\ifnum\u<4yellow!70!black!30\else\ifnum\u<8magenta!30\else cyan!30\fi\fi ,port,right=.2cm of p0\v](p0\u){};
+                \node[fill=\ifnum\u<4yellow!70!black!30\else\ifnum\u<8magenta!30\else cyan!30\fi\fi ,port,right=.2cm of p1\v](p1\u){};
+            }
+        \node[fit={(p00)(p111)},thick,draw](switch){};
+        \node[fit={(p00)(p13)},inner sep=.3mm](backborn){};
+        \node[fit={(p04)(p17)},inner sep=.3mm](5cvlan){};
+        \node[fit={(p08)(p111)},inner sep=.3mm](5ivlan){};
+        \node[below=.3cm]at(backborn.south){backborn用VLAN};
+        \node[below=.3cm]at(5cvlan.south){5C班用VLAN};
+        \node[below=.3cm]at(5ivlan.south){5i班用VLAN};
+        \node[above=1cm of p05,port,fill=gray!50](rp1){};
+        \node[above=1cm of p08,port,fill=gray!50](rp2){};
+        \node[above=.1cm of rp2,port,fill=gray!50](rp3){};
+        \node[above=1cm of p00,rectangle,minimum width=1cm,minimum height=1cm](nd1){};
+        \node[above=1cm of p011,rectangle,minimum width=1cm,minimum height=1cm](nd2){};
+        \node[above]at(rp1.north){\ttfamily FE2};
+        \node[right]at(rp2.east){\ttfamily FE0};
+        \node[right]at(rp3.east){\ttfamily FE1};
+        \node[fit={(nd1)(nd2)(rp3)},draw,thick](router){};
+        \node[left]at(switch.west){\rotatebox{90}{Switch}};
+        \node[left]at(router.west){\rotatebox{90}{Router}};
+        \draw[ultra thick]{
+            ($(p10.center)+(-1cm,-1cm)$)--($(p10.center)+(0,-1cm)$)node[midway,below]{\tiny backborn}--(p10.center)
+            (p03.center)|-(rp1.center)
+            (p06.center)|-(rp3.center)
+            (p08.center)--(rp2.center)
+            (p14.center)|-($(p14.center)+(-1cm,-1cm)$)node[midway,above left]{\tiny Serverへ}
+            (p17.center)|-($(p17.center)+(1cm,-1cm)$)node[midway,above right]{\tiny Clientへ}
+        };
+        \foreach \u in {p03,p10,p06,p08,rp1,rp2,rp3,p14,p17}{
+                \node[circle,fill=black,radius=.3cm]at(\u){};
+            }
+        \foreach \u[evaluate=\u as \v using \u*2+1,evaluate=\v as \w using \v+1] in {0,1,...,11}{
+                \node[below right,minimum size=.3cm,anchor=north west]at(p0\u.north west){\bfseries\tiny\pgfmathprintnumber[fixed,fixed zerofill,precision=0]{\v}};
+                \node[below right,minimum size=.3cm,anchor=north west]at(p1\u.north west){\bfseries\tiny\pgfmathprintnumber[fixed,fixed zerofill,precision=0]{\w}};
+            }
+        \begin{scope}[on background layer]
+            \fill[gray!20](switch.north east)rectangle (switch.south west);
+            \fill[gray!20](router.north east)rectangle (router.south west);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{ルータとスイッチの配線}
+    \label{fig:ルータとスイッチの配線}
+\end{figure}
+\subsection{動作確認}
+TAサーバ，メインルータ（\texttt{192.168.0.9}），インターネット（たとえば\texttt{8.8.8.8}）にpingが通るか確認する．
+また，TAサーバ上にある，アクセス者のIPアドレスを確認するCGI（\texttt{http://172.21.33.2/index.cgi}）にアクセスし，\texttt{192.168.0.59}と，バックボーン側のIPアドレスが表示されるか確認する．
+これはNAPTを通して，5C班LAN内のIPアドレスが秘匿になっていることを示している．最後に，\texttt{traceroute}コマンドで，TAサーバまで，2台のルータを経由していることを確認する．
+\subsection{設定確認}
+\lstinputlisting[caption={スイッチの設定情報}]{Switch.log}
+\lstinputlisting[caption={ルータの設定情報}]{Router.log}
