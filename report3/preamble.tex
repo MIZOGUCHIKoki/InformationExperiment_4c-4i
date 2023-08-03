@@ -1,7 +1,7 @@
 \usepackage{silence}
 \WarningFilter{caption}{Unknown document}
 \usepackage{fancyhdr,lastpage,abstract,listings,float,wrapfig,tabularx,multirow,multicol}
-\usepackage{hyperref,graphics,graphicx,framed}
+\usepackage{hyperref,graphics,graphicx,framed,booktabs}
 \usepackage[symbol]{footmisc}
 \usepackage{amsmath,amssymb}
 \usepackage{tikz}
@@ -29,7 +29,7 @@
 \renewcommand{\thefigure}{\arabic{figure}}
 \renewcommand{\thetable}{\arabic{table}}
 \renewcommand{\theequation}{\arabic{equation}}
-\renewcommand{\labelenumi}{\theenumi.\ }
+\renewcommand{\labelenumi}{\textbf{\theenumi.}\ }
 \renewcommand{\eqref}[1]{式(\ref{#1})}
 \newcommand{\figref}[1]{図\ref{#1}}
 \newcommand{\tblref}[1]{表\ref{#1}}
@@ -84,7 +84,7 @@ literate =    {---}{{\ProcessThreeDashes}}3
     %backgroundcolor={\color[gray]{.90}},
     breaklines = true,
     breakindent = 10pt,
-    basicstyle = \ttfamily\small\selectfont,
+    basicstyle = \ttfamily\small,
     commentstyle = {\ttfamily\small \color[rgb]{0,0.45,0}},
     classoffset = 0,
     keywordstyle = {\ttfamily\small\color{red}},
