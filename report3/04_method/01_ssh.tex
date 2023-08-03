@@ -1,1 +1,38 @@
 \subsection{SSLを用いたリモートログインの実現}
+SSH接続するClientは，高知工科大学ワークステーションのコンピュータを利用する．
+\begin{enumerate}
+    \item ダウンロードされた鍵ファイル\texttt{c5.pem}ファイルを\texttt{\textasciitilde/.ssh}に移動させる．
+    \item \texttt{\textasciitilde/.ssh}がない場合は，\texttt{mkdir}コマンドを用いてディレクトリを作成する．
+    \item \texttt{\textasciitilde/.ssh/config}ファイルがない場合は，\texttt{touch}コマンドを用いてファイルを作成して，以下の内容を書き込み，保存する．
+          この設定により，\texttt{c5.exp.info.kochi-tech.ac.jp}のホストへアクセスするときに，ユーザ名，鍵ファイルの場所，プロキシの設定を省略できる．
+          インスタンス作成時に，デフォルトで作成されるユーザ名は\texttt{ec2-user}である．
+          高知工科大学のプロキシは，\texttt{http://proxy.noc.kochi-tech.ac.jp:3128}である．
+          \begin{lstlisting}[style=file,caption={\ttfamily \textasciitilde/.ssh/config},escapechar={}]
+Host c5.exp.info.kochi-tech.ac.jp
+ User ec2-user
+ IdentityFile ~/.ssh/c5.pem
+ ProxyCommand nc -X connect -x proxy.noc.kochi-tech.ac.jp:3128 %h %p
+        \end{lstlisting}
+    \item 以下のコマンドを実行し，インスタンスへSSH接続できるか確認する．
+          \begin{lstlisting}
+$ ssh c5.exp.info.kochi-tech.ac.jp
+          \end{lstlisting}
+          以下の出力を確認できたら，SSHによるリモートログインに成功している．
+          \begin{lstlisting}
+A newer release of "Amazon Linux" is available.
+  Version 2023.1.20230725:
+Run "/usr/bin/dnf check-release-update" for full release and version update info
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+Last login: Thu Aug  3 14:25:50 2023 from xxx.xxx.xxx.xxx
+[ec2-user@ip-172-31-93-16 ~]$ 
+\end{lstlisting}
+\end{enumerate}
