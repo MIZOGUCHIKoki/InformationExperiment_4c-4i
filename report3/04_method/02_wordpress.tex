@@ -1,1 +1,30 @@
 \subsection{WordPressのインストールとWebページの公開}
+WordPressを用いたWebページを公開する．
+WordPressにはPHPやMySQLなどのソフトウェアも必要であるため，それらもインストールする．
+\begin{enumerate}
+    \item WordPressに必要な\texttt{httpd}，\texttt{MySQL}，\texttt{PHP}，\texttt{wget}などをインストールする．
+          \begin{lstlisting}
+$ sudo yum install httpd mysql-server php php-mysql wget
+\end{lstlisting}
+    \item \texttt{wget}コマンドを利用して，WordPressのパッケージをダウンロード，解凍し，所定の場所にコピーする．\texttt{/var/www/wordpress}のディレクトリ管理権限を\texttt{apache}に変更する．
+          \begin{lstlisting}
+$ sudo cd /tmp
+$ sudo wget http://ja.wordpress.org/wordpress-3.5.1-ja.tar.gz
+$ sudo tar zxvf wordpress-3.5.1-ja.tar.gz 
+$ sudo cp -r wordpress /var/www/
+$ sudo chown -R apache.apache /var/www/wordpress
+    \end{lstlisting}
+    \item \texttt{httpd}の設定ファイルを更新する．
+          \begin{itemize}
+              \item \texttt{DocumentRoot}を\texttt{/var/www/wordpress}に変更．
+              \item \texttt{/var/www/wordpress}のディレクトリに，\texttt{.htasccess}によるディレクティブ上書きを許可．
+          \end{itemize}
+          \begin{lstlisting}
+%{\normalfont -- 略 --}%
+DocumentRoot "/var/www/wordpress"            
+%{\normalfont -- 略 --}%
+<Directory "/var/www/wordpress">
+            AllowOverride All
+%{\normalfont -- 略 --}%
+          \end{lstlisting}
+\end{enumerate}
