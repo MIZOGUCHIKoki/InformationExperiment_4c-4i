@@ -1,30 +1,78 @@
 \subsection{WordPressのインストールとWebページの公開}
 WordPressを用いたWebページを公開する．
-WordPressにはPHPやMySQLなどのソフトウェアも必要であるため，それらもインストールする．
 \begin{enumerate}
-    \item WordPressに必要な\texttt{httpd}，\texttt{MySQL}，\texttt{PHP}，\texttt{wget}などをインストールする．
+    \item WordPressに必要なパッケージをインストールする．
           \begin{lstlisting}
-$ sudo yum install httpd mysql-server php php-mysql wget
+$ sudo dnf install wget php-mysqlnd httpd php-fpm php-mysqli mariadb105-server php-json php php-devel -y
 \end{lstlisting}
-    \item \texttt{wget}コマンドを利用して，WordPressのパッケージをダウンロード，解凍し，所定の場所にコピーする．\texttt{/var/www/wordpress}のディレクトリ管理権限を\texttt{apache}に変更する．
+    \item データベース，Webサーバを起動する．
+          \begin{lstlisting}
+$ sudo systemctl start mariadb httpd
+\end{lstlisting}
+    \item \texttt{wget}コマンドを利用して，WordPressのパッケージをダウンロード，解凍し，所定の場所にコピーする．
+          そして，\texttt{/var/www/wordpress}のディレクトリ管理権限を\texttt{apache}に変更する．
           \begin{lstlisting}
 $ sudo cd /tmp
-$ sudo wget http://ja.wordpress.org/wordpress-3.5.1-ja.tar.gz
-$ sudo tar zxvf wordpress-3.5.1-ja.tar.gz 
+$ sudo wget http://ja.wordpress.org/latest.tar.gz
+$ sudo tar -xvf latest.tar.gz
 $ sudo cp -r wordpress /var/www/
-$ sudo chown -R apache.apache /var/www/wordpress
+$ sudo cp -r wordpress/* /var/www/html/
+$ sudo chown -R apache.apache /var/www
     \end{lstlisting}
     \item \texttt{httpd}の設定ファイルを更新する．
           \begin{itemize}
-              \item \texttt{DocumentRoot}を\texttt{/var/www/wordpress}に変更．
-              \item \texttt{/var/www/wordpress}のディレクトリに，\texttt{.htasccess}によるディレクティブ上書きを許可．
+              \item \texttt{DocumentRoot}を\texttt{/var/www/html}に変更．
+              \item \texttt{/var/www/html}のディレクトリに，\texttt{.htasccess}によるディレクティブ上書きを許可する．
+                    さらに，ファイル名を指定しないアクセスに対しては\texttt{index.php}を返す設定をする．
           \end{itemize}
-          \begin{lstlisting}
-%{\normalfont -- 略 --}%
-DocumentRoot "/var/www/wordpress"            
-%{\normalfont -- 略 --}%
-<Directory "/var/www/wordpress">
-            AllowOverride All
-%{\normalfont -- 略 --}%
+          \begin{lstlisting}[style=file,caption={\ttfamily /etc/httpd/conf/httpd.conf}]
+%\ryaku%
+DocumentRoot %{\color{red}"/var/www/html"}%
+%\ryaku%
+<Directory "/var/www/html">
+            AllowOverride %{\color{red}All}%
+%\ryaku%
+<IfModule dir_module>
+            DirectoryIndex index.php
+</IfModule>
+%\ryaku%
           \end{lstlisting}
+    \item データベースにアクセスして，WordPress用のユーザを作成する．作成したユーザに対して，完全な権限を付与する．
+          \begin{lstlisting}
+$ sudo mysql -u root -p
+> CREATE USER 'wordpress-user'@'localhost' IDENTIFIED BY '******';
+> CREATE DATABASE `wordpress-db`;
+> GRANT ALL PRIVILEGES ON `wordpress-db`.* TO "wordpress-user"@"localhost";
+> FLUSH PRIVILEGES;
+\end{lstlisting}
+    \item \url{https://api.wordpress.org/secret-key/1.1/salt/}にアクセスして，ランダムに生成されるキーセット値を取得する．
+    \item \texttt{/var/www/html/wp-config.php}ファイルでデータベース情報と，キーセットを登録する．
+          \begin{lstlisting}[style=file,caption={\ttfamily /var/www/html/wp-config.php},language=php,escapechar={}]
+define( 'DB_NAME', 'wordpress-db' );
+define( 'DB_USER', 'wordpress-user' ); 
+define( 'DB_PASSWORD', '******' );
+define( 'DB_HOST', 'localhost' ); 
+define( 'DB_CHARSET', 'utf8' );
+define( 'DB_COLLATE', '' );
+define('AUTH_KEY',         '**secret**');
+define('SECURE_AUTH_KEY',  '**secret**');
+define('LOGGED_IN_KEY',    '**secret**');
+define('NONCE_KEY',        '**secret**');
+define('AUTH_SALT',        '**secret**');
+define('SECURE_AUTH_SALT', '**secret**');
+define('LOGGED_IN_SALT',   '**secret**');
+define('NONCE_SALT',       '**secret**');
+\end{lstlisting}
+    \item \texttt{/var/www}以下のディレクトリに対して，パーミッションを変更し，SGIDを付与する．
+          \begin{lstlisting}
+$ sudo chmod 2775 /var/www
+$ find /var/www -type d -exec sudo chmod 2775 {} \;
+$ find /var/www -type f -exec sudo chmod 0644 {} \;
+    \end{lstlisting}
+    \item \texttt{httpd}を再起動する．
+          \begin{lstlisting}
+$ sudo systemctl restart httpd
+\end{lstlisting}
+    \item \url{c5.exp.info.kochi-tech.ac.jp}にアクセスして，WordPressが表示されるか確認する．
+    \item サイトのタイトル，ユーザ名を設定して，WordPress内で記事を編集し，公開する．
 \end{enumerate}
