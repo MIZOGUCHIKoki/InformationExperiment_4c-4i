@@ -1,1 +1,52 @@
 \subsection{WebページのSSL化}
+Let's Encrypt を用いてHTTPS通信を実現する．
+\begin{enumerate}
+    \item 必要なパッケージをインストールし，Python3をセットアップする．
+          \begin{lstlisting}
+$ sudo dnf install -y python3 augeas-libs pip
+$ sudo python3 -m venv /opt/certbot/
+$ sudo /opt/certbot/bin/pip install --upgrade pip
+$ sudo /opt/certbot/bin/pip install certbot
+$ sudo ln -s /opt/certbot/bin/certbot /usr/bin/certbot
+\end{lstlisting}
+    \item Webサーバを停止する．
+          \begin{lstlisting}
+$ sudo systemctl stop httpd
+\end{lstlisting}
+    \item \texttt{certbot}を実行し，質問に回答する．これにより，証明書が作成される．
+          \begin{lstlisting}
+$ sudo certbot certonly --standalone
+\end{lstlisting}
+          \begin{itemize}
+              \item 証明書の期限切れを通知するメールアドレス：\texttt{250373b@ugs.kochi-tech.ac.jp}
+              \item 利用規約に同意するか：\texttt{Y}
+              \item メールアドレスを共有するか？：\texttt{N}
+              \item 証明書に記載するドメイン名：\texttt{c5.exp.info.kochi-tech.ac.jp}
+          \end{itemize}
+          完了したら，証明書が\texttt{/etc/letsencrypt/live/c5.kochi-tech.ac.jp}下に作成される．
+    \item \texttt{/etc/httpd/conf.d/ssl.conf}へ以下を追加し，証明書などのファイル所在を記す．
+          \begin{lstlisting}[style=file,caption={\ttfamily /etc/httpd/conf.d/ssl.conf}]
+%\ryaku%
+<VirtualHost _default_:443>
+ ErrorLog logs/ssl_error_log
+ TransferLog logs/ssl_access_log
+ LogLevel warn
+ SSLEngine on
+ ServerName      c5.exp.info.kochi-tech.ac.jp
+ DocumentRoot    /var/www/html
+ SSLHonorCipherOrder on
+ SSLCipherSuite PROFILE=SYSTEM
+ SSLProxyCipherSuite PROFILE=SYSTEM
+ SSLCertificateFile      /etc/letsencrypt/live/c5.exp.info.kochi-tech.ac.jp/cert.pem
+ SSLCertificateKeyFile   /etc/letsencrypt/live/c5.exp.info.kochi-tech.ac.jp/privkey.pem
+ SSLCertificateChainFile /etc/letsencrypt/live/c5.exp.info.kochi-tech.ac.jp/chain.pem        
+ %\ryaku%
+</VirtualHost>
+%\ryaku%
+    \end{lstlisting}
+    \item \texttt{httpd}を起動する．
+          \begin{lstlisting}
+$ sudo systemctl start httpd
+\end{lstlisting}
+    \item \url{https://c5.exp.kochi-tech.ac.jp}にアクセスし，SSLの適用を確かめる．
+\end{enumerate}
