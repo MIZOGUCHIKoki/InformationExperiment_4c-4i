@@ -1,1 +1,27 @@
 \subsection{Basic認証の適用}
+\texttt{/var/www/html/basic}へのWebアクセスに，Basic認証を適用する．
+\begin{enumerate}
+    \item \texttt{/var/www/html/basic/index.html}を作成し，\texttt{index.html}に適当なWebページをHTMLで記述する．
+    \item Basic認証用のIDとパスワード組みを作成する．
+          \begin{lstlisting}
+$ sudo htpasswd -c /etc/httpd/htpasswd groupc5
+New password: 
+Re-type new password: 
+Adding password for user groupc5
+$ cat /etc/httpd/htpasswd 
+groupc5:$apr1$ZsK7Iq9f$fq1F9XSDaBH2j/8RBHZZP/
+$ sudo chown apache:apache /etc/httpd/htpasswd
+$ sudo chmod 600 /etc/httpd/htpasswd        
+    \end{lstlisting}
+    \item \texttt{/etc/httpd/conf/httpd.conf}に以下を追加し，Basic認証を適用する．
+          \begin{lstlisting}[style=file,caption={\ttfamily /etc/httpd/conf/httpd.conf}]
+<Directory "/var/www/html/basic">
+    AuthType Basic
+    AuthName "auth"
+    AuthUserFile /etc/httpd/htpasswd
+    Require valid-user
+</Directory>
+\end{lstlisting}
+    \item \texttt{httpd}を再起動する．
+    \item \url{c5.exp.info.kochi-tech.ac.jp/basic/index.html}にアクセスし，Basic認証が適用できているか確認する．
+\end{enumerate}
