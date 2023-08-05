@@ -1,21 +1,52 @@
 \section{内容}
 クラウドサービスを用いて，以下のことを実現する．
-\begin{multicols}{2}
-    \begin{enumerate}
-        \renewcommand{\labelenumi}{\theenumi.\ }
+\begin{enumerate}
+    \renewcommand{\labelenumi}{\theenumi.\ }
+    \renewcommand{\labelenumi}{\theenumi.\ }
+    \begin{multicols}{2}
         \item Public IPアドレスの取得と，DNSへの登録．
         \item ファイアウォールの設定．
         \item クラウドサービスへのリモートログイン．
         \item WordPressを用いたWebページ公開．
         \item WebページにBasic認証を適用する．
         \item WebページのSSL化によるHTTPS通信の実現．
-              \columnbreak
+        \columnbreak
         \item Dockerをクラウドにインストールし，\texttt{httpd}のイメージに対するコンテナを立ち上げる．
-              コンテナを立ち上げると，8080ポートでコンテナ内のウェブサーバへアクセスできるようにする．
-    \end{enumerate}
-\end{multicols}
-\begin{enumerate}
-    \setcounter{enumi}{7}
-    \renewcommand{\labelenumi}{\theenumi.\ }
-    \item
+        コンテナを立ち上げると，8080ポートでコンテナ内のWebサーバへアクセスできるようにする．
+    \end{multicols}
+    \item \TeX ファイルをコンパイルするシステムを構築する（\figref{fig:処理の流れ}）．
+          \begin{enumerate}
+              \renewcommand{\labelenumii}{\theenumii. }
+              \item FTPクライアントから，クラウドへFTP接続し，所定の場所へ\TeX ファイルを置く．
+              \item クラウドが\TeX ファイルの更新を検知し，Dockerのコンテナへ\TeX ファイルを送る．
+              \item クラウド上のDockerコンテナ内で，受信した\TeX ファイルの更新を検知し，コンパイルしてPDFを生成する．
+              \item コンテナ内で生成したPDFファイルを，コンテナ外から取得する．
+              \item 生成されたPDFをFTPクライアントから取得する．
+          \end{enumerate}
 \end{enumerate}
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}
+        \tikzset{file/.style={rectangle,minimum width=1.3cm,minimum height=1.5cm,draw,fill=gray!10}};
+        \tikzset{machine/.style={inner sep=3mm,rounded corners,draw,very thick,fit={#1}}}
+        \node[file]at(0,0)(main1){\scriptsize\ttfamily main.tex};
+        \node[file,right=3cm of main1](main2){\scriptsize\ttfamily main.tex};
+        \node[file,right=3cm of main2](main3){\scriptsize\ttfamily main.tex};
+        \node[file,below=1cm of main3](pdf1){\scriptsize\ttfamily main.pdf};
+        \node[file,left=3cm of pdf1](pdf2){\scriptsize\ttfamily main.pdf};
+        \node[file,left=3cm of pdf2](pdf3){\scriptsize\ttfamily main.pdf};
+        \node[machine=(main3)(pdf1),dotted](docker){};
+        \node[above]at(docker.north)(dockercap){\small コンテナ};
+        \node[machine=(main2)(main3)(docker)(dockercap)(pdf1)](ec2){};
+        \node[below]at(ec2.south)(cloudcap){\small クラウド};
+        \draw[thick,-latex](main1.east)to[bend left=30]node[midway,above]{\small\ttfamily FPT put}(main2.west);
+        \draw[thick,-latex](main2.east)to[bend left=30]node[midway,above]{\small\ttfamily docker cp}(main3.west);
+        \draw[thick,-latex](pdf1.west)to[bend left=30]node[midway,below]{\small\ttfamily docker cp}(pdf2.east);
+        \draw[thick,-latex](pdf2.west)to[bend left=30]node[midway,below]{\small\ttfamily FTP get}(pdf3.east);
+        \node at(main1.south |- cloudcap.west){\small FTPクライアント};
+        \node[machine=(main1)(pdf3),dashed,thick]{};
+        \draw[-Stealth,thick](main3)--(pdf1)node[midway,fill=white,draw]{\scriptsize\ttfamily uplatex{\normalfont など}};
+    \end{tikzpicture}
+    \caption{処理の流れ}
+    \label{fig:処理の流れ}
+\end{figure}
