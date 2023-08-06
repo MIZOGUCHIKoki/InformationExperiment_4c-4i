@@ -72,3 +72,55 @@
 仮想化は，リソースの集約に役立つ技術である．
 1台のサーバ上に複数の仮想環境を作ることで，初期コスト，管理コストの削減ができ，リソースを集約することで管理が簡便になる．\par
 ただし，物理{{サーバ}}に比べて性能が劣り，リソースを集約していることで，ハードウェアの故障による障害範囲が広くなる．
+\subsection{スケールインとスケールアウト}
+クラウドでは，仮想サーバのスペック（CPUやメモリサイズなど）や台数の変更によるサーバリソースの調節が簡便にできる．
+スケールインとスケールアウトは，仮想サーバのリソース調節における分類である．
+\begin{description}
+    \item[スケールアップ] サーバのスペックが不足しているときに，仮想サーバのスペックを上げること．
+    \item[スケールダウン] サーバスペックが過剰であるときに，仮想サーバのスペックを下げること．
+    \item[スケールアウト] 同じようなスペックのサーバを複数台並べて，最適なリソース量を提供すること．
+    \item[スケールイン] リクエストに対して，{{サーバ}}台数が過剰であるとき，{{サーバ}}の台数を減らして最適なリソース量を提供すること．\hfill\cite{スケールアップ}
+\end{description}
+\begin{figure}[htbp]
+    \centering
+    \begin{minipage}[b]{.23\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \node[draw,dashed,thick,rounded corners,minimum width=2cm,minimum height=1cm](sp1){};
+            \node[draw,thick,rounded corners,minimum width=3cm,minimum height=1.5cm,anchor=south west]at(sp1.south west)(sp2){};
+            \draw[-latex,shorten >= 1mm](sp1.north east)--(sp2.north east);
+            \node[below right]at(sp1.north west){\tiny\ttfamily 1CPU / Memory 1GB};
+            \node[below right]at(sp2.north west){\tiny\ttfamily 2CPU / Memory 2GB};
+        \end{tikzpicture}
+        \caption{スケールアップ}
+    \end{minipage}
+    \begin{minipage}[b]{.23\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \node[draw,thick,rounded corners,minimum width=2cm,minimum height=1cm](sp1){};
+            \node[draw,dashed,thick,rounded corners,minimum width=3cm,minimum height=1.5cm,anchor=south west]at(sp1.south west)(sp2){};
+            \draw[-latex,shorten <= 1mm](sp2.north east)--(sp1.north east);
+            \node[below right]at(sp1.north west){\tiny\ttfamily 1CPU / Memory 1GB};
+            \node[below right]at(sp2.north west){\tiny\ttfamily 2CPU / Memory 2GB};
+        \end{tikzpicture}
+        \caption{スケールダウン}
+    \end{minipage}
+    \begin{minipage}[b]{.23\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \node[minimum width=.5cm,minimum height=1.5cm,anchor=center,draw](sv1){\scriptsize\rotatebox{90}{\ttfamily server}};
+            \node[minimum width=.5cm,minimum height=1.5cm,anchor=center,draw,right=.2cm of sv1](sv2){\scriptsize\rotatebox{90}{\ttfamily server}};
+            \node[minimum width=.5cm,minimum height=1.5cm,anchor=center,draw,right=.2cm of sv2](sv3){\scriptsize\rotatebox{90}{\ttfamily server}};
+        \end{tikzpicture}
+        \caption{スケールアウト}
+    \end{minipage}
+    \begin{minipage}[b]{.23\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \node[minimum width=.5cm,minimum height=1.5cm,anchor=center,draw](sv1){\scriptsize\rotatebox{90}{\ttfamily server}};
+            \node[minimum width=.5cm,minimum height=1.5cm,anchor=center,draw,right=.2cm of sv1](sv2){\scriptsize\rotatebox{90}{\ttfamily server}};
+            \node[minimum width=.5cm,minimum height=1.5cm,anchor=center,draw,right=.2cm of sv2,gray=10!](sv3){\scriptsize\rotatebox{90}{\ttfamily server}};
+        \end{tikzpicture}
+        \caption{スケールアウト}
+    \end{minipage}
+\end{figure}
