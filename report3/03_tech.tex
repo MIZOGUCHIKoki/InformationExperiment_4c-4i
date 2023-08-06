@@ -1,1 +1,74 @@
 \section{要素技術}
+\tikzset{str/.style  args={#1with#2}{rounded corners, minimum height=.7cm,align=center,text width=#1,fill=#2}}
+\subsection{仮想マシン}
+仮想化は，辞書で以下のように説明されている．
+\begin{quote}
+    ``コンピューターの物理的資源を論理的に分割して，それぞれ独立並列した状態で利用できるようにすること。1台のサーバーで，複数の基本ソフトを独立並列に動作させるサーバー仮想化など。''  \hfill\cite{スーパー大辞林}
+\end{quote}
+仮想マシン（Virtual Machine）は，辞書で以下のように説明されている．
+\begin{quote}
+    ``あるコンピューターシステムの動作を，別システムで再現するソフトウエア。また，そのような動作環境。あるOSの動作を別の OS 上で再現する場合など。バーチャルマシン。VM。''\hfill\cite{スーパー大辞林}
+\end{quote}
+つまり，1台の計算機で複数のOSやアプリケーションなどを並列に動作させる，仮想化を実現するためのソフトウェアや動作環境のことを「仮想マシン」と呼んでいる．
+今回は「ホスト型」と「ハイパーバイザ型」の仮想化について説明する．
+
+\begin{wrapfigure}{r}[0mm]{.3\textwidth}
+    \centering
+    \begin{tikzpicture}
+        \node[str=.28\textwidth with gray!60](hw){ハードウェア};
+        \node[str=.28\textwidth with gray!50,above=.1cm of hw](hos){ホストOS};
+        \node[str=.28\textwidth with gray!40,above=.1cm of hos](hsw){ホスト型仮想化ソフトウェア};
+        \node[str=.13\textwidth with gray!30,above=.1cm of hsw.north west,anchor=south west](gos1){ゲストOS};
+        \node[str=.13\textwidth with gray!30,above=.1cm of hsw.north east,anchor=south east](gos2){ゲストOS};
+        \node[str=.055\textwidth with gray!20,above=.1cm of gos1.north west,anchor=south west](sw1){\tiny アプリ};
+        \node[str=.055\textwidth with gray!20,above=.1cm of gos1.north east,anchor=south east](sw2){\tiny アプリ};
+        \node[str=.055\textwidth with gray!20,above=.1cm of gos2.north west,anchor=south west](sw3){\tiny アプリ};
+        \node[str=.055\textwidth with gray!20,above=.1cm of gos2.north east,anchor=south east](sw4){\tiny アプリ};
+    \end{tikzpicture}
+    \caption{ホスト型}
+    \label{fig:ホスト型}
+    \vspace{-1cm}
+\end{wrapfigure}
+\subsubsection*{ホスト型}
+ホスト型の仮想化は，「ホスト型仮想化ソフトウェア」を用いて仮想化する手法である（\figref{fig:ホスト型}）．
+ホスト型の仮想化メリットは，ホスト型仮想化ソフトウェアが扱いやすい点にある．代表的なものとしてVirtualBoxがある．\par
+ホスト型仮想化のメリットとして挙げられるのが，既存OSを利用できる点である．それに対して，ホストOSを動作させるためのリソースが必要になり，物理サーバはもちろん，後述するハイパーバイザ型に比べても性能が劣る\cite{itmanage}．
+
+\begin{wrapfigure}{r}[0mm]{.3\textwidth}
+    \centering
+    \begin{tikzpicture}
+        \node[str=.28\textwidth with gray!60,](hw){ハードウェア};
+        \node[str=.28\textwidth with gray!45,above=.1cm of hw](hpv){ハイパーバイザ};
+        \node[str=.13\textwidth with gray!30,above=.1cm of hpv.north west,anchor=south west](gos1){ゲストOS};
+        \node[str=.13\textwidth with gray!30,above=.1cm of hpv.north east,anchor=south east](gos2){Linux};
+        \node[str=.055\textwidth with gray!20,above=.1cm of gos1.north west,anchor=south west](sw1){\tiny アプリ};
+        \node[str=.055\textwidth with gray!20,above=.1cm of gos1.north east,anchor=south east](sw2){\tiny アプリ};
+        \node[str=.055\textwidth with gray!20,above=.1cm of gos2.north west,anchor=south west](sw3){\tiny Apache};
+        \node[str=.055\textwidth with gray!20,above=.1cm of gos2.north east,anchor=south east](sw4){\tiny Python};
+    \end{tikzpicture}
+    \caption{ハイパーバイザ型}
+    \label{fig:ハイパーバイザ型}
+    \vspace{-1cm}
+\end{wrapfigure}
+
+\subsubsection*{ハイパーバイザ型}
+ホストOSを必要としない，「ハイパーバイザ」と呼ばれる仮想化ソフトウェアを用いた仮想化．
+ホストOSを必要としないので，ホスト型と比べてリソースの使用効率が良い．
+このハイパーバイザ型には，「準仮想化」と「完全仮想化」の2種類が存在する．
+\begin{description}
+    \setlength{\leftskip}{1em}
+    \item[完全仮想化] ハードウェアも含めて仮想化する方式．
+        ユーザモードで動作するゲストOSから特権命令を実行したとき，必要に応じてハイパーバイザへ処理を移行する．
+        ``ユーザモードで動作するゲストオペレーティングシステムは，自分の動作している環境（仮想化であるかないか）をまったく意識する必要がないため，完全仮想化と呼ばれている．''\cite[p.159]{オペレーティングシステム}
+        この方式は，特権命令をハイパーバイザへ移行して処理するので，オーバーヘッドが大きく，ハイパーバイザも特権命令の実行を常時監視する必要がある．
+\end{description}
+
+\begin{description}
+    \setlength{\leftskip}{1em}
+    \item[準仮想化] 仮想マシンからハードウェアを直接操作できるように，ゲストOSを改変した方式．
+        完全仮想化に比べてオーバーヘットが激減するが，OSの書き換えが必要であるため，全てのOSには対応できない．
+\end{description}
+\subsubsection*{仮想化の利点と欠点}
+仮想化は，リソースの集約に役立つ技術である．
+1台のサーバ上に複数の仮想環境を作ることで，初期コスト，管理コストの削減ができ，リソースを集約することで管理が簡便になる．\par
+ただし，物理サーバに比べて性能が劣り，リソースを集約していることで，ハードウェアの故障による障害範囲が広くなることが欠点として挙げられる．
