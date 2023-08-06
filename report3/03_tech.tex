@@ -19,11 +19,11 @@
         \node[str=.28\textwidth with gray!50,above=.1cm of hw](hos){ホストOS};
         \node[str=.28\textwidth with gray!40,above=.1cm of hos](hsw){ホスト型仮想化ソフトウェア};
         \node[str=.13\textwidth with gray!30,above=.1cm of hsw.north west,anchor=south west](gos1){ゲストOS};
-        \node[str=.13\textwidth with gray!30,above=.1cm of hsw.north east,anchor=south east](gos2){ゲストOS};
-        \node[str=.055\textwidth with gray!20,above=.1cm of gos1.north west,anchor=south west](sw1){\tiny アプリ};
-        \node[str=.055\textwidth with gray!20,above=.1cm of gos1.north east,anchor=south east](sw2){\tiny アプリ};
-        \node[str=.055\textwidth with gray!20,above=.1cm of gos2.north west,anchor=south west](sw3){\tiny アプリ};
-        \node[str=.055\textwidth with gray!20,above=.1cm of gos2.north east,anchor=south east](sw4){\tiny アプリ};
+        \node[str=.13\textwidth with gray!30,above=.1cm of hsw.north east,anchor=south east](gos2){Linux};
+        \node[str=.055\textwidth with gray!20,above=.1cm of gos1.north west,anchor=south west](sw1){\tiny App};
+        \node[str=.055\textwidth with gray!20,above=.1cm of gos1.north east,anchor=south east](sw2){\tiny App};
+        \node[str=.055\textwidth with gray!20,above=.1cm of gos2.north west,anchor=south west](sw3){\tiny Apache};
+        \node[str=.055\textwidth with gray!20,above=.1cm of gos2.north east,anchor=south east](sw4){\tiny Python};
     \end{tikzpicture}
     \caption{ホスト型}
     \label{fig:ホスト型}
@@ -41,8 +41,8 @@
         \node[str=.28\textwidth with gray!45,above=.1cm of hw](hpv){ハイパーバイザ};
         \node[str=.13\textwidth with gray!30,above=.1cm of hpv.north west,anchor=south west](gos1){ゲストOS};
         \node[str=.13\textwidth with gray!30,above=.1cm of hpv.north east,anchor=south east](gos2){Linux};
-        \node[str=.055\textwidth with gray!20,above=.1cm of gos1.north west,anchor=south west](sw1){\tiny アプリ};
-        \node[str=.055\textwidth with gray!20,above=.1cm of gos1.north east,anchor=south east](sw2){\tiny アプリ};
+        \node[str=.055\textwidth with gray!20,above=.1cm of gos1.north west,anchor=south west](sw1){\tiny App};
+        \node[str=.055\textwidth with gray!20,above=.1cm of gos1.north east,anchor=south east](sw2){\tiny App};
         \node[str=.055\textwidth with gray!20,above=.1cm of gos2.north west,anchor=south west](sw3){\tiny Apache};
         \node[str=.055\textwidth with gray!20,above=.1cm of gos2.north east,anchor=south east](sw4){\tiny Python};
     \end{tikzpicture}
@@ -52,13 +52,13 @@
 \end{wrapfigure}
 
 \subsubsection*{ハイパーバイザ型}
-ホストOSを必要としない，「ハイパーバイザ」と呼ばれる仮想化ソフトウェアを用いた仮想化．
+ホストOSを必要としない，「ハイパーバイザ」と呼ばれる仮想化ソフトウェアを用いた仮想化（\figref{fig:ハイパーバイザ型}）．
 ホストOSを必要としないので，ホスト型と比べてリソースの使用効率が良い．
 このハイパーバイザ型には，「準仮想化」と「完全仮想化」の2種類が存在する．
 \begin{description}
     \setlength{\leftskip}{1em}
     \item[完全仮想化] ハードウェアも含めて仮想化する方式．
-        ユーザモードで動作するゲストOSから特権命令を実行したとき，必要に応じてハイパーバイザへ処理を移行する．
+        ユーザモードで動作するゲストOSから{{特権命令を実行した}}とき，必要に応じてハイパーバイザへ処理を移行する．
         ``ユーザモードで動作するゲストオペレーティングシステムは，自分の動作している環境（仮想化であるかないか）をまったく意識する必要がないため，完全仮想化と呼ばれている．''\cite[p.159]{オペレーティングシステム}
         この方式は，特権命令をハイパーバイザへ移行して処理するので，オーバーヘッドが大きく，ハイパーバイザも特権命令の実行を常時監視する必要がある．
 \end{description}
@@ -66,9 +66,9 @@
 \begin{description}
     \setlength{\leftskip}{1em}
     \item[準仮想化] 仮想マシンからハードウェアを直接操作できるように，ゲストOSを改変した方式．
-        完全仮想化に比べてオーバーヘットが激減するが，OSの書き換えが必要であるため，全てのOSには対応できない．
+        完全仮想化に比べてオーバーヘットが激減するが，OSの書き換えが必要であるため，すべてのOSには対応できない．
 \end{description}
 \subsubsection*{仮想化の利点と欠点}
 仮想化は，リソースの集約に役立つ技術である．
 1台のサーバ上に複数の仮想環境を作ることで，初期コスト，管理コストの削減ができ，リソースを集約することで管理が簡便になる．\par
-ただし，物理サーバに比べて性能が劣り，リソースを集約していることで，ハードウェアの故障による障害範囲が広くなることが欠点として挙げられる．
+ただし，物理{{サーバ}}に比べて性能が劣り，リソースを集約していることで，ハードウェアの故障による障害範囲が広くなる．
