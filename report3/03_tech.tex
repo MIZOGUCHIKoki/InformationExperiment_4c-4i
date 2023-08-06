@@ -124,3 +124,14 @@
         \caption{スケールアウト}
     \end{minipage}
 \end{figure}
+\subsection{IaaS, PaaS, SaaS}
+クラウドを利用するとき，クラウド事業者が管理する部分と，クラウド利用者が管理する部分を明確にする必要がある．
+IaaS，PasS，SaaSとは，クラウド事業者が管理する部分に対して分類したものである．これを「サービスレイヤ」と呼ぶこともある．
+\begin{description}
+    \item[SaaS: Software as a Service] アプリケーションソフトウェアをサービスとして提供する．電子メール（Gmail）やオンライン会議システム（Zoom）などがある．
+    \item[PaaS: Platform as a Service] ライブラリの利用をサービスとして提供する．ユーザはライブラリを用いてアプリケーションを構成する．提供されているライブラリの管理はクラウド事業者が行うので，ユーザはライブラリを意識する必要がない．代表的なものにストレージサービスのAmazon S3がある．
+    \item[IaaS: Infrastructure as a Service] インフラストラクチャ（仮想ハードウェアやネットワーク）をサービスとして提供する．ユーザは提供された仮想ハードウェア上にOSをインストールし，そのうえでアプリケーションなどを動かす．代表的なものにAmazon EC2がある．
+\end{description}
+\begin{flushright}
+    \cite[p.164]{オペレーティングシステム}
+\end{flushright}
