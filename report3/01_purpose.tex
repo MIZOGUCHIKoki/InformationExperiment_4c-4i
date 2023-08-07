@@ -1,0 +1,66 @@
+\begin{wrapfigure}{r}[0mm]{.6\textwidth}
+    \centering
+    \begin{minipage}[b]{.29\textwidth}
+        \begin{tikzpicture}
+            \coordinate (O) at (0,0);
+            \coordinate (A) at (1,2);
+            \coordinate (B) at (2,1.5);
+            \coordinate (C) at (3,3);
+            \coordinate (D) at (4,2);
+            \draw[black,thick, name path=curve]plot[smooth, tension=0.7]coordinates {(O)(A)(B)(C)(D)};
+            \draw[name path=line,thick,dashed](0,2.5)--(4,2.5);
+            \draw[thick,dashed](0,2.5)--(4,2.5);
+            \draw[thick,-latex](0,0)--(4,0);
+            \draw[thick,-latex](0,0)--(0,4.5);
+            \node[below] at ($(0,0)!0.5!(4,0)$){\scriptsize 時間};
+            \node[left] at ($(0,0)!0.5!(0,4.5)$){\scriptsize\rotatebox{90}{リソース量}};
+            \node[below]at(B){\scriptsize 必要なリソース};
+            \node[above]at(C){\scriptsize 機会損失};
+            \node[below right]at(0,2.5){\scriptsize 無駄になる};
+            \node[above right]at(0,2.5){\scriptsize 用意したリソース};
+            \begin{scope}[on background layer]
+                \clip plot[smooth, tension=0.7] coordinates {(O) (A) (B) (C) (D)} |- (0,4) -- cycle;
+                \fill[gray!40, name intersections={of=curve and line}] (intersection-1) rectangle (0,0);
+                \fill[gray!40, name intersections={of=curve and line}] (intersection-2) rectangle (4,0);
+            \end{scope}
+        \end{tikzpicture}
+        \caption{オンプレミス}
+        \label{fig:オンプレミス}
+    \end{minipage}
+    \begin{minipage}[b]{.29\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \coordinate (O) at (0,0);
+            \coordinate (A) at (1,2);
+            \coordinate (B) at (2,1.5);
+            \coordinate (C) at (3,3);
+            \coordinate (D) at (4,2);
+            \newcommand{\avv}{0.2cm}
+            \draw[black,thick]plot[smooth, tension=0.7]coordinates {(O)(A)(B)(C)(D)};
+            \draw[thick,dashed]plot[smooth,tension=0.7] coordinates {($(O)+(0,\avv)$)($(A)+(0,\avv)$)($(B)+(0,\avv)$)($(C)+(0,\avv)$)($(D)+(0,\avv)$)};
+            \draw[thick,-latex](0,0)--(4,0);
+            \draw[thick,-latex](0,0)--(0,4.5);
+            \node[below] at ($(0,0)!0.5!(4,0)$){\scriptsize 時間};
+            \node[left] at ($(0,0)!0.5!(0,4.5)$){\scriptsize\rotatebox{90}{リソース量}};
+            \node[above]at($(C)+(0,\avv)$){\scriptsize 用意したリソース};
+            \node[below]at(B){\scriptsize 必要なリソース};
+        \end{tikzpicture}
+        \caption{（例）AWSの利用}
+        \label{fig:AWSの利用}
+    \end{minipage}
+    \vspace{-1cm}
+\end{wrapfigure}
+\section{目的}
+本実験では，今までオンプレミスで行った作業を，クラウド上で実現する．
+クラウド化する目的は大きく2つある．\par
+第一に，サーバをクラウド化することで，管理コストや運用コストを抑えられる．
+オンプレミスの運用では，サーバ本体を用意し，サーバ本体の管理もしなければならない．
+サーバ本体にかかるコストもあるが，サーバの管理には電気代や故障した場合の部品代など，運用にもコストが大きくかかる．
+クラウド化によって，これらのコストは不要になり，管理の手間もクラウドサービスに任せられる．
+さらに，用意したリソースと必要なリソースの差が問題になる\figref{fig:オンプレミス}に対して，クラウドでは\figref{fig:AWSの利用}のように，必要に応じてリソースを変更できる．
+これにより，大きくコストが抑えられる\cite{2015amazon}．\par
+第二に，災害対策やセキュリティ対策に対しても，クラウド化による大きな利点がある．
+オンプレミスでは，当然セキュリティ対策や災害対策も含めて行わねばならない．
+これにも前述したコストや専門的な知識が必要であり，対策が不十分な場合は損害が発生することもある．
+クラウドサービスにもよるが，大概のクラウドサービスでは，セキュリティの専門知識がなくても高いセキュリティレベルを実現できる．
+さらに，国内外の遠隔地にデータを分散できるクラウドサービスは，災害対策にもつながる．\par

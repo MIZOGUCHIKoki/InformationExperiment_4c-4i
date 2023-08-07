@@ -1,0 +1,138 @@
+\subsection{{\normalfont \TeX} ファイルをコンパイルするシステムの構築}
+FTPで\TeX ファイルを送信するとPDFを生成するシステムを作成する．
+FTPでファイル（\texttt{main.tex}）を所定箇所に置いたら，\texttt{Bash}がファイルの更新を検知して，Dockerコンテナへ\texttt{main.tex}を転送する．
+Dockerコンテナに送信された\texttt{main.tex}は，コンテナ内で\texttt{main.pdf}を生成し，EC2インスタンスへ，\texttt{main.pdf}を転送する．
+転送された\texttt{main.pdf}をFTPを用いて，取得する．
+\begin{enumerate}
+    \item FTPサーバをインスタンス上に構築する．\texttt{vsftpd}パッケージをインストール後，ユーザを作成する．
+          \begin{lstlisting}
+$ sudo yum install vsftpd -y
+$ sudo adduser --home /home/ftp-user ftp-user
+$ sudo passwd ftp_user
+$ sudo chown ftp-user:ftp-user -R /home/ftp-user/
+\end{lstlisting}
+    \item 設定ファイルを以下のように変更する．
+          \begin{lstlisting}[style=file,caption={\ttfamily /etc/vsftpd/vsftpd.conf}]
+anonymous_enable=NO
+local_enable=YES
+ascii_upload_enable=YES
+ascii_download_enable=YES
+write_enable=YES
+local_umask=022
+dirmessage_enable=YES
+xferlog_enable=YES
+xferlog_std_format=YES
+listen=YES
+listen_ipv6=NO
+pam_service_name=vsftpd
+userlist_enable=YES
+tcp_wrappers=NO
+use_localtime=YES
+force_dot_files=YES
+pasv_address=3.94.71.105
+pasv_enable=YES
+pasv_addr_resolve=YES
+pasv_min_port=60000
+pasv_max_port=60010
+userlist_deny=NO    
+\end{lstlisting}
+    \item Dockerのレジストリから\TeX ファイルをコンパイルするソフトウェアを含むイメージをPullする．
+          \begin{lstlisting}
+$ docker pull ghcr.io/being24/latex-docker
+$ docker images
+REPOSITORY                     TAG       IMAGE ID       CREATED       SIZE
+ghcr.io/being24/latex-docker   latest    bc414bef2302   3 weeks ago   2.2GB
+%\ryaku%
+$ docker run --name latex bc414bef2302
+$ docker ps
+CONTAINER ID   IMAGE          COMMAND       CREATED      STATUS          PORTS     NAMES
+19b52251ed12   bc414bef2302   "/bin/bash"   7 days ago   Up 12 minutes             latex
+%\ryaku%
+\end{lstlisting}
+    \item 事前に作成した更新を検知してコンパイルするシェルスクリプトを\texttt{docker cp}コマンドを用いて転送する．
+          \begin{lstlisting}
+$ docker cp comp.sh 19b52251ed12:/workdir
+\end{lstlisting}
+          \begin{lstlisting}[style=file,caption={\ttfamily 19b52251ed12:/workdir/comp.sh},language=Bash]
+#!/bin/sh            
+echo "監視対象 main.tex"
+INTERVAL=1 # 監視間隔
+last=`ls --full-time main.tex | awk '{print $6"-"$7}'`
+while true; do
+    sleep $INTERVAL
+    current=`ls --full-time main.tex | awk '{print $6"-"$7}'`
+    if [ $last != $current ] ; then
+        echo ""
+        echo "updated: $current"
+        last=$current
+        uplatex -interaction=nonstopmode main.tex
+        dvipdfmx main.dvi
+    fi
+done        
+\end{lstlisting}
+    \item \texttt{main.tex}が更新されたら，Dockerのコンテナへファイルを転送するシェルスクリプトを\texttt{/home/ftp-user}に置く．
+          \begin{lstlisting}[style=file,caption={\ttfamily /home/ftp-user/file\_check.sh},language=Bash]
+#!/bin/sh
+echo "監視対象 main.tex"
+echo "実行コマンド docker cp main.tex 19b52251ed12:/workdir"
+INTERVAL=1 #監視間隔, 秒で指定
+last=`ls --full-time main.tex | awk '{print $6"-"$7}'`
+while true; do
+    sleep $INTERVAL
+    current=`ls --full-time main.tex | awk '{print $6"-"$7}'`
+    if [ $last != $current ] ; then
+        echo ""
+        echo "updated: $current"
+        last=$current
+        docker cp main.tex 19b52251ed12:/workdir
+        sleep 5
+        docker cp 19b52251ed12:/workdir/main.pdf /home/ftp-user/main.pdf
+        echo "compiled main.tex"
+    fi
+done        
+\end{lstlisting}
+    \item \texttt{/home/ftp-user/file\_check.sh}を実行する．
+          \begin{lstlisting}
+$ sudo bash /home/ftp-user/file_check.sh &    
+\end{lstlisting}
+    \item コンテナ内に入って，\texttt{/workdir/comp.sh}を実行する．
+          \begin{lstlisting}
+$ docker exec -it latex bash
+root@19b52251ed12:/workdir# bash comp.sh
+\end{lstlisting}
+    \item 適当な\TeX 文書を\texttt{main.tex}に書く．
+    \item FTPクライアントから，EC2インスタンスへFTP接続し，\texttt{main.tex}ファイルを置く．
+          5秒くらい経ったら，\texttt{main.pdf}を取得する．
+          \begin{lstlisting}[basicstyle={\ttfamily\tiny}]
+$ ftp ftp-user@c5.exp.info.kochi-tech.ac.jp
+Connected to c5.exp.info.kochi-tech.ac.jp.
+220 (vsFTPd 3.0.5)
+331 Please specify the password.
+Password: 
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp> put main.tex
+local: main.tex remote: main.tex
+229 Entering Extended Passive Mode (|||60007|)
+150 Ok to send data.
+
+  0% |                                               |     0        0.00 KiB/s    --:-- ETA
+100% |***********************************************|    94      312.23 KiB/s    00:00 ETA
+226 Transfer complete.
+94 bytes sent in 00:00 (0.24 KiB/s)
+ftp> get main.pdf
+local: main.pdf remote: main.pdf
+229 Entering Extended Passive Mode (|||60003|)
+150 Opening BINARY mode data connection for main.pdf (6269 bytes).
+
+  0% |                                               |     0        0.00 KiB/s    --:-- ETA
+100% |***********************************************|  6269        8.37 MiB/s    00:00 ETA
+226 Transfer complete.
+6269 bytes received in 00:00 (32.85 KiB/s)
+ftp> quit
+221 Goodbye.
+$ 
+\end{lstlisting}
+    \item \texttt{main.pdf}が\texttt{main.tex}をコンパイルしたものであるか確認する．
+\end{enumerate}

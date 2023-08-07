@@ -1,0 +1,52 @@
+\subsection{EC2インスタンスの作成と諸設定}
+EC2インスタンスを，\tblref{tbl:インスタンスの作成とネットワークの設定}のもとで作成する．
+Elastic IPアドレスの割り当てで，パブリックIPアドレスを固定化する．
+また，\tblref{tbl:ファイアウォールの設定}に沿って，ファイアウォールを設定する．
+外部への，任意のアクセスを許可し，外部からのアクセスは，指定した一部のアクセスのみを許可する．\par
+\begin{table}[htbp]
+    \centering
+    \caption{インスタンスの作成とネットワークの設定}
+    \label{tbl:インスタンスの作成とネットワークの設定}
+    \begin{tabularx}{\textwidth}{lR}
+        \toprule
+        \multicolumn{1}{c}{設定内容} & \multicolumn{1}{c}{設定値}                  \\
+        \midrule
+        名前とタグ                    & \texttt{c5}                              \\
+        OS                       & \texttt{Amazon Linux 2023 AMI}           \\
+        アーキテクチャ                  & 64ビット (x86)                              \\
+        インスタンスタイプ                & \texttt{t2.micro}                        \\
+        キーペア                     & RSA\ （\texttt{.pem}）                     \\
+        ストレージ                    & \texttt{1\ x\ 8 GiB\ gp3}ルートボリューム（暗号化なし） \\
+        Public IPの割り当て           & 有効化                                      \\
+        セキュリティグループ               & セキュリティグループを作成する                          \\
+        Elastic IPアドレスの割り当て      & 有効化（\texttt{3.94.71.105}）                \\
+        ネットワークボーダーグループ           & \texttt{us-east-1}                       \\
+        パブリックIPアドレスルプール          & AmazonのIPv4アドレスプール                       \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+\begin{table}[htbp]
+    \centering
+    \caption{ファイアウォールの設定}
+    \label{tbl:ファイアウォールの設定}
+    \begin{tabularx}{\textwidth}{cRRR}
+        \toprule
+        ルール                        & \multicolumn{1}{c}{プロトコル}     & \multicolumn{1}{c}{ポート範囲} & \multicolumn{1}{c}{送信先} \\
+        \midrule
+        アウトバウンドルール                 & すべて                           & すべて                       & \texttt{0.0.0.0/0}      \\
+        \bottomrule
+        \toprule
+        ルール                        & \multicolumn{1}{c}{タイプ/プロトコル} & \multicolumn{1}{c}{ポート範囲} & \multicolumn{1}{c}{ソース} \\
+        \midrule
+        \multirow{6}{*}{インバウンドルール} & SSH/TCP                       & 21                        & \texttt{0.0.0.0/0}      \\
+                                   & カスタムTCP/TCP                   & 22                        & \texttt{0.0.0.0/0}      \\
+                                   & HTTP/TCP                      & 80                        & \texttt{0.0.0.0/0}      \\
+                                   & HTTPS/TCP                     & 443                       & \texttt{0.0.0.0/0}      \\
+                                   & カスタムTCP/TCP                   & 8080                      & \texttt{0.0.0.0/0}      \\
+                                   & カスタムTCP/TCP                   & 60000\ -\ 60010           & \texttt{0.0.0.0/0}      \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+インスタンスを作成すると，鍵ファイル\texttt{c5.pem}のダウンロードが始まる．
+このファイルは厳重に管理する．
+また，Elastic IPアドレスを，DNSのAレコードに記載し，Elastic IPとドメイン名\texttt{c5.exp.info.kochi-tech.ac.jp}を対応づける．

@@ -1,0 +1,30 @@
+\subsection{Dockerのインストールとコンテナの構築}
+\begin{enumerate}
+    \item Dockerのパッケージをインストールし，有効化する．権限も更新する．
+          \begin{lstlisting}
+$ sudo dnf install -y docker
+$ sudo systemctl enable --now docker
+$ sudo systemctl status docker
+$ sudo usermod -aG docker ec2-user
+\end{lstlisting}
+    \item Dockerのコンテナを作成する．ここではイメージをレジストリから取得する．
+          今回は，\texttt{httpd}のイメージを利用して，8080番ポートでHTTP通信を実現する．
+          \begin{lstlisting}
+$ docker pull httpd
+$ docker images
+REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
+httpd        latest    d140b777a247   3 weeks ago   168MB
+          \end{lstlisting}
+    \item コンテナを作成する．8080番ポートに来たアクセスをコンテナ内の80番ポートにフォワーディングする．
+          \begin{lstlisting}
+$ docker run httpd -itd -p 8080:80
+\end{lstlisting}
+    \item  作成したコンテナが動いているか確認する．
+          \begin{lstlisting}
+$ docker ps 
+CONTAINER ID   IMAGE     COMMAND              CREATED         STATUS         PORTS                                   NAMES
+0fd95973b539   httpd     "httpd-foreground"   8 minutes ago   Up 8 minutes   0.0.0.0:8080->80/tcp, :::8080->80/tcp   wizardly_galois
+\end{lstlisting}
+    \item Dockerのコンテナへ，Webアクセスできることを確認する．
+          \url{http://c5.exp.info.kochi-tech.ac.jp:8080}へアクセスし，「\texttt{It Works!}」の文字を確認する．
+\end{enumerate}
