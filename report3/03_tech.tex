@@ -30,9 +30,9 @@
     \vspace{-1cm}
 \end{wrapfigure}
 \subsubsection*{ホスト型}
-ホスト型の仮想化は，「ホスト型仮想化ソフトウェア」を用いて仮想化する手法である（\figref{fig:ホスト型}）．
-ホスト型の仮想化メリットは，ホスト型仮想化ソフトウェアが扱いやすい点にある．代表的なものとしてVirtualBoxがある．\par
-ホスト型仮想化のメリットとして挙げられるのが，既存OSを利用できる点である．それに対して，ホストOSを動作させるためのリソースが必要になり，物理サーバはもちろん，後述するハイパーバイザ型に比べても性能が劣る\cite{itmanage}．
+ホスト型の仮想化は，「ホスト型仮想化ソフトウェア」を用いて仮想化する手法である（\figref{fig:ホスト型}）．\par
+ホスト型仮想化のメリットは，ホスト型仮想化ソフトウェアが扱いやすく，既存OSを利用できる点である．代表的なものとしてVirtualBoxがある．\par
+それに対して，ホストOSを動作させるためのリソースが必要になり，物理サーバはもちろん，後述するハイパーバイザ型に比べても性能が劣る\cite{itmanage}．
 
 \begin{wrapfigure}{r}[0mm]{.3\textwidth}
     \centering
@@ -72,17 +72,38 @@
 仮想化は，リソースの集約に役立つ技術である．
 1台のサーバ上に複数の仮想環境を作ることで，初期コスト，管理コストの削減ができ，リソースを集約することで管理が簡便になる．\par
 ただし，物理{{サーバ}}に比べて性能が劣り，リソースを集約していることで，ハードウェアの故障による障害範囲が広くなる．
-\subsection{スケールインとスケールアウト}
+\subsection{スケールイン・スケールアウト}
 クラウドでは，仮想サーバのスペック（CPUやメモリサイズなど）や台数の変更によるサーバリソースの調節が簡便にできる．
 スケールインとスケールアウトは，仮想サーバのリソース調節における分類である．
 \begin{description}
-    \item[スケールアップ] サーバのスペックが不足しているときに，仮想サーバのスペックを上げること．
-    \item[スケールダウン] サーバスペックが過剰であるときに，仮想サーバのスペックを下げること．
     \item[スケールアウト] 同じようなスペックのサーバを複数台並べて，最適なリソース量を提供すること．
-    \item[スケールイン] リクエストに対して，{{サーバ}}台数が過剰であるとき，{{サーバ}}の台数を減らして最適なリソース量を提供すること．\hfill\cite{スケールアップ}
+    \item[スケールイン] リクエストに対して，{{サーバ}}台数が過剰であるとき，{{サーバ}}の台数を減らして最適なリソース量を提供すること．
+    \item[スケールアップ] {{サーバ}}のスペックが不足しているときに，仮想{{サーバ}}のスペックを上げること．
+    \item[スケールダウン] {{サーバ}}スペックが過剰であるときに，仮想{{サーバ}}のスペックを下げること．
 \end{description}
+\begin{flushright}
+    \hfill\cite{スケールアップ}
+\end{flushright}
 \begin{figure}[htbp]
     \centering
+    \begin{minipage}[b]{.23\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \node[minimum width=.5cm,minimum height=1.5cm,anchor=center,draw](sv1){\scriptsize\rotatebox{90}{\ttfamily server}};
+            \node[minimum width=.5cm,minimum height=1.5cm,anchor=center,draw,right=.2cm of sv1](sv2){\scriptsize\rotatebox{90}{\ttfamily server}};
+            \node[minimum width=.5cm,minimum height=1.5cm,anchor=center,draw,right=.2cm of sv2](sv3){\scriptsize\rotatebox{90}{\ttfamily server}};
+        \end{tikzpicture}
+        \caption{スケールアウト}
+    \end{minipage}
+    \begin{minipage}[b]{.23\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \node[minimum width=.5cm,minimum height=1.5cm,anchor=center,draw](sv1){\scriptsize\rotatebox{90}{\ttfamily server}};
+            \node[minimum width=.5cm,minimum height=1.5cm,anchor=center,draw,right=.2cm of sv1](sv2){\scriptsize\rotatebox{90}{\ttfamily server}};
+            \node[minimum width=.5cm,minimum height=1.5cm,anchor=center,draw,right=.2cm of sv2,gray=10!](sv3){\scriptsize\rotatebox{90}{\ttfamily server}};
+        \end{tikzpicture}
+        \caption{スケールイン}
+    \end{minipage}
     \begin{minipage}[b]{.23\textwidth}
         \centering
         \begin{tikzpicture}
@@ -105,31 +126,13 @@
         \end{tikzpicture}
         \caption{スケールダウン}
     \end{minipage}
-    \begin{minipage}[b]{.23\textwidth}
-        \centering
-        \begin{tikzpicture}
-            \node[minimum width=.5cm,minimum height=1.5cm,anchor=center,draw](sv1){\scriptsize\rotatebox{90}{\ttfamily server}};
-            \node[minimum width=.5cm,minimum height=1.5cm,anchor=center,draw,right=.2cm of sv1](sv2){\scriptsize\rotatebox{90}{\ttfamily server}};
-            \node[minimum width=.5cm,minimum height=1.5cm,anchor=center,draw,right=.2cm of sv2](sv3){\scriptsize\rotatebox{90}{\ttfamily server}};
-        \end{tikzpicture}
-        \caption{スケールアウト}
-    \end{minipage}
-    \begin{minipage}[b]{.23\textwidth}
-        \centering
-        \begin{tikzpicture}
-            \node[minimum width=.5cm,minimum height=1.5cm,anchor=center,draw](sv1){\scriptsize\rotatebox{90}{\ttfamily server}};
-            \node[minimum width=.5cm,minimum height=1.5cm,anchor=center,draw,right=.2cm of sv1](sv2){\scriptsize\rotatebox{90}{\ttfamily server}};
-            \node[minimum width=.5cm,minimum height=1.5cm,anchor=center,draw,right=.2cm of sv2,gray=10!](sv3){\scriptsize\rotatebox{90}{\ttfamily server}};
-        \end{tikzpicture}
-        \caption{スケールイン}
-    \end{minipage}
 \end{figure}
 \subsection{IaaS, PaaS, SaaS}
 クラウドを利用するとき，クラウド事業者が管理する部分と，クラウド利用者が管理する部分を明確にする必要がある．
 IaaS，PasS，SaaSとは，クラウド事業者が管理する部分に対して分類したものである．これを「サービスレイヤ」と呼ぶこともある．
 \begin{description}
     \item[SaaS: Software as a Service] アプリケーションソフトウェアをサービスとして提供する．電子メール（Gmail）やオンライン会議システム（Zoom）などがある．
-    \item[PaaS: Platform as a Service] ライブラリの利用をサービスとして提供する．ユーザはライブラリを用いてアプリケーションを構成する．提供されているライブラリの管理はクラウド事業者が行うので，ユーザはライブラリを意識する必要がない．代表的なものにストレージサービスのAmazon S3がある．
+    \item[PaaS: Platform as a Service] ライブラリの利用をサービスとして提供する．ユーザはライブラリを用いてアプリケーションを構成する．提供されているライブラリの管理はクラウド事業者が行うので，ユーザはライブラリを意識する必要がない．代表的なものAmazon S3がある．
     \item[IaaS: Infrastructure as a Service] インフラストラクチャ（仮想ハードウェアやネットワーク）をサービスとして提供する．ユーザは提供された仮想ハードウェア上にOSをインストールし，そのうえでアプリケーションなどを動かす．代表的なものにAmazon EC2がある．
 \end{description}
 \begin{flushright}
